@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Criollo Atomizadores</string>
+    <string name="title_activity_main">Criollo Atomizadores</string>
+    <string name="package_name">com.inta.criolloatm</string>
+    <string name="custom_url_scheme">com.inta.criolloatm</string>
+</resources>

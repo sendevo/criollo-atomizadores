@@ -1,14 +1,13 @@
 import { f7, Navbar, Page, List, BlockTitle, Row, Col, Button } from 'framework7-react';
 import { useContext, useEffect, useState } from 'react';
-import { BackButton, CalculatorButton } from '../../components/Buttons';
-import { NozzleSeparationSelector } from '../../components/Selectors';
+import { BackButton, LinkButton } from '../../components/Buttons';
 import Input from "../../components/Input";
-import NozzleMenu from "../../components/NozzleMenu";
+import ArcConfigInput from "../../components/ArcConfigInput";
 import Toast from '../../components/Toast';
 import { ModelCtx, WalkthroughCtx } from '../../context';
 import * as API from '../../entities/API';
-import iconDistance from '../../assets/icons/dpicos.png';
-import iconNozzles from '../../assets/icons/cant_picos2.png';
+import { FaStopwatch, FaTree } from 'react-icons/fa';
+import iconDistance from '../../assets/icons/dplantas.png';
 import iconVelocity from '../../assets/icons/velocidad.png';
 import iconPressure from '../../assets/icons/presion.png';
 import iconVolume from '../../assets/icons/dosis.png';
@@ -18,11 +17,11 @@ const Params = props => {
     const model = useContext(ModelCtx);
 
     const [inputs, setInputs] = useState({
-        nozzleSeparation: model.nozzleSeparation || 0.35,        
-        nozzleNumber: model.nozzleNumber || '',        
+        rowSeparation: model.rowSeparation || 3,        
+        arcNumber: model.arcNumber || 1,
         nominalFlow: model.nominalFlow || 0.8,        
         nominalPressure: model.nominalPressure || 3,
-        workVelocity: model.workVelocity || 20,
+        workVelocity: model.workVelocity || 10,
         workVelocityUpdated: false,
         workPressure: model.workPressure || 2,
         workPressureUpdated: false,
@@ -30,11 +29,9 @@ const Params = props => {
         workVolumeUpdated: false
     });
 
-    const [nozzleSelection, setNozzleSelection] = useState(model.nozzleSelection || [-1, -1, -1, -1]);
-
     const {
-        nozzleSeparation,
-        nozzleNumber,
+        rowSeparation,
+        arcNumber,
         nominalFlow,
         nominalPressure,
         workVelocity,
@@ -45,36 +42,8 @@ const Params = props => {
         workVolumeUpdated
     } = inputs;
 
-
-    // El caudal total de pulverizacion se calcula ante cualquier cambio de variable
-    // pero solo si esta indicado el numero de picos
-    let sprayFlow = model.sprayFlow;
-    try{
-        sprayFlow = API.computeQb({
-            n: nozzleNumber,
-            Qnom: nominalFlow,
-            Pnom: nominalPressure,
-            Pt: workPressure
-        });
-        model.update("sprayFlow", sprayFlow);
-    }catch(e){
-        console.log(e.message);
-        model.update("sprayFlow", null);
-    }
-
-    // El caudal de pulverizacion de cada pico se calcula ante cualquier cambio de variable
-    // pero no se usa en esta seccion, sino en verificacion de picos
-    try{
-        const workFlow = API.computeQt({
-            Qnom: nominalFlow,
-            Pnom: nominalPressure,
-            Pt: workPressure
-        });      
-        model.update("workFlow", workFlow);
-    }catch(e){
-        console.log(e.message);
-        model.update("workFlow", null);
-    }
+    let sprayFlow = 2;
+    let airFlow = 3;
 
     // Ante cualquier cambio, borrar formularios de verificacion y de insumos
     model.update({
@@ -105,87 +74,36 @@ const Params = props => {
             }));
     }, [model.workVelocity, model.velocityMeasured]);   
 
-    const handleNozzleSeparationChange = value => {
-        const ns = parseFloat(value);
+    const handleRowSeparationChange = value => {
+        const rs = parseFloat(value);
         setInputs({
             ...inputs,
-            nozzleSeparation: ns,
+            rowSeparation: rs,
             nozzleNumber: '',
             workPressureUpdated: false,
             workVelocityUpdated: false,
             workVolumeUpdated: false
         });
         model.update({
-            nozzleSeparation: ns, 
+            rowSeparation: rs, 
             nozzleNumber: '',
             sprayFlow: null
         });
     };
 
-    const handleNozzleNumberChange = value => {
-        const n = parseInt(value);
+    const handleArcNumberChange = value => {
         setInputs({
             ...inputs,
-            nozzleNumber: n
-        });
-        model.update("nozzleNumber", n);
-    };
-
-    const handleNozzleSelected = (selection, nozzle) => {        
-        setNozzleSelection(selection);
-        model.update("nozzleSelection", selection);
-        if(nozzle){
-            try{
-                const qn = API.computeQNom({
-                    b: nozzle.b,
-                    c: nozzle.c,
-                    Pnom: nominalPressure
-                });
-                model.update({
-                    nominalFlow: qn,                    
-                    nozzleName: nozzle.long_name
-                });
-                setInputs({
-                    ...inputs,
-                    nominalFlow: qn,
-                    workPressureUpdated: false,
-                    workVelocityUpdated: false,
-                    workVolumeUpdated: false
-                });  
-            }catch(err){
-                Toast("error", err.message);
-            }
-        }
-    };
-
-    const handleNominalFlowChange = e => {        
-        const nf = parseFloat(e.target.value);
-        setInputs({
-            ...inputs,
-            nominalFlow: nf,                        
+            arcNumber: value,
             workPressureUpdated: false,
             workVelocityUpdated: false,
             workVolumeUpdated: false
         });
-        setNozzleSelection([-1, -1, -1, -1]);
         model.update({
-            nominalFlow: nf,
-            nozzleSelection: [-1, -1, -1, -1],
-            nozzleName: null
+            arcNumber: value,
+            sprayFlow: null
         });
-    };
-
-    const handleNominalPressureChange = e => {
-        const np = parseFloat(e.target.value);
-        setInputs({
-            ...inputs,
-            nominalPressure: np,
-            workPressureUpdated: false,
-            workVelocityUpdated: false,
-            workVolumeUpdated: false
-        });
-        model.update("nominalPressure", np);
-    };
+    }
 
     const handleWorkVelocityChange = e => {
         const wv = parseFloat(e.target.value);
@@ -228,7 +146,7 @@ const Params = props => {
             const newVel = API.computeVt({
                 Va: workVolume,
                 Pt: workPressure,
-                d: nozzleSeparation,
+                d: rowSeparation,
                 Qnom: nominalFlow,
                 Pnom: nominalPressure
             });
@@ -253,7 +171,7 @@ const Params = props => {
             const newPres = API.computePt({
                 Va: workVolume,
                 Vt: workVelocity,            
-                d: nozzleSeparation,
+                d: rowSeparation,
                 Qnom: nominalFlow,
                 Pnom: nominalPressure
             });
@@ -275,7 +193,7 @@ const Params = props => {
             const newVol = API.computeVa({
                 Pt: workPressure,
                 Vt: workVelocity,
-                d: nozzleSeparation,
+                d: rowSeparation,
                 Qnom: nominalFlow,
                 Pnom: nominalPressure
             });
@@ -293,8 +211,9 @@ const Params = props => {
     };
 
     const addParamsToReport = () => {
+        /*
         const {
-            nozzleSeparation,
+            rowSeparation,
             nominalFlow,
             nominalPressure,
             workVelocity,
@@ -302,7 +221,7 @@ const Params = props => {
             workVolume
         } = inputs;
         model.addParamsToReport({
-            nozzleSeparation,
+            rowSeparation,
             nominalFlow,
             nominalPressure,
             workVelocity,
@@ -311,6 +230,7 @@ const Params = props => {
             nozzleName: model.nozzleName
         });
         f7.panel.open();
+        */
     };
 
     // Callbacks del modo ayuda
@@ -324,65 +244,36 @@ const Params = props => {
     return (
         <Page>            
             <Navbar title="Parámetros de aplicación" style={{maxHeight:"40px", marginBottom:"0px"}}/>            
-            <NozzleSeparationSelector value={nozzleSeparation} onChange={handleNozzleSeparationChange}/>
+            
+            <BlockTitle style={{marginBottom: 5, marginTop:0}}>Ancho de calle</BlockTitle>
+
             <List form noHairlinesMd style={{marginBottom:"10px", marginTop: "10px"}}>    
                 <Input
                     className="help-target-dist-nozzle"
                     slot="list"
-                    label="Distancia entre picos"
-                    name="nozzleSeparation"
+                    label="Distancia entre filas"
+                    name="rowSeparation"
                     type="number"
                     unit="m"
                     icon={iconDistance}
-                    value={nozzleSeparation}
-                    onChange={v => handleNozzleSeparationChange(v.target.value)}>
-                </Input>
-                <Input
-                    className="help-target-nozzle-cnt"
-                    slot="list"
-                    label="Cantidad de picos"
-                    name="nozzleNumber"
-                    type="number"                    
-                    icon={iconNozzles}
-                    value={nozzleNumber}
-                    onChange={v => handleNozzleNumberChange(v.target.value)}>
+                    value={rowSeparation}
+                    onChange={v => handleRowSeparationChange(v.target.value)}>
                 </Input>
             </List>
 
-            <BlockTitle style={{marginBottom: 5}}>Capacidad del pico</BlockTitle>
+            <BlockTitle style={{marginBottom: 5}}>Configuración del arco</BlockTitle>
             
             <center className="help-target-nozzle-select">
-                <NozzleMenu 
-                    onOptionSelected={handleNozzleSelected} 
-                    selection={nozzleSelection} />
+                <ArcConfigInput 
+                    arcNumber={arcNumber}
+                    onArcChange={handleArcNumberChange}
+                    configName="S/N"
+                    onNewConfig={()=>console.log("Nueva config.")}
+                    onOpenConfig={()=>console.log("Abrir config.")}
+                    />
             </center>
 
-            <List form noHairlinesMd style={{marginBottom:"10px", marginTop: "0px"}}>    
-                <Row slot="list">
-                    <Col>
-                        <Input
-                            label="Caudal nominal"
-                            name="nominalFlow"
-                            type="number"
-                            unit="l/min"                    
-                            value={nominalFlow}
-                            onChange={handleNominalFlowChange}>
-                        </Input>
-                    </Col>
-                    <Col>
-                        <Input
-                            label="Presión nominal"
-                            name="nominalPressure"
-                            type="number"
-                            unit="bar"                    
-                            value={nominalPressure}
-                            onChange={handleNominalPressureChange}>
-                        </Input>
-                    </Col>
-                </Row>
-            </List>
-
-            <BlockTitle style={{marginBottom: "5px"}}>Parámetros de pulverización</BlockTitle>
+            <BlockTitle style={{marginBottom: "5px"}}>Parámetros de aplicación</BlockTitle>
             <List form noHairlinesMd style={{marginBottom:"10px"}}>
                 <Row slot="list" className="help-target-params-1 help-target-params-2">
                     <Col width="80">
@@ -400,40 +291,61 @@ const Params = props => {
                         </Input>        
                     </Col>
                     <Col width="20" style={{paddingTop:"5px", marginRight:"10px"}}>
-                        <CalculatorButton href="/velocity/" tooltip="Medir velocidad"/>
+                        <LinkButton href="/velocity/" tooltip="Medir velocidad">
+                            <FaStopwatch size={20}/>
+                        </LinkButton>
                     </Col>
                 </Row>
                 
-                <Input
-                    slot="list"
-                    borderColor={workPressureUpdated ? "green":"#F2D118"}
-                    label="Presión de trabajo"
-                    name="workPressure"
-                    type="number"
-                    unit="bar"
-                    icon={iconPressure}
-                    value={workPressure}
-                    onIconClick={computeWorkPressure}
-                    onChange={handleWorkPressureChange}>
-                </Input>
+                <Row slot="list" className="help-target-params-1 help-target-params-2">
+                    <Col width="80">
+                        <Input
+                            slot="list"
+                            borderColor={workPressureUpdated ? "green":"#F2D118"}
+                            label="Presión de trabajo"
+                            name="workPressure"
+                            type="number"
+                            unit="bar"
+                            icon={iconPressure}
+                            value={workPressure}
+                            onIconClick={computeWorkPressure}
+                            onChange={handleWorkPressureChange}>
+                        </Input>
+                    </Col>
+                </Row>
                 {sprayFlow && <div slot="list">
                     <span style={{fontSize: "0.85em", color: "rgb(100, 100, 100)", marginLeft: "50px"}}>
-                        Caudal pulverizado: {sprayFlow} l/min
+                        Caudal de bomba: {sprayFlow} l/min
                     </span>
                 </div>}
 
-                <Input
-                    slot="list"
-                    borderColor={workVolumeUpdated ? "green":"#F2D118"}
-                    label="Volumen de aplicación"
-                    name="workVolume"
-                    type="number"
-                    unit="l/ha"
-                    icon={iconVolume}
-                    value={workVolume}
-                    onIconClick={computeWorkVolume}
-                    onChange={handleWorkVolumeChange}>
-                </Input>
+                <Row slot="list" className="help-target-params-1 help-target-params-2">
+                    <Col width="80">
+                        <Input
+                            slot="list"
+                            borderColor={workVolumeUpdated ? "green":"#F2D118"}
+                            label="Volumen pulverizado"
+                            name="workVolume"
+                            type="number"
+                            unit="l/ha"
+                            icon={iconVolume}
+                            value={workVolume}
+                            onIconClick={computeWorkVolume}
+                            onChange={handleWorkVolumeChange}>
+                        </Input>
+                    </Col>
+                    <Col width="20" style={{paddingTop:"5px", marginRight:"10px"}}>
+                        <LinkButton href="/velocity/" tooltip="Calcular TRV" >
+                            <FaTree size={20}/>
+                        </LinkButton>
+                    </Col>
+                </Row>
+                <div slot="list">
+                    <span style={{fontSize: "0.85em", color: "rgb(100, 100, 100)", marginLeft: "50px"}}>
+                        Caudal de aire: {airFlow} m<sup>3</sup>/h
+                    </span>
+                </div>
+
             </List>
 
             <Row style={{marginTop:20, marginBottom: 20}}>

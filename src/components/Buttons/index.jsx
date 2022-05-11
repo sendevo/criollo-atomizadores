@@ -1,5 +1,5 @@
 import { Link, Block } from 'framework7-react';
-import { FaPlay, FaStop, FaArrowLeft, FaPlus, FaStopwatch, FaTrash } from 'react-icons/fa';
+import { FaPlay, FaStop, FaArrowLeft, FaPlus, FaTrash } from 'react-icons/fa';
 import classes from './style.module.css';
 
 const BackButton = props => (
@@ -14,10 +14,10 @@ const BackButton = props => (
     </Block>   
 ); 
 
-const CalculatorButton = props => (
+const LinkButton = props => (
     <Block style={{textAlign: "center", margin:"0px", padding:"0px"}}>
         <Link {...props} className={classes.RoundButton} style={{backgroundColor:props.color}}>
-            <FaStopwatch size={20}/>
+            {props.children}
         </Link>
     </Block>   
 );
@@ -58,7 +58,7 @@ const PlayButton = props => ( // Boton de control del cronometro
 
 export { 
     BackButton, 
-    CalculatorButton, 
+    LinkButton, 
     DeleteButton, 
     AddButton,
     PlayButton 

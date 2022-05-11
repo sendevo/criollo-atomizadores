@@ -7,7 +7,7 @@ import securityIcon from '../../assets/icons/seguridad.png';
 import infoIcon from '../../assets/icons/info.png';
 import logoInta from '../../assets/backgrounds/logoInta.png';
 import logoMin from '../../assets/backgrounds/logomin.png';
-import logo from '../../assets/icons/iconocriollo.png';
+import logo from '../../assets/icons/iconocriolloatm.png';
 import classes from '../style.module.css';
 
 const Home = () => (
@@ -17,7 +17,8 @@ const Home = () => (
                 <img className="app-logo" src={logo} height="100px" width="100px" alt="logo"/>
             </Block>
             <Block style={{textAlign: "center", marginTop:"5px"}}>
-                <h2 className={classes.Title}>CRIOLLO</h2>                
+                <h2 className={classes.Title}>CRIOLLO</h2>
+                <h3 className={classes.Title}>Atomizadores</h3>
             </Block>
             <Block className={classes.ButtonContainer}>
                 <Link href="/params/" className={classes.MenuButton}>

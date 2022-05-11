@@ -71,7 +71,7 @@ const f7params = {
             }
         },
         { // Cálculo de TRV
-            path: '/trv/',
+            path: '/trv/:id',
             component: Views.Trv,
             on:{pageInit: ()=>pushState("trv")},
             options: {

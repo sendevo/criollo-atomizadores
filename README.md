@@ -1,4 +1,4 @@
-# Criollo Atomizadores 4.0
+# Criollo Atomizadores 3.0
 
 Criollo Atomizadores es una aplicación utilitaria para tablets y smartphones que permite calcular los principales parámetros hidráulicos de operación de atomizadores o pulverizadoras hidroneumáticas y realizar la verificación estática correspondiente.  
 Al usar la aplicación es posible calcular alternativamente la velocidad de avance del equipo, la presión de trabajo y el volumen de pulverización. También es posible realizar la verificación de los picos y obtener el diagnóstico rápido del estado de los mismos. Cuenta con un calculador de mezclas para los productos del caldo de pulverización.   

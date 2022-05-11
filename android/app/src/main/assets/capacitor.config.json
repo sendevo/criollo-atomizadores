@@ -1,0 +1,6 @@
+{
+	"appId": "com.inta.criolloatm",
+	"appName": "Criollo Atomizadores",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}

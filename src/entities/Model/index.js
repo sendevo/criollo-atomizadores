@@ -8,7 +8,15 @@ import { Capacitor } from "@capacitor/core";
 // El almacenamiento de datos se realiza con el valor de la version.
 // Las migraciones entre versiones no estan implementadas. 
 // Ante cualquier cambio en el modelo, se debe incrementar la version.
-const version = '4'; 
+const version = '3'; 
+
+const get_blank_arc_config = () => {
+    return {
+        id: generateId(),
+        name: 'S/N',
+        nozzles: []
+    };
+};
 
 const get_blank_report = () => {
     return {
@@ -28,7 +36,11 @@ const get_blank_report = () => {
 };
 
 const defaultFormParams = {
-    workVelocity: 20, // Velocidad de trabajo (km/h)
+    rowSeparation: 3, // Ancho de calle (m)
+    arcNumber: 1, // Numero de arcos
+    arcConfig: get_blank_arc_config(),
+    
+    workVelocity: 10, // Velocidad de trabajo (km/h)
     velocityMeasured: false, // Para disparar render en vista de parametros
     workPressure: 2, // Presion de trabajo (bar)
     workVolume: 56, // Volumen de aplicacion (l/ha)
@@ -36,9 +48,6 @@ const defaultFormParams = {
     nominalFlow: 0.8, // Caudal nominal de pico seleccionado
     sprayFlow: null, // Caudal de pulverizacion (caudal de picos multiplicado por n de picos)
     nominalPressure: 3, // Presion nominal de pico seleccionado
-    nozzleSeparation: 0.35, // Distancia entre picos (m)
-    nozzleNumber: null, // Numero de picos
-    nozzleSelection: [-1, -1, -1, -1], // Indices de picos seleccionados
     
     // Verificacion de picos
     samplingTimeMs: 30000, // 30000, 60000 o 90000
@@ -61,7 +70,9 @@ const defaultFormParams = {
 export default class CriolloModel {
     constructor(){
         Object.assign(this, defaultFormParams);
-        this.reports = []; // Esta variable debe ser persistente
+        // Estas variable deben ser persistente
+        this.reports = []; 
+        this.arcConfigurations = [];
         this.getFromLocalStorage();
     }
 
@@ -85,7 +96,7 @@ export default class CriolloModel {
     /// Persistencia de parametros
 
     saveToLocalStorage(){ // Guardar datos en localStorage
-        const key = "criollo_model"+version;
+        const key = "criollo_atm_model"+version;
         const value = JSON.stringify(this);
         if(Capacitor.isNativePlatform())
             Storage.set({key, value});
@@ -113,7 +124,7 @@ export default class CriolloModel {
 
     getFromLocalStorage(){ // Recuperar datos de localStorage
         if(Capacitor.isNativePlatform())
-            Storage.get({key: "criollo_model"+version}).then(result => {
+            Storage.get({key: "criollo_atm_model"+version}).then(result => {
                 if(result.value)
                     Object.assign(this, JSON.parse(result.value));
                 else{
@@ -124,14 +135,14 @@ export default class CriolloModel {
         else{
             if(window.avt){
                 const userData = window.avt.generalData.getUserData();
-                const req = {ids:[userData.id], keys:["criollo_model"+version]};
+                const req = {ids:[userData.id], keys:["criollo_atm_model"+version]};
                 window.avt.storage.user.get(req)
                 .then(result => {                    
                     console.log(result);
                     if(result){
                         if(result.info?.objects[userData.id]){
-                            if(result.info.objects[userData.id]["criollo_model"+version]){
-                                const data = result.info.objects[userData.id]["criollo_model"+version].data;
+                            if(result.info.objects[userData.id]["criollo_atm_model"+version]){
+                                const data = result.info.objects[userData.id]["criollo_atm_model"+version].data;
                                 Object.assign(this, JSON.parse(data));
                             }
                         }
@@ -139,7 +150,7 @@ export default class CriolloModel {
                 });
             }else{
                 console.log("get: Fallback a localStorage");
-                const content = localStorage.getItem("criollo_model"+version);
+                const content = localStorage.getItem("criollo_atm_model"+version);
                 if(content){
                     const model = JSON.parse(content);
                     if(model)

@@ -11,14 +11,14 @@ import { BackButton } from '../../components/Buttons';
 
 const About = props => (
     <Page name="about">
-        <BlockTitle>Acerca de CRIOLLO</BlockTitle>
+        <BlockTitle>Acerca de CRIOLLO Atomizadores</BlockTitle>
         <Block>
             <List accordionList>
                 <ListItem accordionItem title="Versión de la aplicación">
                     <AccordionContent>
                         <Block>
                             <center>
-                                    <h3>Calibrador CRIOLLO 4.0</h3>
+                                    <h3>Calibrador CRIOLLO Atomizadores 3.0</h3>
                             </center>
                             <h3>Staff</h3>
                             <p><b>Autor:</b> Juan Pablo D'Amico</p>
@@ -29,10 +29,10 @@ const About = props => (
                 <ListItem accordionItem title="Descripción de la app">
                     <AccordionContent>
                         <Block>
-                            <p style={{textAlign: "justify"}}>Criollo es una aplicación utilitaria para tablets y smartphones que permite calcular los principales parámetros de operación de pulverizadoras terrestres de botalón y realizar la verificación estática correspondiente.</p>
+                            <p style={{textAlign: "justify"}}>Criollo Atomizadores es una aplicación utilitaria para tablets y smartphones que permite calcular los principales parámetros de operación de pulverizadoras terrestres de botalón y realizar la verificación estática correspondiente.</p>
 		                    <p style={{textAlign: "justify"}}>Al usar la aplicación es posible calcular alternativamente la velocidad de avance del equipo, la presión de trabajo y el volumen de pulverización para un tamaño de pico y una distancia entre picos determinada. También es posible realizar la verificación de los picos y obtener el diagnóstico rápido del estado de los mismos.</p>
                             <p style={{textAlign: "justify"}}>La información generada a partir del ingreso de los datos y los cálculos realizados se compila en un reporte que puede ser guardado en formato PDF y compartido mediante correo electrónico y/o WhatsApp.</p>
-                            <p style={{textAlign: "justify"}}>Una vez instalada, la utilización de Criollo no requiere disponibilidad de señal ni acceso a la red. Estos servicios sólo son necesarios si se desea compartir los reportes generados.</p>                            
+                            <p style={{textAlign: "justify"}}>Una vez instalada, la utilización de Criollo Atomizadores no requiere disponibilidad de señal ni acceso a la red. Estos servicios sólo son necesarios si se desea compartir los reportes generados.</p>                            
                         </Block>
                     </AccordionContent>
                 </ListItem>
@@ -63,7 +63,7 @@ const About = props => (
                     <AccordionContent>
                         <Block>
                         <p><i>Aceptación de los términos y condiciones</i></p>
-                            <p style={{textAlign:"justify"}}>Al acceder o utilizar los servicios de CRIOLLO, el usuario acepta los términos y condiciones establecidos a continuación.</p>
+                            <p style={{textAlign:"justify"}}>Al acceder o utilizar los servicios de CRIOLLO ATOMIZADORES, el usuario acepta los términos y condiciones establecidos a continuación.</p>
                             <p style={{textAlign:"justify"}}>Los textos, las imágenes y demás información que aparece en este sitio y su disposición,
                             pertenecen al Instituto Nacional de Tecnología Agropecuaria (INTA), salvo que se indique lo
                             contrario. La Estación Experimental Agropecuaria Hilario Ascasubi (CERBAS - INTA) autoriza a los

@@ -1,6 +1,6 @@
 .HomePage::after {
 	content: "";	
-	background: url(../assets/backgrounds/fondo6.jpg);
+	background: url(../assets/backgrounds/fondo1.jpg);
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -14,7 +14,7 @@
 }
 
 .InfoPage {
-	background: url(../assets/backgrounds/fondo5.jpg);
+	background: url(../assets/backgrounds/fondo2.jpg);
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;	

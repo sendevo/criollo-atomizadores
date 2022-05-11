@@ -5,15 +5,12 @@ import { useSound } from "use-sound";
 import moment from 'moment';
 import * as API from '../../entities/API/index.js';
 import { KeepAwake } from '@capacitor-community/keep-awake';
-import Input from "../../components/Input";
 import { arrayAvg, formatNumber } from "../../utils";
 import { PlayButton, BackButton } from "../../components/Buttons";
 import Timer from "../../entities/Timer";
 import Toast from "../../components/Toast";
 import { ElapsedSelector } from "../../components/Selectors";
 import NozzlesTable from "../../components/NozzlesTable";
-import iconFlow from "../../assets/icons/caudal.png";
-import iconNumber from "../../assets/icons/cant_picos.png";
 import oneSfx from '../../assets/sounds/uno.mp3';
 import twoSfx from '../../assets/sounds/dos.mp3';
 import threeSfx from '../../assets/sounds/tres.mp3';
@@ -245,35 +242,6 @@ const Control = props => {
         <Page>
             <Navbar title="Verificación de picos" style={{maxHeight:"40px", marginBottom:"0px"}}/>      
             <ElapsedSelector value={elapsed} disabled={running} onChange={handleElapsedChange}/>
-
-            <List form noHairlinesMd style={{marginBottom:"10px", marginTop: "10px"}} className="help-target-control-nozzles">    
-                <Input
-                    slot="list"
-                    label="Picos a controlar"
-                    name="nozzleCnt"
-                    type="number"
-                    icon={iconNumber}
-                    value={data.length === 0 ? undefined : data.length}
-                    onChange={handleNozzleCntChange}
-                    disabled={running}>
-                </Input>
-                <Input
-                    slot="list"
-                    label="Caudal de pico"
-                    name="workFlow"
-                    type="number"
-                    unit="l/min"
-                    icon={iconFlow}
-                    value={workFlow}
-                    onChange={handleWorkFlowChange}
-                    disabled={running}>
-                </Input>
-                {model.sprayFlow && <div slot="list">
-                    <span style={{fontSize: "0.85em", color: "rgb(100, 100, 100)", marginLeft: "50px"}}>
-                        Caudal pulverizado: {model.sprayFlow} l/min
-                    </span>
-                </div>}
-            </List>
 
             <Block style={{marginTop:"20px", textAlign:"center"}} className="help-target-control-play">
                 <p style={{fontSize:"50px", margin:"0px"}}>{getTime()} <PlayButton onClick={toggleRunning} running={running} /></p>
