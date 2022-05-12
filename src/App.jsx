@@ -70,8 +70,24 @@ const f7params = {
                 transition: "f7-cover"        
             }
         },
+        { // Configuracion de arcos
+            path: '/arc/:id?',
+            component: Views.Arc,
+            on:{pageInit: ()=>pushState("arc")},
+            options: {
+                transition: "f7-cover"        
+            }
+        },
+        { // Listado de configuraciones de arco guardadas
+            path: '/arcList/',
+            component: Views.ArcList,
+            on:{pageInit: ()=>pushState("arcList")},
+            options: {
+                transition: "f7-cover"        
+            }
+        },
         { // Cálculo de TRV
-            path: '/trv/:id',
+            path: '/trv/',
             component: Views.Trv,
             on:{pageInit: ()=>pushState("trv")},
             options: {

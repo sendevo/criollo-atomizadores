@@ -1,0 +1,52 @@
+.Table {
+    text-align:center; 
+    min-width:0px; 
+    table-layout:fixed;    
+}
+
+.Table th, td {
+    text-align: center;
+    font-size: 12px;    
+}
+
+.TableRow {
+    cursor: pointer;    
+    height: 35px;
+}
+
+.Header {
+    background-color:rgb(200,200,200, 0.6);
+}
+
+.DataCell {
+    padding-top: 5px!important;
+    padding-bottom: 5px!important;
+    margin: 0px;
+    font-size: 12px;    
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;    
+}
+
+.Icon {
+    width: 20px;
+    height: 20px;
+}
+
+.CheckboxCell {
+    text-align: center;    
+}
+
+.EmptyMessage {
+    display:flex; 
+    flex-direction: column;     
+    align-items: center;
+    color:rgb(150,150,150)
+}
+
+.Card { 
+    margin: 10px; 
+    border-radius: 5px; 
+    min-height: 70px;    
+}

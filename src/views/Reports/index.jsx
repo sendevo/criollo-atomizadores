@@ -1,15 +1,12 @@
 import { f7, Navbar, Page, Block, Checkbox, Row, Col, Button } from 'framework7-react';
 import { useState, useContext } from 'react';
 import moment from 'moment';
+import { countSelected } from '../../utils';
 import { BackButton } from '../../components/Buttons';
 import iconEmpty from '../../assets/icons/empty_folder.png';
 import { ModelCtx } from '../../context';
 import Toast from '../../components/Toast';
 import classes from './style.module.css';
-
-const countSelected = array => {
-    return array.filter(el => el.selected).length;
-};
 
 const Reports = props => {
 

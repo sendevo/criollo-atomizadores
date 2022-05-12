@@ -1,7 +1,7 @@
 import { Navbar, Page, Block, Row, Col, Button, BlockTitle } from 'framework7-react';
 import { useContext } from 'react';
 import { BackButton } from '../../components/Buttons';
-import NozzlesTable from '../../components/NozzlesTable';
+import NozzlesControlTable from '../../components/NozzlesControlTable';
 import { SuppliesTable, PrescriptionTable } from '../../components/SuppliesTable';
 import { ModelCtx } from '../../context';
 import { formatNumber } from '../../utils';
@@ -95,7 +95,7 @@ const ReportDetails = props => {
                             </tr>
                         </tbody>
                     </table>
-                    <NozzlesTable 
+                    <NozzlesControlTable 
                         data={report.control.data} 
                         onDataChange={()=>{}} 
                         rowSelectDisabled={true}

@@ -10,7 +10,7 @@ import { PlayButton, BackButton } from "../../components/Buttons";
 import Timer from "../../entities/Timer";
 import Toast from "../../components/Toast";
 import { ElapsedSelector } from "../../components/Selectors";
-import NozzlesTable from "../../components/NozzlesTable";
+import NozzlesControlTable from "../../components/NozzlesControlTable";
 import oneSfx from '../../assets/sounds/uno.mp3';
 import twoSfx from '../../assets/sounds/dos.mp3';
 import threeSfx from '../../assets/sounds/tres.mp3';
@@ -248,7 +248,7 @@ const Control = props => {
             </Block>
 
             <Block style={{marginBottom: "20px",textAlign:"center"}}>
-                <NozzlesTable 
+                <NozzlesControlTable 
                     data={data} 
                     onDataChange={updateData} 
                     rowSelectDisabled={running || !workFlow}

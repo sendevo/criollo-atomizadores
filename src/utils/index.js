@@ -14,10 +14,27 @@ export const getClosest = (array, attr, value) => {
     return array[index];
 };
 
-export const importAll = r => {
-    let images = {};
-    r.keys().forEach(item => { 
-        images[item.replace('./', '')] = r(item); 
-    });
-    return images
+export const countSelected = array => {
+    const selected = array.filter(el => el.selected);
+    return selected?.length;
+};
+
+export const getConstantRow = matrix => {
+    // Retorna la fila constante en toda la matriz o [] si hay alguna fila diferente
+    if(matrix){
+        if(matrix.length > 0){
+            for(let r = 0; r < matrix.length-1; r++)
+                for(let r2 = r+1; r2 < matrix.length; r2++){
+                    let equalCnt = 0;
+                    for(let c = 0; c < matrix[r].length; c++){
+                        if(matrix[r][c] === matrix[r2][c]) 
+                            equalCnt++;
+                    }
+                    if(equalCnt !== matrix[r].length)
+                        return [];
+                }
+            return matrix[0];
+        }
+    }
+    return [];
 };

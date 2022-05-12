@@ -1,6 +1,8 @@
 import Home from './Home';
 import Params from './Params';
 import Velocity from './Velocity';
+import Arc from './Arc';
+import ArcList from './ArcList';
 import Trv from './TRV';
 import Control from './Control';
 import Info from './Info';
@@ -15,6 +17,8 @@ export {
     Home,
     Params,
     Velocity,
+    Arc,
+    ArcList,
     Trv,
     Control,
     Info,

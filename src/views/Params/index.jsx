@@ -335,7 +335,7 @@ const Params = props => {
                         </Input>
                     </Col>
                     <Col width="20" style={{paddingTop:"5px", marginRight:"10px"}}>
-                        <LinkButton href="/velocity/" tooltip="Calcular TRV" >
+                        <LinkButton href="/trv/" tooltip="Calcular TRV" >
                             <FaTree size={20}/>
                         </LinkButton>
                     </Col>

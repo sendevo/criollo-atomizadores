@@ -4,7 +4,7 @@ import { nozzleCollectedPrompt } from "../Prompts";
 import { FaCheck, FaTimes, FaQuestion } from 'react-icons/fa';
 import classes from './style.module.css';
 
-const NozzlesTable = props => {
+const NozzlesControlTable = props => {
 
     const addCollected = (row, value) => { 
         // Callback prompt
@@ -88,4 +88,4 @@ const NozzlesTable = props => {
     );
 }
 
-export default NozzlesTable;
+export default NozzlesControlTable;

@@ -15,8 +15,8 @@ const BackButton = props => (
 ); 
 
 const LinkButton = props => (
-    <Block style={{textAlign: "center", margin:"0px", padding:"0px"}}>
-        <Link {...props} className={classes.RoundButton} style={{backgroundColor:props.color}}>
+    <Block style={{textAlign: "center", margin:"0px", padding:"0px", width:"100%"}}>
+        <Link {...props} className={props.variant==="square" ? classes.SquaredButton:classes.RoundButton} style={{backgroundColor:props.color, marginTop: props.mt?props.mt:10}}>
             {props.children}
         </Link>
     </Block>   

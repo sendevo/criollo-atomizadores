@@ -1,4 +1,4 @@
-import { Row, Col, Button } from 'framework7-react';
+import { Row, Col, List } from 'framework7-react';
 import { LinkButton } from '../Buttons';
 import { FaPlus, FaFolder } from 'react-icons/fa';
 import arcSingle from '../../assets/icons/arc_single.png';
@@ -7,10 +7,11 @@ import classes from './style.module.css'
 
 const ArcConfigInput = props => {
     return (
+        <List form noHairlinesMd style={{marginBottom:"10px", marginTop: "10px"}}>
         <Row slot="list">
             <Col width={20}>
-                <Row className={classes.LabelContainer}>
-                    <span className={classes.ButtonLabel}>Arcos</span>
+                <Row>
+                    <span className={classes.ButtonLabel} style={{marginLeft:22}}>Arcos</span>
                 </Row>
                 <Row>
                     <img className={classes.ButtonIcon} 
@@ -20,29 +21,42 @@ const ArcConfigInput = props => {
                         alt="icon"/>
                 </Row>
             </Col>
-            <Col width={60} className={classes.MainButtonContainer}>
-                <Row className={classes.LabelContainer}>
+            <Col width={60}>
+                <Row>
                     <span className={classes.ButtonLabel}>Configuración actual</span>
                 </Row>
                 <Row>
-                    <Button fill small className={classes.MainButton}>
+                    <LinkButton
+                        variant="square"
+                        href="/arc/id_ejemplo" 
+                        tooltip="Configuraccion actual"
+                        mt={10}>
                         S/N
-                    </Button>
+                    </LinkButton>
                 </Row>
             </Col>
-            <Col width={20} style={{marginTop:"-10px"}}>
+            <Col width={20} style={{paddingRight:"20px"}}>
                 <Row>
-                    <LinkButton color="green" href="/trv/new" tooltip="Nueva">
+                    <LinkButton 
+                        color="rgb(200, 50, 50)" 
+                        href="/arc/" 
+                        tooltip="Nueva"
+                        mt={10}>
                         <FaPlus size={20}/>
                     </LinkButton>
                 </Row>
                 <Row>
-                    <LinkButton color="black" href="/trv/open" tooltip="Abrir">
+                    <LinkButton 
+                        color="green" 
+                        href="/arcList/" 
+                        tooltip="Abrir"
+                        mt={3}>
                         <FaFolder size={20}/>
                     </LinkButton>
                 </Row>
             </Col>
         </Row>
+        </List>
     )
 };
 
