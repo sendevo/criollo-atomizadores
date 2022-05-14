@@ -6,9 +6,12 @@ import NozzleMenu from "../../components/NozzleMenu";
 import { getConstantRow, countSelected } from '../../utils';
 import iconNumber from '../../assets/icons/nozzle_cnt.png';
 
-const Arc = props => {
+const ArcConfig = props => {
 
-    const [arc, setArc] = useState([]);
+    // Datos para la tabla de picos
+    const [nozzleData, setNozzleData] = useState([]);
+
+    // Menu de eleccion de modelo de pico para picos del arco seleccionados
     const [nozzleSelection, setNozzleSelection] = useState([-1,-1,-1,-1]);
 
     const handleNozzleCntChange = e => {
@@ -16,33 +19,57 @@ const Arc = props => {
         if(cnt > 0 && cnt < 100){
             const temp = new Array(cnt).fill(0).map(el=>({
                 selected: false,
-                nozzle: [-1,-1,-1,-1],
+                selection: [-1,-1,-1,-1],
+                id: "",
                 name: "Sin pico",
-                img: ""            
+                img: "",
+                b: 0,
+                c: 0,
             }));
-            setArc(temp);
+            setNozzleData(temp);
         }else{
-            setArc([]);
+            setNozzleData([]);
         }
     };
 
     const updateSelection = () => {
-        const nozzles = arc.filter(el => el.selected).map(el => el.nozzle);
-        const sel = getConstantRow(nozzles);
+        const selectedNozzles = nozzleData.filter(el => el.selected).map(el => el.selection);
+        const sel = getConstantRow(selectedNozzles);
         setNozzleSelection(sel.length === 0 ? [-1,-1,-1,-1] : sel);
-    }
+    };
 
-    const handleNozzleSelected = (selection, nozzle) => {
-        setNozzleSelection(selection);
+    const setSelectedAll = v => {
+        const temp = [...nozzleData];
+        temp.forEach(nozzle => {
+            nozzle.selected = v;
+        });
+        setNozzleData(temp);
+        updateSelection();        
+    };
+
+    const setSelected = (idx, v) => {
+        const temp = [...nozzleData];
+        temp[idx].selected = v;
+        setNozzleData(temp);
+        updateSelection();
+    };
+
+
+    const onNozzleSelected = (selection, nozzle) => {
+        // Callback eleccion de pico
+        setNozzleSelection(selection);        
         if(nozzle){
-            const temp = [...arc];
-            temp.filter(el => el.selected).forEach(el => {
-                el.nozzle = selection;
-                el.name = nozzle.name;
-                el.img = nozzle.img;
-                el.selected = false;
-            });
-            setArc(temp);
+            const temp = [...nozzleData];
+            for(let i = 0; i < temp.length; i++){
+                if(temp[i].selected){
+                    temp[i] = {
+                        ...nozzle,
+                        selection,
+                        selected: false
+                    };                    
+                }
+            };            
+            setNozzleData(temp);
         }
     };
 
@@ -61,16 +88,19 @@ const Arc = props => {
                     name="nozzleCnt"
                     type="number"
                     icon={iconNumber}
-                    value={arc.length === 0 ? undefined : arc.length}
+                    value={nozzleData.length === 0 ? undefined : nozzleData.length}
                     onChange={handleNozzleCntChange}>
                 </Input>
             </List>
 
-            <ArcTable data={arc} updateSelection={updateSelection} />
+            <ArcTable 
+                data={nozzleData}
+                setSelected={setSelected}
+                setSelectedAll={setSelectedAll} />
 
-            {arc.length > 0 && countSelected(arc) > 0 && 
+            {nozzleData.length > 0 && countSelected(nozzleData) > 0 && 
                 <NozzleMenu 
-                    onOptionSelected={handleNozzleSelected} 
+                    onOptionSelected={onNozzleSelected} 
                     selection={nozzleSelection} />
             }
 
@@ -92,4 +122,4 @@ const Arc = props => {
     )
 };
 
-export default Arc;
+export default ArcConfig;

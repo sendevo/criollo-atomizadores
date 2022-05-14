@@ -72,7 +72,7 @@ const f7params = {
         },
         { // Configuracion de arcos
             path: '/arc/:id?',
-            component: Views.Arc,
+            component: Views.ArcConfig,
             on:{pageInit: ()=>pushState("arc")},
             options: {
                 transition: "f7-cover"        

@@ -119,7 +119,7 @@
                         "img": "d1",
                         "childs": [
                             {
-                                "id": "dc13",
+                                "id": "chd1dc13",
                                 "name": "DC13",
                                 "long_name": "DyN CH D1 DC13",
                                 "img": "dc13",
@@ -127,7 +127,7 @@
                                 "c": 0.1125833025
                             },
                             {
-                                "id": "dc23",
+                                "id": "chd1dc23",
                                 "name": "DC23",
                                 "long_name": "DyN CH D1 DC23",
                                 "img": "dc23",
@@ -135,7 +135,7 @@
                                 "c": 0.1196269758
                             },
                             {
-                                "id": "dc25",
+                                "id": "chd1dc25",
                                 "name": "DC25",
                                 "long_name": "DyN CH D1 DC25",
                                 "img": "dc25",
@@ -143,7 +143,7 @@
                                 "c": 0.2009178937
                             },
                             {
-                                "id": "dc45",
+                                "id": "chd1dc45",
                                 "name": "DC45",
                                 "long_name": "DyN CH D1 DC45",
                                 "img": "dc45",
@@ -151,7 +151,7 @@
                                 "c": 0.2549578789
                             },
                             {
-                                "id": "dc46",
+                                "id": "chd1dc46",
                                 "name": "DC46",
                                 "long_name": "DyN CH D1 DC46",
                                 "b": -0.01,
@@ -165,7 +165,7 @@
                         "img": "d1_5",
                         "childs": [
                             {
-                                "id": "dc13",
+                                "id": "chd15dc13",
                                 "name": "DC13",
                                 "long_name": "DyN CH D1.5 DC13",
                                 "img": "dc13",
@@ -173,7 +173,7 @@
                                 "c": 0.1238993678
                             },
                             {
-                                "id": "dc23",
+                                "id": "chd15dc23",
                                 "name": "DC23",
                                 "long_name": "DyN CH D1.5 DC23",
                                 "img": "dc23",
@@ -181,7 +181,7 @@
                                 "c": 0.1609652551
                             },
                             {
-                                "id": "dc25",
+                                "id": "chd15dc25",
                                 "name": "DC25",
                                 "long_name": "DyN CH D1.5 DC25",
                                 "img": "dc25",
@@ -189,7 +189,7 @@
                                 "c": 0.2478564706
                             },
                             {
-                                "id": "dc45",
+                                "id": "chd15dc45",
                                 "name": "DC45",
                                 "long_name": "DyN CH D1.5 DC45",
                                 "img": "dc45",
@@ -197,7 +197,7 @@
                                 "c": 0.3805892974
                             },
                             {
-                                "id": "dc46",
+                                "id": "chd15dc46",
                                 "name": "DC46",
                                 "long_name": "DyN CH D1.5 DC46",
                                 "img": "dc46",
@@ -212,7 +212,7 @@
                         "img": "d2",
                         "childs": [
                             {
-                                "id": "dc13",
+                                "id": "chd2dc13",
                                 "name": "DC13",
                                 "long_name": "DyN CH D2 DC13",
                                 "img": "dc13",
@@ -220,7 +220,7 @@
                                 "c": 0.1352731681
                             },
                             {
-                                "id": "dc23",
+                                "id": "chd2dc23",
                                 "name": "DC23",
                                 "long_name": "DyN CH D2 DC23",
                                 "img": "dc23",
@@ -228,7 +228,7 @@
                                 "c": 0.1812302495
                             },
                             {
-                                "id": "dc25",
+                                "id": "chd2dc25",
                                 "name": "DC25",
                                 "long_name": "DyN CH D2 DC25",
                                 "img": "dc25",
@@ -236,7 +236,7 @@
                                 "c": 0.3185818785
                             },
                             {
-                                "id": "dc45",
+                                "id": "chd2dc45",
                                 "name": "DC45",
                                 "long_name": "DyN CH D2 DC45",
                                 "img": "dc45",
@@ -244,7 +244,7 @@
                                 "c": 0.4341674024
                             },
                             {
-                                "id": "dc46",
+                                "id": "chd2dc46",
                                 "name": "DC46",
                                 "long_name": "DyN CH D2 DC46",
                                 "img": "dc46",
@@ -259,7 +259,7 @@
                         "img": "d3",
                         "childs": [
                             {
-                                "id": "dc13",
+                                "id": "chd3dc13",
                                 "name": "DC13",
                                 "long_name": "DyN CH D3 DC13",
                                 "img": "dc13",
@@ -267,7 +267,7 @@
                                 "c": 0.1495337197
                             },
                             {
-                                "id": "dc23",
+                                "id": "chd3dc23",
                                 "name": "DC23",
                                 "long_name": "DyN CH D3 DC23",
                                 "img": "dc23",
@@ -275,7 +275,7 @@
                                 "c": 0.2283997665
                             },
                             {
-                                "id": "dc25",
+                                "id": "chd3dc25",
                                 "name": "DC25",
                                 "long_name": "DyN CH D3 DC25",
                                 "img": "dc25",
@@ -283,7 +283,7 @@
                                 "c": 0.3897114317
                             },
                             {
-                                "id": "dc45",
+                                "id": "chd3dc45",
                                 "name": "DC45",
                                 "long_name": "DyN CH D3 DC45",
                                 "img": "dc45",
@@ -291,7 +291,7 @@
                                 "c": 0.5096270826
                             },
                             {
-                                "id": "dc46",
+                                "id": "chd3dc46",
                                 "name": "DC46",
                                 "long_name": "DyN CH D3 DC46",
                                 "img": "dc46",
@@ -306,7 +306,7 @@
                         "img": "d4",
                         "childs": [
                             {
-                                "id": "dc13",
+                                "id": "chd4dc13",
                                 "name": "DC13",
                                 "long_name": "DyN CH D4 DC13",
                                 "img": "dc13",
@@ -314,7 +314,7 @@
                                 "c": 0.1899482386
                             },
                             {
-                                "id": "dc23",
+                                "id": "chd4dc23",
                                 "name": "DC23",
                                 "long_name": "DyN CH D4 DC23",
                                 "img": "dc23",
@@ -322,7 +322,7 @@
                                 "c": 0.2993561146
                             },
                             {
-                                "id": "dc25",
+                                "id": "chd4dc25",
                                 "name": "DC25",
                                 "long_name": "DyN CH D4 DC25",
                                 "img": "dc25",
@@ -330,7 +330,7 @@
                                 "c": 0.6096818843
                             },
                             {
-                                "id": "dc45",
+                                "id": "chd4dc45",
                                 "name": "DC45",
                                 "long_name": "DyN CH D4 DC45",
                                 "img": "dc45",
@@ -338,7 +338,7 @@
                                 "c": 0.8002074731
                             },
                             {
-                                "id": "dc46",
+                                "id": "chd4dc46",
                                 "name": "DC46",
                                 "long_name": "DyN CH D4 DC46",
                                 "img": "dc46",
@@ -353,7 +353,7 @@
                         "img": "d5",
                         "childs": [
                             {
-                                "id": "dc13",
+                                "id": "chd5dc13",
                                 "name": "DC13",
                                 "long_name": "DyN CH D5 DC13",
                                 "img": "dc13",
@@ -361,7 +361,7 @@
                                 "c": 0.27
                             },
                             {
-                                "id": "dc23",
+                                "id": "chd5dc23",
                                 "name": "DC23",
                                 "long_name": "DyN CH D5 DC23",
                                 "img": "dc23",
@@ -369,7 +369,7 @@
                                 "c": 0.3616522086
                             },
                             {
-                                "id": "dc25",
+                                "id": "chd5dc25",
                                 "name": "DC25",
                                 "long_name": "DyN CH D5 DC25",
                                 "img": "dc25",
@@ -377,7 +377,7 @@
                                 "c": 0.6951297241
                             },
                             {
-                                "id": "dc45",
+                                "id": "chd5dc45",
                                 "name": "DC45",
                                 "long_name": "DyN CH D5 DC45",
                                 "img": "dc45",
@@ -385,7 +385,7 @@
                                 "c": 0.9872689603
                             },
                             {
-                                "id": "dc46",
+                                "id": "chd5dc46",
                                 "name": "DC46",
                                 "long_name": "DyN CH D5 DC46",
                                 "img": "dc46",
@@ -400,7 +400,7 @@
                         "img": "d6",
                         "childs": [
                             {
-                                "id": "dc23",
+                                "id": "chd6dc23",
                                 "name": "DC23",
                                 "long_name": "DyN CH D6 DC23",
                                 "img": "dc23",
@@ -408,7 +408,7 @@
                                 "c": 0.4289804876
                             },
                             {
-                                "id": "dc25",
+                                "id": "chd6dc25",
                                 "name": "DC25",
                                 "long_name": "DyN CH D6 DC25",
                                 "img": "dc25",
@@ -416,7 +416,7 @@
                                 "c": 0.9456997409
                             },
                             {
-                                "id": "dc45",
+                                "id": "chd6dc45",
                                 "name": "DC45",
                                 "long_name": "DyN CH D6 DC45",
                                 "img": "dc45",
@@ -424,7 +424,7 @@
                                 "c": 1.3943009
                             },
                             {
-                                "id": "dc46",
+                                "id": "chd6dc46",
                                 "name": "DC46",
                                 "long_name": "DyN CH D6 DC46",
                                 "img": "dc46",
@@ -439,7 +439,7 @@
                         "img": "d7",
                         "childs": [
                             {
-                                "id": "dc25",
+                                "id": "chd7dc25",
                                 "name": "DC25",
                                 "long_name": "DyN CH D7 DC25",
                                 "img": "dc25",
@@ -447,7 +447,7 @@
                                 "c": 1.143153533
                             },
                             {
-                                "id": "dc45",
+                                "id": "chd7dc45",
                                 "name": "DC45",
                                 "long_name": "DyN CH D7 DC45",
                                 "img": "dc45",
@@ -455,7 +455,7 @@
                                 "c": 1.636788013
                             },
                             {
-                                "id": "dc46",
+                                "id": "chd7dc46",
                                 "name": "DC46",
                                 "long_name": "DyN CH D7 DC46",
                                 "img": "dc46",
@@ -470,7 +470,7 @@
                         "img": "d8",
                         "childs": [
                             {
-                                "id": "dc25",
+                                "id": "chd8dc25",
                                 "name": "DC25",
                                 "long_name": "DyN CH D8 DC25",
                                 "img": "dc25",
@@ -478,7 +478,7 @@
                                 "c": 1.37178424
                             },
                             {
-                                "id": "dc45",
+                                "id": "chd8dc45",
                                 "name": "DC45",
                                 "long_name": "DyN CH D8 DC45",
                                 "img": "dc45",
@@ -486,7 +486,7 @@
                                 "c": 2.019571242
                             },
                             {
-                                "id": "dc46",
+                                "id": "chd8dc46",
                                 "name": "DC46",
                                 "long_name": "DyN CH D8 DC45",
                                 "img": "dc46",
@@ -501,7 +501,7 @@
                         "img": "d10",
                         "childs": [
                             {
-                                "id": "dc25",
+                                "id": "chd10dc25",
                                 "name": "DC25",
                                 "long_name": "DyN CH D10 DC25",
                                 "img": "dc25",
@@ -509,7 +509,7 @@
                                 "c": 1.714730299
                             },
                             {
-                                "id": "dc45",
+                                "id": "chd10dc45",
                                 "name": "DC45",
                                 "long_name": "DyN CH D10 DC45",
                                 "img": "dc45",
@@ -517,7 +517,7 @@
                                 "c": 2.591148008
                             },
                             {
-                                "id": "dc46",
+                                "id": "chd10dc46",
                                 "name": "DC46",
                                 "long_name": "DyN CH D10 DC46",
                                 "img": "dc46",
@@ -532,7 +532,7 @@
                         "img": "d12",
                         "childs": [
                             {
-                                "id": "dc25",
+                                "id": "chd12dc25",
                                 "name": "DC25",
                                 "long_name": "DyN CH D12 DC25",
                                 "img": "dc25",
@@ -540,7 +540,7 @@
                                 "c": 2.114834036
                             },
                             {
-                                "id": "dc45",
+                                "id": "chd12dc45",
                                 "name": "DC45",
                                 "long_name": "DyN CH D12 DC45",
                                 "img": "dc45",
@@ -555,7 +555,7 @@
                         "img": "d14",
                         "childs": [
                             {
-                                "id": "dc25",
+                                "id": "chd14dc25",
                                 "name": "DC25",
                                 "long_name": "DyN CH D14 DC25",
                                 "img": "dc25",
@@ -563,7 +563,7 @@
                                 "c": 2.319793382
                             },
                             {
-                                "id": "dc45",
+                                "id": "chd14dc45",
                                 "name": "DC45",
                                 "long_name": "DyN CH D14 DC45",
                                 "img": "dc45",
@@ -584,7 +584,7 @@
                         "img": "d1",
                         "childs": [
                             {
-                                "id": "dc31",
+                                "id": "clld1dc31",
                                 "name": "DC31",
                                 "long_name": "DyN CLL D1 DC31",
                                 "img": "dc31",
@@ -592,7 +592,7 @@
                                 "c": 0.2619
                             },
                             {
-                                "id": "dc35",
+                                "id": "clld1dc35",
                                 "name": "DC35",
                                 "img": "dc35",
                                 "b": 0.0844,
@@ -606,7 +606,7 @@
                         "img": "d2",
                         "childs": [
                             {
-                                "id": "dc31",
+                                "id": "clld2dc31",
                                 "name": "DC31",
                                 "long_name": "DyN CLL D2 DC31",
                                 "img": "dc31",
@@ -614,7 +614,7 @@
                                 "c": 0.402
                             },
                             {
-                                "id": "dc35",
+                                "id": "clld2dc35",
                                 "name": "DC35",
                                 "long_name": "DyN CLL D2 DC35",
                                 "img": "dc35",
@@ -622,7 +622,7 @@
                                 "c": 0.4517
                             },
                             {
-                                "id": "dc56",
+                                "id": "clld2dc56",
                                 "name": "DC56",
                                 "long_name": "DyN CLL D2 DC56",
                                 "img": "dc56",
@@ -637,7 +637,7 @@
                         "img": "d3",
                         "childs": [
                             {
-                                "id": "dc31",
+                                "id": "clld3dc31",
                                 "name": "DC31",
                                 "long_name": "DyN CLL D3 DC31",
                                 "img": "dc31",
@@ -645,7 +645,7 @@
                                 "c": 0.4301
                             },
                             {
-                                "id": "dc35",
+                                "id": "clld3dc35",
                                 "name": "DC35",
                                 "long_name": "DyN CLL D3 DC35",
                                 "img": "dc35",
@@ -653,7 +653,7 @@
                                 "c": 0.6273
                             },
                             {
-                                "id": "dc56",
+                                "id": "clld3dc56",
                                 "name": "DC56",
                                 "long_name": "DyN CLL D3 DC56",
                                 "img": "dc56",
@@ -668,7 +668,7 @@
                         "img": "d4",
                         "childs": [
                             {
-                                "id": "dc35",
+                                "id": "clld4dc35",
                                 "name": "DC35",
                                 "long_name": "DyN CLL D4 DC35",
                                 "img": "dc35",
@@ -676,7 +676,7 @@
                                 "c": 1.0254
                             },
                             {
-                                "id": "dc56",
+                                "id": "clld4dc56",
                                 "name": "DC56",
                                 "long_name": "DyN CLL D4 DC56",
                                 "img": "dc56",
@@ -691,7 +691,7 @@
                         "img": "d5",
                         "childs": [
                             {
-                                "id": "dc35",
+                                "id": "clld5dc35",
                                 "name": "DC35",
                                 "long_name": "DyN CLL D5 DC35",
                                 "img": "dc35",
@@ -699,7 +699,7 @@
                                 "c": 1.2917
                             },
                             {
-                                "id": "dc56",
+                                "id": "clld5dc56",
                                 "name": "DC56",
                                 "long_name": "DyN CLL D5 DC56",
                                 "img": "dc56",
@@ -714,7 +714,7 @@
                         "img": "d6",
                         "childs": [
                             {
-                                "id": "dc56",
+                                "id": "clld6dc56",
                                 "name": "DC56",
                                 "long_name": "DyN CLL D6 DC56",
                                 "img": "dc56",
@@ -729,7 +729,7 @@
                         "img": "d7",
                         "childs": [
                             {
-                                "id": "dc56",
+                                "id": "clld7dc56",
                                 "name": "DC56",
                                 "long_name": "DyN CLL D7 DC56",
                                 "img": "dc56",
@@ -749,7 +749,7 @@
         "img": "atr",
         "childs": [
             {
-                "id": "blanco",
+                "id": "atrblanco",
                 "name": "Blanco",
                 "long_name": "CEN Blanco",
                 "img": "blanco",
@@ -757,7 +757,7 @@
                 "c": 0.1126
             },
             {
-                "id": "lila",
+                "id": "atrlila",
                 "name": "Lila",
                 "long_name": "CEN Lila",
                 "img": "lila",
@@ -765,7 +765,7 @@
                 "c": 0.1494
             },
             {
-                "id": "marron",
+                "id": "atrmarron",
                 "name": "Marron",
                 "long_name": "CEN Marron",
                 "img": "marron",
@@ -773,7 +773,7 @@
                 "c": 0.2026
             },
             {
-                "id": "amarillo",
+                "id": "atramarillo",
                 "name": "Amarillo",
                 "long_name": "CEN Amarillo",
                 "img": "amarillo",
@@ -781,7 +781,7 @@
                 "c": 0.3186
             },
             {
-                "id": "naranja",
+                "id": "atrnaranja",
                 "name": "Naranja",
                 "long_name": "CEN Naranja",
                 "img": "naranja",
@@ -789,7 +789,7 @@
                 "c": 0.4228
             },
             {
-                "id": "rojo",
+                "id": "atrrojo",
                 "name": "Rojo",
                 "long_name": "CEN Rojo",
                 "img": "rojo",
@@ -797,7 +797,7 @@
                 "c": 0.5724
             },
             {
-                "id": "gris",
+                "id": "atrgris",
                 "name": "Gris",
                 "long_name": "CEN Gris",
                 "img": "gris",
@@ -805,7 +805,7 @@
                 "c": 0.6139
             },
             {
-                "id": "verde",
+                "id": "atrverde",
                 "name": "Verde",
                 "long_name": "CEN Verde",
                 "img": "verde",
@@ -813,7 +813,7 @@
                 "c": 0.7279
             },
             {
-                "id": "negro",
+                "id": "atrnegro",
                 "name": "Negro",
                 "long_name": "CEN Negro",
                 "img": "negro",
@@ -821,7 +821,7 @@
                 "c": 0.8239
             },
             {
-                "id": "azul",
+                "id": "atrazul",
                 "name": "Azul",
                 "long_name": "CEN Azul",
                 "img": "azul",
@@ -842,7 +842,7 @@
                 "img": "amt_arriba",
                 "childs": [
                     {
-                        "id": "a007",
+                        "id": "fu007",
                         "name": ".007",
                         "long_name": "AMT fresado arriba .007",
                         "img": "amt_arriba",
@@ -850,7 +850,7 @@
                         "c": 0.276
                     },
                     {
-                        "id": "a008",
+                        "id": "fu008",
                         "name": ".008",
                         "long_name": "AMT fresado arriba .008",
                         "img": "amt_arriba",
@@ -858,7 +858,7 @@
                         "c": 0.3404
                     },
                     {
-                        "id": "a010",
+                        "id": "fu010",
                         "name": ".010",
                         "long_name": "AMT fresado arriba .010",
                         "img": "amt_arriba",
@@ -866,7 +866,7 @@
                         "c": 0.5439
                     },
                     {
-                        "id": "a012",
+                        "id": "fu012",
                         "name": ".012",
                         "long_name": "AMT fresado arriba .012",
                         "img": "amt_arriba",
@@ -874,7 +874,7 @@
                         "c": 0.7785
                     },
                     {
-                        "id": "a015",
+                        "id": "fu015",
                         "name": ".015",
                         "long_name": "AMT fresado arriba .015",
                         "img": "amt_arriba",
@@ -882,7 +882,7 @@
                         "c": 1.1819
                     },
                     {
-                        "id": "a018",
+                        "id": "fu018",
                         "name": ".018",
                         "long_name": "AMT fresado arriba .018",
                         "img": "amt_arriba",
@@ -890,7 +890,7 @@
                         "c": 1.8033
                     },
                     {
-                        "id": "a020",
+                        "id": "fu020",
                         "name": ".020",
                         "long_name": "AMT fresado arriba .020",
                         "img": "amt_arriba",
@@ -898,7 +898,7 @@
                         "c": 2.1456
                     },
                     {
-                        "id": "a023",
+                        "id": "fu023",
                         "name": ".023",
                         "long_name": "AMT fresado arriba .023",
                         "img": "amt_arriba",
@@ -913,7 +913,7 @@
                 "img": "amt_abajo",
                 "childs": [
                     {
-                        "id": "a007",
+                        "id": "fd007",
                         "name": ".007",
                         "long_name": "AMT fresado abajo .007",
                         "img": "amt_abajo",
@@ -921,7 +921,7 @@
                         "c": 0.2704
                     },
                     {
-                        "id": "a008",
+                        "id": "fd008",
                         "name": ".008",
                         "long_name": "AMT fresado abajo .008",
                         "img": "amt_abajo",
@@ -929,7 +929,7 @@
                         "c": 0.2948
                     },
                     {
-                        "id": "a010",
+                        "id": "fd010",
                         "name": ".010",
                         "long_name": "AMT fresado abajo .010",
                         "img": "amt_abajo",
@@ -937,7 +937,7 @@
                         "c": 0.4423
                     },
                     {
-                        "id": "a012",
+                        "id": "fd012",
                         "name": ".012",
                         "long_name": "AMT fresado abajo .012",
                         "img": "amt_abajo",
@@ -945,7 +945,7 @@
                         "c": 0.6464
                     },
                     {
-                        "id": "a015",
+                        "id": "fd015",
                         "name": ".015",
                         "long_name": "AMT fresado abajo .015",
                         "img": "amt_abajo",
@@ -953,7 +953,7 @@
                         "c": 0.9928
                     },
                     {
-                        "id": "a018",
+                        "id": "fd018",
                         "name": ".018",
                         "long_name": "AMT fresado abajo .018",
                         "img": "amt_abajo",
@@ -961,7 +961,7 @@
                         "c": 1.4005
                     },
                     {
-                        "id": "a020",
+                        "id": "fd020",
                         "name": ".020",
                         "long_name": "AMT fresado abajo .020",
                         "img": "amt_abajo",
@@ -969,7 +969,7 @@
                         "c": 1.7994
                     },
                     {
-                        "id": "a023",
+                        "id": "fd023",
                         "name": ".023",
                         "long_name": "AMT fresado abajo .023",
                         "img": "amt_abajo",

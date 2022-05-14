@@ -1,7 +1,7 @@
 import Home from './Home';
 import Params from './Params';
 import Velocity from './Velocity';
-import Arc from './Arc';
+import ArcConfig from './Arc';
 import ArcList from './ArcList';
 import Trv from './TRV';
 import Control from './Control';
@@ -17,7 +17,7 @@ export {
     Home,
     Params,
     Velocity,
-    Arc,
+    ArcConfig,
     ArcList,
     Trv,
     Control,
