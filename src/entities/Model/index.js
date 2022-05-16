@@ -73,6 +73,7 @@ export default class CriolloModel {
         Object.assign(this, defaultFormParams);
         // Estas variable deben ser persistente
         this.reports = []; 
+        this.currentArcConfig = get_blank_arc_config();
         this.arcConfigurations = [];
         this.getFromLocalStorage();
     }
