@@ -979,5 +979,21 @@
                 ]
             }
         ]
+    },
+    {
+        "id": "otros",
+        "name": "Otros",
+        "long_name": "Otros",
+        "img": "otros",
+        "childs": [
+            {
+                "id": "tapon",
+                "name": "Tapón",
+                "long_name": "Tapón",
+                "img": "tapon",
+                "b": 0,
+                "c": 0
+            }
+        ]
     }
 ]

@@ -73,15 +73,19 @@ const Reports = props => {
         f7.dialog.confirm('¿Está seguro que desea eliminar los reportes seleccionados?', 'Eliminar reportes', () => {
             const selectedIds = getSelected().map(el => el.id);
             if (selectedIds.length > 0) {
+                let errors = 0;
                 for(let i = 0; i < selectedIds.length; i++){
-                    const res = model.deleteReport(selectedIds[i]);
-                    if(res.status === "error"){
-                        Toast("error", res.message, 2000, "center");
-                        break;
+                    try{
+                        model.deleteReport(selectedIds[i]);
+                    }catch(err){
+                        Toast("error", err.message, 2000, "center");
+                        errors++;
                     }
                 }
-                Toast("success", "Reportes eliminados exitosamente", 2000, "center");
-                setSelectedAll(false); // Deseleccionar todos y actualizar vista
+                if(errors === 0){
+                    Toast("success", "Reportes eliminados exitosamente", 2000, "center");
+                    setSelectedAll(false); // Deseleccionar todos y actualizar vista
+                }
             }else{
                 Toast("info", "Seleccione al menos un reporte", 2000, "center");
             }

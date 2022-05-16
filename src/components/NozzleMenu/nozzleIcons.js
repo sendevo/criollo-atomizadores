@@ -61,6 +61,9 @@ import dyn_d7 from '../../assets/nozzles/dyn_d7.png';
 import iso005 from '../../assets/nozzles/iso005.png';
 import iso06 from '../../assets/nozzles/iso06.png';
 import verde from '../../assets/nozzles/verde.png';
+import tapon from '../../assets/nozzles/tapon.png';
+import otros from '../../assets/nozzles/otros.png';
+import personalizado from '../../assets/nozzles/personalizado.png';
 
 export default {
     amarillo,
@@ -125,5 +128,8 @@ export default {
     dyn_d7,
     iso005,
     iso06,
-    verde
+    verde,
+    tapon,
+    otros,
+    personalizado
 }

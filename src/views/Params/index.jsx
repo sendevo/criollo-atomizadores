@@ -267,10 +267,8 @@ const Params = props => {
                 <ArcConfigInput 
                     arcNumber={arcNumber}
                     onArcChange={handleArcNumberChange}
-                    configName="S/N"
-                    onNewConfig={()=>console.log("Nueva config.")}
-                    onOpenConfig={()=>console.log("Abrir config.")}
-                    />
+                    arcConfig={model.currentArcConfig}
+                />
             </center>
 
             <BlockTitle style={{marginBottom: "5px"}}>Parámetros de aplicación</BlockTitle>

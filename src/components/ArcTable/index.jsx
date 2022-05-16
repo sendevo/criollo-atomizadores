@@ -39,7 +39,7 @@ const ArcTable = props => {
                 <div style={{maxHeight:"300px",overflow: "auto"}}>
                     <table className={["data-table", classes.Table].join(' ')} >
                         <colgroup>
-                        <col span={1} style={{width: "15%"}} />
+                            <col span={1} style={{width: "15%"}} />
                             <col span={1} style={{width: "15%"}} />
                             <col span={1} style={{width: "50%"}} />
                             <col span={1} style={{width: "20%"}} />
@@ -55,7 +55,7 @@ const ArcTable = props => {
                                             />
                                         </td>
                                         <td className={classes.DataCell}>{idx+1}</td>
-                                        <td className={classes.DataCell}>{row.name}</td>
+                                        <td className={classes.DataCell}>{row.long_name}</td>
                                         <td className={classes.DataCell}>
                                             <img src={icons[row.img]} className={classes.Icon}/>
                                         </td>

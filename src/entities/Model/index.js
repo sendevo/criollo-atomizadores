@@ -13,14 +13,16 @@ const version = '3';
 const get_blank_arc_config = () => {
     return {
         id: generateId(),
+        timestamp: 0,
         name: 'S/N',
-        nozzles: []
+        nozzleData: []
     };
 };
 
 const get_blank_report = () => {
     return {
         id: generateId(),
+        timestamp: 0,
         name: "Sin nombre",
         comments: "",
         params:{},
@@ -38,7 +40,6 @@ const get_blank_report = () => {
 const defaultFormParams = {
     rowSeparation: 3, // Ancho de calle (m)
     arcNumber: 1, // Numero de arcos
-    arcConfig: get_blank_arc_config(),
     
     workVelocity: 10, // Velocidad de trabajo (km/h)
     velocityMeasured: false, // Para disparar render en vista de parametros
@@ -224,14 +225,36 @@ export default class CriolloModel {
         if(index !== -1){
             this.reports.splice(index, 1);
             this.saveToLocalStorage();
-            return {
-                status: "success"
-            };
         }else{
-            return {
-                status: "error",
-                message: "No se encontró el reporte"
-            };
+            throw new Error("No se encontro el reporte");
+        }
+    }
+
+
+    // Configuracion de arcos
+
+    getArcConfig(id) {
+        let index = -1;
+        if(id) index = this.arcConfigurations.findIndex(config => config.id === id); 
+        this.currentArcConfig = index !== -1 ? this.arcConfigurations[index] : get_blank_arc_config();
+        return this.currentArcConfig;
+    }
+
+    saveArcConfig(nozzleData, configName) {
+        this.currentArcConfig.name = configName;
+        this.currentArcConfig.nozzleData = nozzleData;
+        this.currentArcConfig.timestamp = Date.now();
+        this.arcConfigurations.push(this.currentArcConfig); 
+        this.saveToLocalStorage();
+    }
+
+    deleteArcConfig(id) {
+        const index = this.arcConfigurations.findIndex(config => config.id === id);
+        if(index !== -1){
+            this.arcConfigurations.splice(index, 1);
+            this.saveToLocalStorage();
+        }else{
+            throw new Error("No se encontró la configuración");
         }
     }
 }

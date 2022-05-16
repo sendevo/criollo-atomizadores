@@ -28,10 +28,10 @@ const ArcConfigInput = props => {
                 <Row>
                     <LinkButton
                         variant="square"
-                        href="/arc/id_ejemplo" 
+                        href={`/arc/${props.arcConfig.id}`}
                         tooltip="Configuraccion actual"
                         mt={10}>
-                        S/N
+                        {props.arcConfig.name}
                     </LinkButton>
                 </Row>
             </Col>
@@ -39,7 +39,7 @@ const ArcConfigInput = props => {
                 <Row>
                     <LinkButton 
                         color="rgb(200, 50, 50)" 
-                        href="/arc/" 
+                        href="/arc/"
                         tooltip="Nueva"
                         mt={10}>
                         <FaPlus size={20}/>
