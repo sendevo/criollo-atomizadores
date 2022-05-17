@@ -1,4 +1,7 @@
 import { Block, Radio, Row, Col, BlockTitle } from 'framework7-react';
+import typeATree from "../../assets/icons/tree_type_a.png";
+import typeBTree from "../../assets/icons/tree_type_b.png";
+import typeCTree from "../../assets/icons/tree_type_c.png";
 
 
 const NozzleSeparationSelector = props => {
@@ -131,4 +134,54 @@ const ElapsedSelector = props => {
 };
 
 
-export { NozzleSeparationSelector, PresentationSelector, ElapsedSelector };
+const iconStyle = {
+    alignContent:"center",
+    alignItems: "center",
+    marginBottom: "-30px",
+    width: "60px",
+    height: "60px"
+}
+
+const TreeTypeSelector = props => {
+
+    const setType = (el, value) => {
+        if(el.target.checked){
+            props.onChange(value);
+        }
+    };
+
+    return (
+        <Block style={{margin:"0px"}}>
+            <BlockTitle>Forma de la planta</BlockTitle>
+            <Row>
+                <Col style={{textAlign:"center"}}>
+                    <Radio 
+                        disabled={props.disabled}
+                        name="input-type" 
+                        checked={props.value==="type_a"} 
+                        onChange={e=>setType(e,"type_a")}/> 
+                    <img src={typeATree} alt="" style={iconStyle}/>
+                </Col>
+                <Col style={{textAlign:"center"}}>
+                    <Radio 
+                        disabled={props.disabled}
+                        name="input-type" 
+                        checked={props.value==="type_b"} 
+                        onChange={e=>setType(e,"type_b")}/> 
+                    <img src={typeBTree} alt="" style={iconStyle}/>
+                </Col>
+                <Col style={{textAlign:"center"}}>
+                    <Radio 
+                        disabled={props.disabled}
+                        name="input-type" 
+                        checked={props.value==="type_c"} 
+                        onChange={e=>setType(e,"type_c")}/> 
+                    <img src={typeCTree} alt="" style={iconStyle}/>
+                </Col>
+            </Row>
+        </Block>
+    );
+};
+
+
+export { NozzleSeparationSelector, PresentationSelector, ElapsedSelector, TreeTypeSelector };
