@@ -1,10 +1,11 @@
 import { useState, useContext } from 'react';
 import { Page, Navbar, Block, BlockTitle, List, Row, Col, Button } from "framework7-react";
 import { ModelCtx } from '../../context';
-//import * as API from '../../entities/API';
+import * as API from '../../entities/API';
 import { TreeTypeSelector } from "../../components/Selectors";
 import Input from "../../components/Input";
 import { BackButton } from '../../components/Buttons';
+import Toast from '../../components/Toast';
 import iconDistance from "../../assets/icons/dplantas.png";
 import iconPlantW from "../../assets/icons/plant_width.png";
 import iconPlantH from "../../assets/icons/plant_height.png";
@@ -40,6 +41,26 @@ const Trv = props => {
         greenIndex,
         expansionFactor
     } = inputs;
+
+    // Calcular resultados en cada render
+    let qAir, dose;
+    try{
+        qAir = API.computeAirFlow({
+            D: rowSeparation,
+            h: plantHeight,
+            Vt: model.workVelocity || 10,
+            F: expansionFactor
+        });
+        dose = API.computeVaFromTRV({
+            D: rowSeparation,
+            r: plantType,
+            h: plantHeight,
+            w: plantWidth,
+            gI: greenIndex
+        });
+    }catch(e){
+        Toast("error", e.message);
+    }
 
     const handleInputChange = e => {
         const value = parseFloat(e.target.value);
@@ -131,7 +152,7 @@ const Trv = props => {
                                 type="number"
                                 unit="l/ha"
                                 icon={iconDose}
-                                value={1230}>
+                                value={dose}>
                             </Input>
                         </Col>
                     </Row>
@@ -158,7 +179,7 @@ const Trv = props => {
                                 type="number"
                                 unit="m³/h"
                                 icon={iconAir}
-                                value={10.23}>
+                                value={qAir}>
                             </Input>
                         </Col>
                     </Row>
