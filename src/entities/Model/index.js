@@ -38,6 +38,7 @@ const get_blank_report = () => {
 };
 
 const defaultFormParams = {
+    // Parametros
     rowSeparation: 3, // Ancho de calle (m)
     arcNumber: 1, // Numero de arcos
     
@@ -48,8 +49,17 @@ const defaultFormParams = {
     workFlow: 0.65, // Caudal de trabajo efectivo (l/min) por pico
     nominalFlow: 0.8, // Caudal nominal de pico seleccionado
     sprayFlow: null, // Caudal de pulverizacion (caudal de picos multiplicado por n de picos)
+    airFlow: null, // Caudal de aire
     nominalPressure: 3, // Presion nominal de pico seleccionado
     
+    // TRV
+    plantType: "type_a",
+    plantHeight: 2, // Altura de planta (m)
+    plantWidth: 1, // Ancho de planta (m)
+    greenIndex: 1, // Indice verde
+    expansionFactor: 2, // Factor de expansión
+    trvMeasured: false, // Para disparar render en vista de parametros
+
     // Verificacion de picos
     samplingTimeMs: 30000, // 30000, 60000 o 90000
     collectedData: [], // Datos de jarreo

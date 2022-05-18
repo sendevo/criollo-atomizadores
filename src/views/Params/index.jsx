@@ -26,6 +26,7 @@ const Params = props => {
         workPressure: model.workPressure || 2,
         workPressureUpdated: false,
         workVolume: model.workVolume || 56,
+        airFlow: model.airFlow || 1000,
         workVolumeUpdated: false
     });
 
@@ -39,11 +40,11 @@ const Params = props => {
         workPressure,
         workPressureUpdated,
         workVolume,
+        airFlow,
         workVolumeUpdated
     } = inputs;
 
     let sprayFlow = 2;
-    let airFlow = 3;
 
     // Ante cualquier cambio, borrar formularios de verificacion y de insumos
     model.update({
@@ -64,7 +65,7 @@ const Params = props => {
     });
 
     useEffect(() => {
-        if(model.velocityMeasured)
+        if(model.velocityMeasured){
             setInputs(prevState => ({
                 ...prevState,
                 workVelocity: model.workVelocity,
@@ -72,7 +73,20 @@ const Params = props => {
                 workPressureUpdated: false,
                 workVolumeUpdated: false
             }));
-    }, [model.workVelocity, model.velocityMeasured]);   
+            model.velocityMeasured = false;
+        }
+        if(model.trvMeasured){
+            setInputs(prevState => ({
+                ...prevState,
+                workVolume: model.workVolume,
+                airFlow: model.airFlow
+            }));
+        }
+    }, [
+        model.workVelocity, 
+        model.velocityMeasured,
+        model.trvMeasured
+    ]);   
 
     const handleRowSeparationChange = value => {
         const rs = parseFloat(value);

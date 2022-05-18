@@ -26,8 +26,8 @@ const Trv = props => {
 
     const [inputs, setInputs] = useState({
         plantType: model.plantType || "type_a",
-        rowSeparation: model.rowSeparation || 3,
-        plantHeight: model.plantHeight || 1,
+        rowSeparation: model.rowSeparation || 2.5,
+        plantHeight: model.plantHeight || 2,
         plantWidth: model.plantWidth || 1,
         greenIndex: model.greenIndex || 1,
         expansionFactor: model.expansionFactor || 2
@@ -68,6 +68,8 @@ const Trv = props => {
             ...inputs,
             [e.target.name]: value,
         });
+        if(value)
+            model.update(e.target.name, value);
     };
 
     const handlePlantTypeChange = value => {
@@ -75,10 +77,15 @@ const Trv = props => {
             ...inputs,
             plantType: value,
         });
+        model.update("plantType", value);
     };
 
     const exportData = () => {
-        console.log("Exportar");
+        model.update({
+            airFlow: qAir,
+            workVolume: dose,
+            trvMeasured: true
+        });
         props.f7router.back();
     };
 
