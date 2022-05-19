@@ -62,7 +62,7 @@ const defaultFormParams = {
 
     // Verificacion de picos
     samplingTimeMs: 30000, // 30000, 60000 o 90000
-    collectedData: [], // Datos de jarreo
+    //collectedData: [], // Datos de jarreo
     verificationOutput: {},
 
     // Variables de insumos

@@ -7,6 +7,7 @@ import * as API from '../../entities/API/index.js';
 import { KeepAwake } from '@capacitor-community/keep-awake';
 import { arrayAvg, formatNumber } from "../../utils";
 import { PlayButton, BackButton } from "../../components/Buttons";
+import { ArcConfigDisplay } from "../../components/ArcConfig";
 import Timer from "../../entities/Timer";
 import Toast from "../../components/Toast";
 import { ElapsedSelector } from "../../components/Selectors";
@@ -28,8 +29,11 @@ const Control = props => {
     const [elapsed, setElapsed] = useState(model.samplingTimeMs || 30000); // Duracion: 30, 60 o 90
     
     // Inputs
-    const [workFlow, setWorkFlow] = useState(model.workFlow || undefined);    
-    const [data, setData] = useState(model.collectedData || []); // Datos de la tabla
+    const initialData = model.currentArcConfig.nozzleData.map(n => ({        
+        updated: false
+    }));    
+    const [data, setData] = useState(initialData); // Datos de la tabla
+    const [currentArc, setCurrentArc] = useState("right");
 
     // Outputs
     const [outputs, setOutputs] = useState(model.verificationOutput || { // Resultados
@@ -59,59 +63,9 @@ const Control = props => {
         setElapsed(value);        
     };
 
-    const handleWorkFlowChange = e => { // Al cambiar el valor de caudal, actualizar datos de 
-        const wf = parseFloat(e.target.value);
-        if(wf){ // Actualizar tabla, solo con valor de caudal valido            
-            try{
-                const temp = data.map(row => ({
-                    ...row,
-                    ...API.computeEffectiveFlow({
-                        c: row.value, 
-                        tms: elapsed,
-                        Va: wf
-                    })
-                }));                  
-                model.update("workFlow", wf);
-                updateData(temp);
-            }catch(err){
-                Toast("error", err.message);
-            }
-        }
-        setWorkFlow(e.target.value);
-    };
-
-    const handleNozzleCntChange = e => {        
-        const temp = [];
-        for(let i = 0; i < e.target.value; i++){
-            temp.push({
-                value: 0,
-                updated: false,
-                ef: undefined,
-                s: undefined,
-                c: false
-            });
-        }
-        const temp2 = {
-            ...outputs,
-            ready: false
-        };
-        model.update("collectedData", temp);
-        model.update("verificationOutput", temp2);
-        setData(temp);
-        setOutputs(temp2);
-    };
-
     const handleNewCollectedValue = value => {        
-        try{
-            const res = API.computeEffectiveFlow({ // Funcion para evaluar volumen recolectado
-                c: value, 
-                tms: elapsed,
-                Va: parseFloat(workFlow)
-            });
-            return res;
-        }catch(err){
-            Toast("error", err.message);
-        }
+        console.log("Nuevo valor recolectado:", value);
+        // ...
     };
 
     const updateData = newData => {
@@ -161,36 +115,32 @@ const Control = props => {
     };
 
     const toggleRunning = () => {
-        if(workFlow){
-            if(data.length > 0) // Solo si hay indicado un numero de picos mayor a 0
-            {
-                if(!running){
-                    timer.onChange = setTime;
-                    timer.onTimeout = onTimeout;
-                    timer.clear();
-                    timer.start();
-                    KeepAwake.keepAwake()                
-                    .catch(err => {
-                        console.log("Error de KeepAwake");
-                        console.log(err);                    
-                    });
-                    setRunning(true);
-                }else{
-                    timer.stop();
-                    timer.clear();
-                    setTime(elapsed);            
-                    KeepAwake.allowSleep()
-                    .catch(err => {
-                        console.log("Error de KeepAwake");
-                        console.log(err);                    
-                    });
-                    setRunning(false);
-                }
-            }else{ // Si no hay datos, no se puede iniciar el timer
-                Toast("error", "Indique la cantidad de picos a controlar", 3000, "bottom");
+        if(data.length > 0) // Solo si hay indicado un numero de picos mayor a 0
+        {
+            if(!running){
+                timer.onChange = setTime;
+                timer.onTimeout = onTimeout;
+                timer.clear();
+                timer.start();
+                KeepAwake.keepAwake()                
+                .catch(err => {
+                    console.log("Error de KeepAwake");
+                    console.log(err);                    
+                });
+                setRunning(true);
+            }else{
+                timer.stop();
+                timer.clear();
+                setTime(elapsed);            
+                KeepAwake.allowSleep()
+                .catch(err => {
+                    console.log("Error de KeepAwake");
+                    console.log(err);                    
+                });
+                setRunning(false);
             }
-        }else{
-            Toast("error", "Indique el caudal de trabajo", 3000, "bottom");
+        }else{ // Si no hay datos, no se puede iniciar el timer
+            Toast("error", "Indique la cantidad de picos a controlar", 3000, "bottom");
         }
     };
 
@@ -228,15 +178,24 @@ const Control = props => {
         f7.panel.open();       
     };
 
+    const handleArcSwitch = () => {
+        f7.dialog.confirm('Está a punto de cambiar la lista de picos. ¿Desea continuar?', 
+            'Advertencia', 
+            () => {
+                // TODO: actualizar datos de la tabla
+                setCurrentArc(currentArc === "right" ? "left":"right");
+            }
+        );
+    }
+
+    /*
     const wlk = useContext(WalkthroughCtx);
     Object.assign(wlk.callbacks, {
-        control_nozzles: () => {            
-            handleNozzleCntChange({target: {value: 3}});
-        },
         control_results: () => {
             updateData(model.collectedData);
         }
     });
+    */
 
     return (
         <Page>
@@ -246,12 +205,17 @@ const Control = props => {
             <Block style={{marginTop:"20px", textAlign:"center"}} className="help-target-control-play">
                 <p style={{fontSize:"50px", margin:"0px"}}>{getTime()} <PlayButton onClick={toggleRunning} running={running} /></p>
             </Block>
-
+            
+            <ArcConfigDisplay 
+                arcSide={currentArc}
+                arcConfig={model.currentArcConfig}
+                onArcSwitch={handleArcSwitch}/>
+        
             <Block style={{marginBottom: "20px",textAlign:"center"}}>
                 <NozzlesControlTable 
                     data={data} 
                     onDataChange={updateData} 
-                    rowSelectDisabled={running || !workFlow}
+                    rowSelectDisabled={running}
                     evalCollected={handleNewCollectedValue}/>
             </Block>
 

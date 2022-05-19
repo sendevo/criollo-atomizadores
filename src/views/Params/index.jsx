@@ -2,7 +2,7 @@ import { f7, Navbar, Page, List, BlockTitle, Row, Col, Button } from 'framework7
 import { useContext, useEffect, useState } from 'react';
 import { BackButton, LinkButton } from '../../components/Buttons';
 import Input from "../../components/Input";
-import ArcConfigInput from "../../components/ArcConfigInput";
+import { ArcConfigInput } from "../../components/ArcConfig";
 import Toast from '../../components/Toast';
 import { ModelCtx, WalkthroughCtx } from '../../context';
 import * as API from '../../entities/API';
@@ -79,14 +79,16 @@ const Params = props => {
             setInputs(prevState => ({
                 ...prevState,
                 workVolume: model.workVolume,
+                workVolumeUpdated: true,
                 airFlow: model.airFlow
             }));
+            model.trvMeasured = false;
         }
     }, [
         model.workVelocity, 
         model.velocityMeasured,
         model.trvMeasured
-    ]);   
+    ]);
 
     const handleRowSeparationChange = value => {
         const rs = parseFloat(value);
@@ -247,6 +249,8 @@ const Params = props => {
         */
     };
 
+    
+    /*
     // Callbacks del modo ayuda
     const wlk = useContext(WalkthroughCtx);
     Object.assign(wlk.callbacks, {
@@ -254,6 +258,7 @@ const Params = props => {
             computeWorkVelocity();
         }
     });
+    */
     
     return (
         <Page>            

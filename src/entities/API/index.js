@@ -6,6 +6,11 @@ const isString = value => (typeof value === 'string' || value instanceof String)
 const isPositiveFloat = value => Number.isFinite(value) && value > 0;
 
 const schemas = { // Esquemas de validación de parametros
+    computeQNom:{
+        b: Number.isFinite,
+        c: Number.isFinite,
+        Pnom: Number.isFinite
+    },
     computeAirFlow:{
         D: isPositiveFloat,
         h: isPositiveFloat,
@@ -65,6 +70,12 @@ const plantFormIndex = {
     type_a: 735.9,
     type_b: 937,
     type_c: 468.5
+};
+
+export const computeQNom = params => {
+    checkParams(schemas.computeQNom, params);
+    const {b, c, Pnom} = params;
+    return round2(b + c * Math.sqrt(Pnom));
 };
 
 export const computeAirFlow = params => {

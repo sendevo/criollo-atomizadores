@@ -1,6 +1,7 @@
-import { f7, List, Row } from 'framework7-react';
+import { f7, List, Row, Col } from 'framework7-react';
 import ReactDOMServer from 'react-dom/server';
 import IconCollected from '../../assets/icons/recolectado.png';
+import arcNumbers from '../../assets/icons/arc_numbers.png';
 import Input from '../Input';
 import React from 'react';
 
@@ -125,6 +126,38 @@ const timerCollectedPrompt = (callback) => {
     }).open();
 };
 
+const infoPrompt = () => {
+    
+    const content = ReactDOMServer.renderToStaticMarkup(
+        <Row style={{marginTop:"10px"}}>
+            <Col width={30} style={{
+                    marginTop:"20px",
+                    borderRadius: "10%",
+                    border: "2px solid grey",
+                    padding: "5px",
+                    boxShadow: "5px 3px 10px 1px grey"
+                }}>
+                <img src={arcNumbers} width="100%"/>
+            </Col>
+            <Col width={70}>
+                <p>Los picos de cada arco están enumerados de manera descendente, tal como se muestra en la imagen.</p>
+            </Col>
+        </Row>
+    );
+    
+    f7.dialog.create({
+        title:"Aclaración",
+        content: content,
+        destroyOnClose: true,
+        buttons: [
+            {
+                text: "Aceptar",
+                onClick: f7.dialog.close
+            }
+        ]
+    }).open();
+};
 
-export { nozzleCollectedPrompt, timerCollectedPrompt, openRecipientSizePrompt };
+
+export { nozzleCollectedPrompt, timerCollectedPrompt, openRecipientSizePrompt, infoPrompt };
 
