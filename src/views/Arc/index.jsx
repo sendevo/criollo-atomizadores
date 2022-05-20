@@ -1,14 +1,16 @@
 import { useState, useContext } from 'react';
-import { f7, Page, Navbar, List, Row, Col, Button } from "framework7-react";
+import { f7, Page, Navbar, List, Link, Row, Col, Button } from "framework7-react";
 import moment from 'moment';
 import Input from "../../components/Input";
 import ArcTable from "../../components/ArcTable";
 import NozzleMenu from "../../components/NozzleMenu";
 import { BackButton } from "../../components/Buttons";
+import { infoPrompt } from "../../components/Prompts";
 import * as API from '../../entities/API';
 import { ModelCtx } from '../../context';
 import { getConstantRow, countSelected } from '../../utils';
 import Toast from '../../components/Toast';
+import { FaInfo } from 'react-icons/fa';
 import iconNumber from '../../assets/icons/nozzle_cnt.png';
 
 const ArcConfig = props => {
@@ -145,17 +147,34 @@ const ArcConfig = props => {
         <Page>
             <Navbar title="Configuración del arco" style={{maxHeight:"40px", marginBottom:"0px"}}/>      
             
-            <List form noHairlinesMd style={{marginBottom:"20px", marginTop: "0px"}} className="help-target-control-nozzles">    
-                <Input
-                    slot="list"
-                    label="Cantidad de picos"
-                    name="nozzleCnt"
-                    type="number"
-                    icon={iconNumber}
-                    value={nozzleData.length === 0 ? undefined : nozzleData.length}
-                    onChange={handleNozzleCntChange}>
-                </Input>
-            </List>
+            <Row>
+                <Col width={80}>
+                    <List form noHairlinesMd style={{marginBottom:"20px", marginTop: "0px"}} className="help-target-control-nozzles">    
+                        <Input
+                            slot="list"
+                            label="Cantidad de picos"
+                            name="nozzleCnt"
+                            type="number"
+                            icon={iconNumber}
+                            value={nozzleData.length === 0 ? undefined : nozzleData.length}
+                            onChange={handleNozzleCntChange}>
+                        </Input>
+                    </List>
+                </Col>
+                <Col width={20} style={{paddingRight:"10px", paddingTop:"16px"}}>
+                    <Link 
+                        onClick={infoPrompt}
+                        style={{
+                            borderRadius:"50%", 
+                            backgroundColor:"#FBE01B", 
+                            width:"40px", 
+                            height:"40px",
+                            color:"rgb(100,100,100)",
+                            border: "1px solid gray"}} >
+                        <FaInfo />
+                    </Link>
+                </Col>
+            </Row>
 
             <ArcTable 
                 data={nozzleData}

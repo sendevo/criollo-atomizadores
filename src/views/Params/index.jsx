@@ -19,8 +19,6 @@ const Params = props => {
     const [inputs, setInputs] = useState({
         rowSeparation: model.rowSeparation || 3,        
         arcNumber: model.arcNumber || 1,
-        nominalFlow: model.nominalFlow || 0.8,        
-        nominalPressure: model.nominalPressure || 3,
         workVelocity: model.workVelocity || 10,
         workVelocityUpdated: false,
         workPressure: model.workPressure || 2,
@@ -33,8 +31,6 @@ const Params = props => {
     const {
         rowSeparation,
         arcNumber,
-        nominalFlow,
-        nominalPressure,
         workVelocity,
         workVelocityUpdated,
         workPressure,
@@ -44,7 +40,18 @@ const Params = props => {
         workVolumeUpdated
     } = inputs;
 
-    let sprayFlow = 2;
+    let sprayFlow = model.sprayFlow;
+    try{
+        sprayFlow = API.computeQe({
+            nozzleData: model?.currentArcConfig?.nozzleData,
+            Na: arcNumber,
+            Pt: workPressure
+        });
+        model.update("sprayFlow", sprayFlow);
+    }catch(e){
+        console.log(e.message);
+        model.update("sprayFlow", null);
+    }
 
     // Ante cualquier cambio, borrar formularios de verificacion y de insumos
     model.update({
@@ -162,9 +169,9 @@ const Params = props => {
             const newVel = API.computeVt({
                 Va: workVolume,
                 Pt: workPressure,
-                d: rowSeparation,
-                Qnom: nominalFlow,
-                Pnom: nominalPressure
+                D: rowSeparation,
+                Na: arcNumber,
+                nozzleData: model.currentArcConfig?.nozzleData
             });
             model.update({
                 workVelocity: newVel,
@@ -187,9 +194,7 @@ const Params = props => {
             const newPres = API.computePt({
                 Va: workVolume,
                 Vt: workVelocity,            
-                d: rowSeparation,
-                Qnom: nominalFlow,
-                Pnom: nominalPressure
+                D: rowSeparation
             });
             model.update("workPressure", newPres);
             setInputs({
@@ -207,11 +212,11 @@ const Params = props => {
     const computeWorkVolume = () => {
         try{
             const newVol = API.computeVa({
-                Pt: workPressure,
                 Vt: workVelocity,
-                d: rowSeparation,
-                Qnom: nominalFlow,
-                Pnom: nominalPressure
+                D: rowSeparation,
+                Pt: workPressure,
+                Na: arcNumber,
+                nozzleData: model.currentArcConfig?.nozzleData
             });
             model.update("workVolume", newVol);
             setInputs({

@@ -89,49 +89,49 @@ $ npx cap open android
 
 
 ### Backlog
-#### Progreso: 0%
+#### Progreso: 70%
 
 Funcionales
   - [ ] Seccion parámetros de pulverización.  
-    - [ ] Vista principal.  
-    - [ ] Configuración de arcos.  
-    - [ ] Gestión de arcos.  
+    - [x] Vista principal.  
+    - [x] Configuración de arcos.  
+    - [x] Gestión de arcos.  
     - [ ] Cálculo de resultados.  
-    - [ ] Medidor de velocidad. 
-    - [ ] Medidor de TRV.  
-    - [ ] Control de campos.  
+    - [x] Medidor de velocidad. 
+    - [x] Medidor de TRV.  
+    - [x] Control de campos.  
     - [ ] Cargar resultados a reporte.  
   - [ ] Sección verificación de picos.  
-    - [ ] Vista principal.  
+    - [x] Vista principal.  
     - [ ] Cálculo de resultados.  
     - [ ] Control de campos.  
     - [ ] Cargar resultados a reporte.  
   - [ ] Sección calculo de mezclas.  
-    - [ ] Vista con formulario.  
-    - [ ] Cálculo de insumos.  
-    - [ ] Navigator/Capacitor GPS.  
-    - [ ] Vista de resultados.  
-    - [ ] Control de campos.  
+    - [x] Vista con formulario.  
+    - [x] Cálculo de insumos.  
+    - [x] Navigator/Capacitor GPS.  
+    - [x] Vista de resultados.  
+    - [x] Control de campos.  
     - [ ] Cargar resultados a reporte.  
   - [ ] Sección reportes.  
-    - [ ] Vista de listado de reportes.  
-    - [ ] Gestión de reportes.  
+    - [x] Vista de listado de reportes.  
+    - [x] Gestión de reportes.  
     - [ ] Vista de presentación de reportes.  
     - [ ] Exportar reporte a PDF y compartir. 
-  - [ ] Sección seguridad e higiene.  
-  - [ ] Sección Información y ayuda.  
-    - [ ] Menú de enlaces.  
-    - [ ] Sección acerca de.  
-    - [ ] Enlace informacion adicional.  
+  - [x] Sección seguridad e higiene.  
+  - [x] Sección Información y ayuda.  
+    - [x] Menú de enlaces.  
+    - [x] Sección acerca de.  
+    - [x] Enlace informacion adicional.  
     - [ ] Recorrido por la app (modo ayuda).  
 
 No funcionales  
-  - [ ] Creación repositorio.  
-  - [ ] Proyecto React con Vite.   
-  - [ ] Recursos multimedia.
-  - [ ] Código fuente.   
+  - [x] Creación repositorio.  
+  - [x] Proyecto React con Vite.   
+  - [x] Recursos multimedia.
+  - [x] Código fuente.   
   - [ ] Compilación a Android.  
   - [ ] Publicación de versiones a producción.  
-    - [ ] Web.  
+    - [x] Web.  
     - [ ] Google Play.  
     - [ ] Auravant.  

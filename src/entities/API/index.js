@@ -5,32 +5,59 @@ const isString = value => (typeof value === 'string' || value instanceof String)
 //const isFloat = Number.isFinite;
 const isPositiveFloat = value => Number.isFinite(value) && value > 0;
 
-const schemas = { // Esquemas de validación de parametros
-    computeQNom:{
-        b: Number.isFinite,
-        c: Number.isFinite,
-        Pnom: Number.isFinite
-    },
-    computeAirFlow:{
-        D: isPositiveFloat,
-        h: isPositiveFloat,
-        Vt: Number.isFinite,
-        F: Number.isFinite
-    },
-    computeVaFromTRV:{
-        D: isPositiveFloat,
-        r: isString,
-        h: isPositiveFloat,
-        w: isPositiveFloat,
-        gI: isPositiveFloat,
-    },
-    computeSuppliesList: {
-        A: isPositiveFloat,
-        T: isPositiveFloat,
-        Va: isPositiveFloat,
-        products: v => v?.length > 0 && v.every(x => isPositiveFloat(x.dose) && isString(x.name) && Number.isInteger(x.presentation))
-    }
+
+const _computeQe = {
+    nozzleData: v => v?.length > 0,
+    Na: n => Number.isInteger(n) && (n === 1 || n === 2),
+    Pt: Number.isFinite
 };
+
+const _computeVa = {        
+    Vt: isPositiveFloat,
+    D: isPositiveFloat,
+    ..._computeQe
+};
+
+const _computePt = {
+    Va: isPositiveFloat,
+    Vt: isPositiveFloat,
+    D: isPositiveFloat
+};
+
+const _computeVt = {
+    Va: isPositiveFloat,
+    D: isPositiveFloat,
+    ..._computeQe
+};
+
+const _computeQNom = {
+    b: Number.isFinite,
+    c: Number.isFinite,
+    Pnom: Number.isFinite
+};
+
+const _computeAirFlow = {
+    D: isPositiveFloat,
+    h: isPositiveFloat,
+    Vt: Number.isFinite,
+    F: Number.isFinite
+};
+
+const _computeVaFromTRV = {
+    D: isPositiveFloat,
+    r: isString,
+    h: isPositiveFloat,
+    w: isPositiveFloat,
+    gI: isPositiveFloat,
+};
+
+const _computeSuppliesList = {
+    A: isPositiveFloat,
+    T: isPositiveFloat,
+    Va: isPositiveFloat,
+    products: v => v?.length > 0 && v.every(x => isPositiveFloat(x.dose) && isString(x.name) && Number.isInteger(x.presentation))
+};
+
 
 // Validación de lista de parametros 
 const validate = (schema, object) => Object.keys(schema)
@@ -41,6 +68,9 @@ const parameterNames = { // Nombres de los parametros para mostrar en mensajes d
     Qnom: "Caudal nominal",
     Pnom: "Presión nominal",
     Qb: "Caudal de bomba",
+    Qe: "Caudal efectivo",
+    Na: "Número de arcos",
+    nozzleData: "Configuración de arco",
     D: "Distancia entre filas",
     h: "Altura de plantas",
     w: "Ancho de plantas",
@@ -78,20 +108,52 @@ const plantFormIndex = {
     type_c: 468.5
 };
 
+export const computeQe = params => {
+    checkParams(_computeQe, params);
+    const { nozzleData, Na, Pt } = params;
+    const qe = []; 
+    //
+    // ... Calcular qe_i
+    //
+    // Sum array arr
+    const Qe = Na * qe.reduce((a, b) => a + b, 0);
+    return round2(Qe);
+};
+
+export const computeVa = params => {
+    checkParams(_computeVa, params);
+    const Qe = computeQe(params);
+    const { Vt, D  } = params;
+    return round2(Qe*600/Vt/D);
+};
+
+export const computeVt = params => {
+    checkParams(_computeVt, params);
+    const Qe = computeQe(params);
+    const { Va, D } = params;
+    return round2(Qe*600/Va/D);
+};
+
+export const computePt = params => {
+    checkParams(_computePt, params);
+    const { Va, Vt, D } = params;
+    return 0;
+};
+
 export const computeQNom = params => {
-    checkParams(schemas.computeQNom, params);
+    checkParams(_computeQNom, params);
     const {b, c, Pnom} = params;
     return round2(b + c * Math.sqrt(Pnom));
 };
 
 export const computeAirFlow = params => {
-    checkParams(schemas.computeAirFlow, params);
+    checkParams(_computeAirFlow, params);
     const {D, h, Vt, F} = params;
     return round2(Vt * D * h / F * 1000);
 };
 
 export const computeVaFromTRV = params => {
-    checkParams(schemas.computeVaFromTRV, params);
+    checkParams(_computeVaFromTRV, params);
     const {D, r, h, w, gI} = params;
     const rk = plantFormIndex[r];
     return round2(rk * h * w * gI / D);
@@ -102,7 +164,7 @@ const computeProductVolume = (prod, vol, Va) => { // Cantidad de insumo (gr o ml
 };
 
 export const computeSuppliesList = params => { // Lista de insumos y cargas para mezcla   
-    checkParams(schemas.computeSuppliesList, params);
+    checkParams(_computeSuppliesList, params);
     const { A, T, Va, products } = params;
     const Nc = A*Va/T; // Cantidad de cargas
     const Ncc = Math.floor(Nc); // Cantidad de cargas completas
