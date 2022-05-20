@@ -23,6 +23,12 @@ const schemas = { // Esquemas de validación de parametros
         h: isPositiveFloat,
         w: isPositiveFloat,
         gI: isPositiveFloat,
+    },
+    computeSuppliesList: {
+        A: isPositiveFloat,
+        T: isPositiveFloat,
+        Va: isPositiveFloat,
+        products: v => v?.length > 0 && v.every(x => isPositiveFloat(x.dose) && isString(x.name) && Number.isInteger(x.presentation))
     }
 };
 
@@ -89,4 +95,29 @@ export const computeVaFromTRV = params => {
     const {D, r, h, w, gI} = params;
     const rk = plantFormIndex[r];
     return round2(rk * h * w * gI / D);
+};
+
+const computeProductVolume = (prod, vol, Va) => { // Cantidad de insumo (gr o ml) por volumen de agua
+    return prod.presentation === 0 || prod.presentation === 1 ? vol*prod.dose/Va : vol*prod.dose/100;
+};
+
+export const computeSuppliesList = params => { // Lista de insumos y cargas para mezcla   
+    checkParams(schemas.computeSuppliesList, params);
+    const { A, T, Va, products } = params;
+    const Nc = A*Va/T; // Cantidad de cargas
+    const Ncc = Math.floor(Nc); // Cantidad de cargas completas
+    const Vf = (Nc - Ncc)*T; // Volumen fraccional [L]
+    const Ncb = Math.ceil(Nc); // Cantidad de cargas balanceadas
+    const Vcb = A*Va/Ncb; // Volumen de cargas balanceadas
+    const Vftl = Vf/T < 0.2; // Detectar volumen fraccional total menor a 20%
+    // Calcular cantidades de cada producto
+    const pr = products.map(p => ({
+        ...p, // Por comodidad, dejar resto de los detalles en este arreglo
+        cpp: computeProductVolume(p, T, Va)/1000, // Cantidad por carga completa [l o kg]
+        cfc: computeProductVolume(p, Vf, Va)/1000, // Cantidad por carga fraccional [l o kg]
+        ceq: computeProductVolume(p, Vcb, Va)/1000, // Cantidad por carga equilibrada [l o kg]
+        total: computeProductVolume(p, T, Va)*Nc/1000, // Cantidad total de insumo [l o kg]
+    }));
+
+    return {pr, Nc, Ncc, Vf, Ncb, Vcb, Vftl};
 };
