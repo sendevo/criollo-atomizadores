@@ -55,7 +55,7 @@ const ArcTable = props => {
                                             />
                                         </td>
                                         <td className={classes.DataCell}>{idx+1}</td>
-                                        <td className={classes.DataCell}>{row.long_name}</td>
+                                        <td className={classes.DataCell}>{row.long_name}<br /><span style={{fontSize:"9px", color:"rgb(90, 90, 90)"}}>{row.Qnom} l/min @ {row.Pnom} bar</span></td>
                                         <td className={classes.DataCell}>
                                             <img src={icons[row.img]} className={classes.Icon}/>
                                         </td>

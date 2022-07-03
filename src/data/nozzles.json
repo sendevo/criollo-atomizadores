@@ -993,6 +993,12 @@
                 "img": "tapon",
                 "b": 0,
                 "c": 0
+            },
+            {
+                "id": "custom",
+                "name": "Personalizado",
+                "long_name": "Personalizado",
+                "img": "personalizado"
             }
         ]
     }

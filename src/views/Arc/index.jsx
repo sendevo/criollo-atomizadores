@@ -24,6 +24,7 @@ const ArcConfig = props => {
     // Menu de eleccion de modelo de pico para picos del arco seleccionados
     const [nozzleSelection, setNozzleSelection] = useState([-1,-1,-1,-1]);
     const [{nominalPressure, nominalFlow}, setNozzleParams] = useState({nominalPressure:3, nominalFlow:0.8});
+    const [showInputs, setShowInputs] = useState(false);
 
     const handleNozzleCntChange = e => {
         const cnt = parseInt(e.target.value);
@@ -70,27 +71,30 @@ const ArcConfig = props => {
         updateSelection();
     };
 
-    const onNozzleSelected = (selection, nozzle, custom = false) => { // Callback eleccion de pico
+    const onNozzleSelected = (selection, nozzle) => { // Callback eleccion de pico
         setNozzleSelection(selection);        
         if(nozzle){
             try{
-                if(!custom){ // Pico predefinido
+                if(nozzle.id != "custom"){ // Si es pico predefinido -> actualizar parametros en la tabla
                     nozzle.Qnom = API.computeQNom({b: nozzle.b, c: nozzle.c, Pnom: nominalPressure});
                     setNozzleParams({nominalPressure, nominalFlow: nozzle.Qnom});
+                    setShowInputs(false);
+                    const temp = [...nozzleData];
+                    for(let i = 0; i < temp.length; i++){
+                        if(temp[i].selected){
+                            temp[i] = {
+                                ...nozzle,
+                                Pnom: nominalPressure,
+                                selection,
+                                selected: true,
+                                valid: true
+                            };
+                        }
+                    };
+                    setNozzleData(temp);
+                }else{ // Si es personalizado, habilitar inputs
+                    setShowInputs(true);
                 }
-                const temp = [...nozzleData];
-                for(let i = 0; i < temp.length; i++){
-                    if(temp[i].selected){
-                        temp[i] = {
-                            ...nozzle,
-                            Pnom: nominalPressure,
-                            selection,
-                            selected: true,
-                            valid: true
-                        };
-                    }
-                };
-                setNozzleData(temp);
             }catch(err){
                 Toast("error", err.message);
             }
@@ -100,39 +104,37 @@ const ArcConfig = props => {
     const handleNominalFlowChange = e => {
         const Qnom = parseFloat(e.target.value);
         setNozzleParams({nominalPressure, nominalFlow: Qnom});
-        if(Qnom){
-            const customNozzle = {
-                id: "",
-                long_name: `Pers. ${Qnom} l/min a ${nominalPressure} bar`,
-                img: "personalizado",
-                b: 0,
-                c: 0,
-                Pnom: nominalPressure,
-                Qnom: Qnom
-            };
-            onNozzleSelected([-1,-1,-1,-1], customNozzle, true);
-        }else{
+        if(!Qnom)
             Toast("error", "Caudal nominal no válido");
-        }
     };
 
     const handleNominalPressureChange = e => {
         const Pnom = parseFloat(e.target.value);
         setNozzleParams({nominalPressure:Pnom, nominalFlow});
-        if(Pnom){
-            const customNozzle = {
-                id: "",
-                long_name: `Pers. ${nominalFlow} l/min a ${Pnom} bar`,
-                img: "personalizado",
-                b: 0,
-                c: 0,
-                Pnom: Pnom,
-                Qnom: nominalFlow
-            };
-            onNozzleSelected([-1,-1,-1,-1], customNozzle, true);
-        }else{
+        if(!Pnom)
             Toast("error", "Presión nominal no válida");
-        }
+    };
+
+    const setCustomNozzle = () => {        
+        const temp = [...nozzleData];
+        for(let i = 0; i < temp.length; i++){
+            if(temp[i].selected){
+                temp[i] = {
+                    id: "custom",
+                    long_name: `Personalizado`,
+                    img: "personalizado",
+                    b: -1,
+                    c: -1,                    
+                    Qnom: nominalFlow,
+                    Pnom: nominalPressure,
+                    selection: [4, 1, -1, -1],
+                    selected: true,
+                    valid: true
+                };
+            }
+        };
+        setShowInputs(false);
+        setNozzleData(temp);        
     };
 
     const saveArc = () => {
@@ -187,36 +189,51 @@ const ArcConfig = props => {
                         onOptionSelected={onNozzleSelected} 
                         selection={nozzleSelection} />
 
-                    <List form noHairlinesMd style={{marginBottom:"10px", marginTop: "0px"}}>    
-                        <Row slot="list">
-                            <Col style={{width:"50%"}}>
-                                <Input
-                                    label="Caudal nominal"
-                                    name="nominalFlow"
-                                    type="number"
-                                    unit="l/min"                    
-                                    value={nominalFlow}
-                                    onChange={handleNominalFlowChange}>
-                                </Input>
-                            </Col>
-                            <Col style={{width:"50%"}}>
-                                <Input
-                                    label="Presión nominal"
-                                    name="nominalPressure"
-                                    type="number"
-                                    unit="bar"                    
-                                    value={nominalPressure}
-                                    onChange={handleNominalPressureChange}>
-                                </Input>
-                            </Col>
-                        </Row>
-                    </List>
+                    {showInputs &&
+                        <List form noHairlinesMd style={{marginBottom:"10px", marginTop: "0px"}}>    
+                            <Row slot="list">
+                                <Col width={50}>
+                                    <Input
+                                        label="Caudal nominal"
+                                        name="nominalFlow"
+                                        type="number"
+                                        unit="l/min"                    
+                                        value={nominalFlow}
+                                        onChange={handleNominalFlowChange}>
+                                    </Input>
+                                </Col>
+                                <Col width={50}>
+                                    <Input
+                                        label="Presión nominal"
+                                        name="nominalPressure"
+                                        type="number"
+                                        unit="bar"                    
+                                        value={nominalPressure}
+                                        onChange={handleNominalPressureChange}>
+                                    </Input>
+                                </Col>
+                            </Row>
+                            <Row slot="list">
+                                <Col width={10}></Col>
+                                <Col width={80}>
+                                    <Button 
+                                        fill
+                                        color='teal'
+                                        style={{textTransform:"none"}}
+                                        onClick={setCustomNozzle}>
+                                            Aceptar
+                                    </Button>
+                                </Col>
+                                <Col width={10}></Col>                
+                            </Row>
+                        </List>
+                    }
                 </>
             }
 
-            <Row style={{marginTop:10, marginBottom: 20}}>
+            <Row style={{marginTop:25, marginBottom: 20}}>
                 <Col width={20}></Col>
-                <Col width={60} className="help-target-params-report">
+                <Col width={60}>
                     <Button 
                         fill
                         style={{textTransform:"none"}} 
