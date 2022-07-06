@@ -28,7 +28,7 @@ const Control = props => {
     const [firstRound, setFirstRound] = useState(true); // Muestra indicativo la primera vez
     const [elapsed, setElapsed] = useState(model.samplingTimeMs || 30000); // Duracion: 30, 60 o 90
     
-    // Inputs
+    // Inputs    
     const initialData = model.currentArcConfig.nozzleData.map(n => ({        
         updated: false
     }));    
@@ -63,12 +63,24 @@ const Control = props => {
         setElapsed(value);        
     };
 
-    const handleNewCollectedValue = value => {        
-        console.log("Nuevo valor recolectado:", value);
-        // ...
+    const handleNewCollectedValue = (row,value) => {           
+        try{
+            const nozzle = model.currentArcConfig.nozzleData[row];
+            const res = API.computeEffectiveFlow({ // Funcion para evaluar volumen recolectado
+                c: value, 
+                tms: elapsed,
+                Pt: model.workPressure,
+                Pnom: nozzle.Pnom,
+                Qnom: nozzle.Qnom
+            });
+            return res;
+        }catch(err){
+            Toast("error", err.message);
+        }
     };
 
     const updateData = newData => {
+        console.log(newData);
         model.update("collectedData", newData);
         const efAvg = arrayAvg(newData, "ef");
         if(efAvg){

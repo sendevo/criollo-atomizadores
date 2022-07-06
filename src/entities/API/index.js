@@ -21,7 +21,9 @@ const _computeVa = {
 const _computePt = {
     Va: isPositiveFloat,
     Vt: isPositiveFloat,
-    D: isPositiveFloat
+    D: isPositiveFloat,
+    nozzleData: v => v?.length > 0,
+    Na: n => Number.isInteger(n) && (n === 1 || n === 2)
 };
 
 const _computeVt = {
@@ -49,6 +51,14 @@ const _computeVaFromTRV = {
     h: isPositiveFloat,
     w: isPositiveFloat,
     gI: isPositiveFloat,
+};
+
+const _computeEffectiveFlow = {
+    Pt: isPositiveFloat,
+    Pnom: isPositiveFloat,
+    Qnom: isPositiveFloat,
+    c: isPositiveFloat,
+    tms: isPositiveFloat
 };
 
 const _computeSuppliesList = {
@@ -132,8 +142,10 @@ export const computeVt = params => {
 
 export const computePt = params => {
     checkParams(_computePt, params);
-    const { Va, Vt, D } = params;
-    return 0;
+    const { Va, Vt, D, Na, nozzleData } = params;
+    const pe = nozzleData.map(nozzle => nozzle.Qnom/Math.sqrt(nozzle.Pnom));
+    const Pe = Va*Vt*D/600/Na/pe.reduce((a, b) => a + b, 0);
+    return round2(Pe*Pe);
 };
 
 export const computeQNom = params => {
@@ -153,6 +165,17 @@ export const computeVaFromTRV = params => {
     const {D, r, h, w, gI} = params;
     const rk = plantFormIndex[r];
     return round2(rk * h * w * gI / D);
+};
+
+export const computeEffectiveFlow = params => {
+    checkParams(_computeEffectiveFlow, params);
+    const { Pt, Qnom, Pnom, c, tms } = params;
+    const th = 10; // Umbral en porcentaje
+    const ef = round2(c / tms * 60000); // Caudal efectivo
+    const Qe = Qnom*Math.sqrt(Pt/Pnom); // Caudal deseado
+    const s = round2((ef - Qe) / Qe * 100); // Desviacion estandar
+    const ok = Math.abs(s) <= th; // Correcto 
+    return { ef, s, ok };
 };
 
 const computeProductVolume = (prod, vol, Va) => { // Cantidad de insumo (gr o ml) por volumen de agua

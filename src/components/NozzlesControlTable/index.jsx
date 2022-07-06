@@ -12,7 +12,7 @@ const NozzlesControlTable = props => {
         tempArr[row] = {
             value,
             updated: true,
-            ...props.evalCollected(value) // Debe retornar ef, s y ok
+            ...props.evalCollected(row, value) // Debe retornar ef, s y ok
         };
         props.onDataChange(tempArr);
     };

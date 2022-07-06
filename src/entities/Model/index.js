@@ -45,8 +45,7 @@ const defaultFormParams = {
     workVelocity: 10, // Velocidad de trabajo (km/h)
     velocityMeasured: false, // Para disparar render en vista de parametros
     workPressure: 2, // Presion de trabajo (bar)
-    workVolume: 56, // Volumen de aplicacion (l/ha)
-    workFlow: 0.65, // Caudal de trabajo efectivo (l/min) por pico
+    workVolume: 56, // Volumen de aplicacion (l/ha)    
     nominalFlow: 0.8, // Caudal nominal de pico seleccionado
     sprayFlow: null, // Caudal de pulverizacion (caudal de picos multiplicado por n de picos)
     airFlow: null, // Caudal de aire

@@ -192,9 +192,11 @@ const Params = props => {
     const computeWorkPressure = () => {
         try{
             const newPres = API.computePt({
+                nozzleData: model.currentArcConfig?.nozzleData,
                 Va: workVolume,
                 Vt: workVelocity,            
-                D: rowSeparation
+                D: rowSeparation,
+                Na: arcNumber
             });
             model.update("workPressure", newPres);
             setInputs({
@@ -232,28 +234,16 @@ const Params = props => {
     };
 
     const addParamsToReport = () => {
-        /*
-        const {
-            rowSeparation,
-            nominalFlow,
-            nominalPressure,
-            workVelocity,
-            workPressure,
-            workVolume
-        } = inputs;
         model.addParamsToReport({
             rowSeparation,
-            nominalFlow,
-            nominalPressure,
+            arcNumber,
             workVelocity,
             workPressure,
             workVolume,
-            nozzleName: model.nozzleName
+            airFlow
         });
         f7.panel.open();
-        */
     };
-
     
     /*
     // Callbacks del modo ayuda
