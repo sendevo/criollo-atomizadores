@@ -165,7 +165,7 @@ const Params = props => {
     };
 
     const computeWorkVelocity = () => {
-        try{
+        try{            
             const newVel = API.computeVt({
                 Va: workVolume,
                 Pt: workPressure,

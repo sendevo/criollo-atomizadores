@@ -96,7 +96,7 @@ Funcionales
     - [x] Vista principal.  
     - [x] Configuración de arcos.  
     - [x] Gestión de arcos.  
-    - [ ] Cálculo de resultados.  
+    - [x] Cálculo de resultados.  
     - [x] Medidor de velocidad. 
     - [x] Medidor de TRV.  
     - [x] Control de campos.  

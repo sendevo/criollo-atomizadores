@@ -111,11 +111,7 @@ const plantFormIndex = {
 export const computeQe = params => {
     checkParams(_computeQe, params);
     const { nozzleData, Na, Pt } = params;
-    const qe = []; 
-    //
-    // ... Calcular qe_i
-    //
-    // Sum array arr
+    const qe = nozzleData.map(nozzle => nozzle.Qnom*Math.sqrt(Pt/nozzle.Pnom));     
     const Qe = Na * qe.reduce((a, b) => a + b, 0);
     return round2(Qe);
 };
@@ -127,7 +123,7 @@ export const computeVa = params => {
     return round2(Qe*600/Vt/D);
 };
 
-export const computeVt = params => {
+export const computeVt = params => {    
     checkParams(_computeVt, params);
     const Qe = computeQe(params);
     const { Va, D } = params;
