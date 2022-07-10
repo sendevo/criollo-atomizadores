@@ -14,6 +14,7 @@ const ReportDetails = props => {
     
     const model = useContext(ModelCtx);
     const report = model.getReport(props.id);
+    console.log(report);
 
     const exportReport = share => {
         PDFExport(report, share);
@@ -31,25 +32,15 @@ const ReportDetails = props => {
                 <Block className={classes.SectionBlock}>
                     <h3>Parámetros de aplicación</h3>
                     <table className={classes.Table}>
-                        <tbody>
-                            <tr>Capacidad del pico</tr>
-                            <tr>
-                                <td><b>Pico seleccionado:</b></td>
-                                <td className={classes.DataCell}>{report.params.nozzleName ? report.params.nozzleName : <i>Otro pico</i>}</td>
-                            </tr>                     
-                            <tr>
-                                <td><b>Caudal nominal:</b></td>
-                                <td className={classes.DataCell}>{formatNumber(report.params.nominalFlow)} l/min</td>
-                            </tr>
-                            <tr>
-                                <td><b>Presión nominal:</b></td>
-                                <td className={classes.DataCell}>{formatNumber(report.params.nominalPressure)} bar</td>
-                            </tr>
-                            <tr></tr>
+                        <tbody>                            
                             <tr>Parámetros de pulverización</tr>
                             <tr>
-                                <td><b>Distancia entre picos:</b></td>
-                                <td className={classes.DataCell}>{formatNumber(report.params.nozzleSeparation)} m</td>
+                                <td><b>Distancia entre filas:</b></td>
+                                <td className={classes.DataCell}>{formatNumber(report.params.rowSeparation)} m</td>
+                            </tr>
+                            <tr>
+                                <td><b>Cantidad de arcos:</b></td>
+                                <td className={classes.DataCell}>{formatNumber(report.params.arcNumber)}</td>
                             </tr>
                             <tr>
                                 <td><b>Velocidad de trabajo:</b></td>
@@ -62,6 +53,10 @@ const ReportDetails = props => {
                             <tr>
                                 <td><b>Volumen de aplicación:</b></td>
                                 <td className={classes.DataCell}>{formatNumber(report.params.workVolume)} l/ha</td>
+                            </tr>
+                            <tr>
+                                <td><b>Caudal de aire:</b></td>
+                                <td className={classes.DataCell}>{formatNumber(report.params.airFlow)} m³/h</td>
                             </tr>
                         </tbody>
                     </table>
@@ -76,7 +71,7 @@ const ReportDetails = props => {
                             {/*<tr>
                                 <td><b>Caudal efectivo promedio:</b></td>
                                 <td className={classes.DataCell}>{formatNumber(report.control.efAvg)} l/min</td>
-                            </tr>*/}
+                            </tr>
                             {report.control.totalEffectiveFlow && <tr>
                                 <td><b>Caudal pulverizado efectivo:</b></td>
                                 <td className={classes.DataCell}>{formatNumber(report.control.totalEffectiveFlow)} l/min</td>
@@ -93,6 +88,7 @@ const ReportDetails = props => {
                                 <td><b>Diferencia:</b></td>
                                 <td className={classes.DataCell}>{formatNumber(report.control.diff)} l/ha <br/>({formatNumber(report.control.diffp)} %)</td>
                             </tr>
+                            */}
                         </tbody>
                     </table>
                     <NozzlesControlTable 

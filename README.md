@@ -100,11 +100,11 @@ Funcionales
     - [x] Medidor de velocidad. 
     - [x] Medidor de TRV.  
     - [x] Control de campos.  
-    - [ ] Cargar resultados a reporte.  
+    - [x] Cargar resultados a reporte.  
   - [ ] Sección verificación de picos.  
     - [x] Vista principal.  
     - [ ] Cálculo de resultados.  
-    - [ ] Control de campos.  
+    - [ ] Cambio de arco.  
     - [ ] Cargar resultados a reporte.  
   - [ ] Sección calculo de mezclas.  
     - [x] Vista con formulario.  

@@ -178,7 +178,9 @@ const Reports = props => {
                 :
                 null
             }
-            <BackButton {...props}/>
+            <div style={{marginTop:15}}>
+                <BackButton {...props}/>
+            </div>
         </Page>
     );
 };

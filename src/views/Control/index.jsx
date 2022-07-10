@@ -5,7 +5,7 @@ import { useSound } from "use-sound";
 import moment from 'moment';
 import * as API from '../../entities/API/index.js';
 import { KeepAwake } from '@capacitor-community/keep-awake';
-import { arrayAvg, formatNumber } from "../../utils";
+import { arraySum, formatNumber } from "../../utils";
 import { PlayButton, BackButton } from "../../components/Buttons";
 import { ArcConfigDisplay } from "../../components/ArcConfig";
 import Timer from "../../entities/Timer";
@@ -28,18 +28,16 @@ const Control = props => {
     const [firstRound, setFirstRound] = useState(true); // Muestra indicativo la primera vez
     const [elapsed, setElapsed] = useState(model.samplingTimeMs || 30000); // Duracion: 30, 60 o 90
     
-    // Inputs    
+    // Inputs
     const initialData = model.currentArcConfig.nozzleData.map(n => ({        
         updated: false
-    }));    
+    }));
     const [data, setData] = useState(initialData); // Datos de la tabla
     const [currentArc, setCurrentArc] = useState("right");
 
-    // Outputs
+    // TODO: Outputs
     const [outputs, setOutputs] = useState(model.verificationOutput || { // Resultados
-        ready: false,
-        efAvg: undefined,
-        totalEffectiveFlow: undefined,
+        ready: false,        
         expectedSprayVolume: undefined,
         effectiveSprayVolume: undefined,
         diff: undefined,
@@ -79,27 +77,18 @@ const Control = props => {
         }
     };
 
-    const updateData = newData => {
-        console.log(newData);
+    const updateData = newData => {        
         model.update("collectedData", newData);
-        const efAvg = arrayAvg(newData, "ef");
-        if(efAvg){
+        const efSum = arraySum(newData, "ef");
+        if(newData.every(d => d.updated)){ // Verificacion completada
             try{
-                const effectiveSprayVolume = API.computeSprayVolume({
-                    Q: efAvg,
-                    d: model.nozzleSeparation,
-                    vel: model.workVelocity
-                });
-                const expectedSprayVolume = model.workVolume;
-                const diff = effectiveSprayVolume - expectedSprayVolume;
-                const diffp = diff/model.workVolume*100;
+                // TODO: calcular resultados
+                // TODO2: actualizar "outputs"
                 const result = {
-                    efAvg, 
-                    totalEffectiveFlow: model.nozzleNumber ? efAvg*model.nozzleNumber : undefined,
-                    effectiveSprayVolume, 
-                    expectedSprayVolume, 
-                    diff, 
-                    diffp, 
+                    effectiveSprayVolume:0, 
+                    expectedSprayVolume:0, 
+                    diff:0, 
+                    diffp:0, 
                     ready: true
                 };
                 model.update("verificationOutput", result);
@@ -170,17 +159,12 @@ const Control = props => {
     };
 
     const addResultsToReport = () => {
-        const {            
-            efAvg,
-            expectedSprayVolume,
-            effectiveSprayVolume,
+        const {                        
             totalEffectiveFlow,
             diff,
             diffp
         } = outputs;
-        model.addControlToReport({
-            efAvg,
-            expectedSprayVolume,
+        model.addControlToReport({            
             effectiveSprayVolume,
             totalEffectiveFlow,
             diff,
