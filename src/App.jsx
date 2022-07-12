@@ -18,6 +18,7 @@ const pushState = page => window.history.pushState(null, null, page);
 const f7params = {
     name: 'Criollo Atomizadores',
     id: 'com.inta.criolloatm',    
+    theme: 'md',
     dialog: {
         buttonOk: 'Aceptar',
         buttonCancel: 'Cancelar'

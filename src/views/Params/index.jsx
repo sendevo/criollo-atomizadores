@@ -235,6 +235,7 @@ const Params = props => {
 
     const addParamsToReport = () => {
         model.addParamsToReport({
+            arcName: model.currentArcConfig?.name,
             rowSeparation,
             arcNumber,
             workVelocity,

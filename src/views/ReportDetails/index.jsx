@@ -14,7 +14,6 @@ const ReportDetails = props => {
     
     const model = useContext(ModelCtx);
     const report = model.getReport(props.id);
-    console.log(report);
 
     const exportReport = share => {
         PDFExport(report, share);
@@ -32,15 +31,14 @@ const ReportDetails = props => {
                 <Block className={classes.SectionBlock}>
                     <h3>Parámetros de aplicación</h3>
                     <table className={classes.Table}>
-                        <tbody>                            
-                            <tr>Parámetros de pulverización</tr>
+                        <tbody>                                                        
                             <tr>
                                 <td><b>Distancia entre filas:</b></td>
                                 <td className={classes.DataCell}>{formatNumber(report.params.rowSeparation)} m</td>
                             </tr>
                             <tr>
                                 <td><b>Cantidad de arcos:</b></td>
-                                <td className={classes.DataCell}>{formatNumber(report.params.arcNumber)}</td>
+                                <td className={classes.DataCell}>{report.params.arcNumber}</td>
                             </tr>
                             <tr>
                                 <td><b>Velocidad de trabajo:</b></td>
@@ -66,36 +64,49 @@ const ReportDetails = props => {
                 report.completed.control &&
                 <Block className={classes.SectionBlock}>
                     <h3>Verificación de picos</h3>
+
+                    <b>Arco derecho</b>
                     <table className={classes.Table}>
                         <tbody>
-                            {/*<tr>
-                                <td><b>Caudal efectivo promedio:</b></td>
-                                <td className={classes.DataCell}>{formatNumber(report.control.efAvg)} l/min</td>
-                            </tr>
-                            {report.control.totalEffectiveFlow && <tr>
-                                <td><b>Caudal pulverizado efectivo:</b></td>
-                                <td className={classes.DataCell}>{formatNumber(report.control.totalEffectiveFlow)} l/min</td>
-                            </tr>}
                             <tr>
-                                <td><b>Volumen pulverizado efectivo:</b></td>
-                                <td className={classes.DataCell}>{formatNumber(report.control.effectiveSprayVolume)} l/ha</td>
-                            </tr>
-                            <tr>
-                                <td><b>Volumen previsto:</b></td>
-                                <td className={classes.DataCell}>{formatNumber(report.control.expectedSprayVolume)} l/ha</td>
+                                <td><b>Volumen efectivo:</b></td>
+                                <td className={classes.DataCell}>{formatNumber(report.control.outputs.right.effectiveSprayVolume)} l/min</td>
                             </tr>
                             <tr>
                                 <td><b>Diferencia:</b></td>
-                                <td className={classes.DataCell}>{formatNumber(report.control.diff)} l/ha <br/>({formatNumber(report.control.diffp)} %)</td>
+                                <td className={classes.DataCell}>{formatNumber(report.control.outputs.right.diff)} l/min ({formatNumber(report.control.outputs.right.diffp)} %)</td>
                             </tr>
-                            */}
                         </tbody>
                     </table>
                     <NozzlesControlTable 
-                        data={report.control.data} 
+                        data={report.control.tableData.right} 
                         onDataChange={()=>{}} 
                         rowSelectDisabled={true}
                         evalCollected={()=>{}}/>
+                    {
+                        report.control.arcNumber === 2 &&
+                        <>
+                            <br/>
+                            <b>Arco izquierdo</b>
+                            <table className={classes.Table}>
+                                <tbody>
+                                    <tr>
+                                        <td><b>Volumen efectivo:</b></td>
+                                        <td className={classes.DataCell}>{formatNumber(report.control.outputs.left.effectiveSprayVolume)} l/min</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Diferencia:</b></td>
+                                        <td className={classes.DataCell}>{formatNumber(report.control.outputs.left.diff)} l/min ({formatNumber(report.control.outputs.left.diffp)} %)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <NozzlesControlTable 
+                                data={report.control.tableData.left} 
+                                onDataChange={()=>{}} 
+                                rowSelectDisabled={true}
+                                evalCollected={()=>{}}/>
+                        </>
+                    }
                 </Block>
             }  
             {

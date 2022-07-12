@@ -1,5 +1,5 @@
 import { f7, Page, Navbar, Block, List, Row, Col, Button } from "framework7-react";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ModelCtx, WalkthroughCtx } from "../../context";
 import { useSound } from "use-sound";
 import moment from 'moment';
@@ -18,8 +18,19 @@ import threeSfx from '../../assets/sounds/tres.mp3';
 import readySfx from '../../assets/sounds/listo.mp3';
 import classes from './style.module.css';
 
+React.useLayoutEffect = React.useEffect; 
+
 
 const timer = new Timer(0, true);
+
+const OutputBlock = props => (
+    props.outputs.ready && 
+    <Block className={classes.OutputBlock}>
+        <p className="help-target-control-results"><b>Resultados lado {props.side === 'left' ? 'izquierdo' : 'derecho'}</b></p>
+        <p>Volumen pulverizado efectivo: {formatNumber(props.outputs.effectiveSprayVolume)} l/ha</p>
+        <p>Diferencia: {formatNumber(props.outputs.diff)} l/ha ({formatNumber(props.outputs.diffp)} %)</p>
+    </Block>
+);
 
 const Control = props => {
     
@@ -29,19 +40,29 @@ const Control = props => {
     const [elapsed, setElapsed] = useState(model.samplingTimeMs || 30000); // Duracion: 30, 60 o 90
     
     // Inputs
-    const initialData = model.currentArcConfig.nozzleData.map(n => ({        
-        updated: false
-    }));
-    const [data, setData] = useState(initialData); // Datos de la tabla
     const [currentArc, setCurrentArc] = useState("right");
+    const initialData = {
+        right: model.currentArcConfig.nozzleData.map(n => ({updated: false})),
+        left: model.currentArcConfig.nozzleData.map(n => ({updated: false}))
+    };
+    const [tableData, setTableData] = useState(initialData); // Datos de la tabla
 
-    // TODO: Outputs
-    const [outputs, setOutputs] = useState(model.verificationOutput || { // Resultados
-        ready: false,        
-        expectedSprayVolume: undefined,
-        effectiveSprayVolume: undefined,
-        diff: undefined,
-        diffp: undefined
+    // Outputs
+    const [outputs, setOutputs] = useState({ // Resultados
+        left:{
+            expectedSprayVolume: undefined,
+            effectiveSprayVolume: undefined,
+            diff: undefined,
+            diffp: undefined,
+            ready: false
+        },
+        right:{
+            expectedSprayVolume: undefined,
+            effectiveSprayVolume: undefined,
+            diff: undefined,
+            diffp: undefined,
+            ready: false
+        }
     });
     
     // Estado del timer
@@ -75,29 +96,35 @@ const Control = props => {
         }catch(err){
             Toast("error", err.message);
         }
+        return {updated: false};
     };
 
     const updateData = newData => {        
         model.update("collectedData", newData);
-        const efSum = arraySum(newData, "ef");
         if(newData.every(d => d.updated)){ // Verificacion completada
-            try{
-                // TODO: calcular resultados
-                // TODO2: actualizar "outputs"
-                const result = {
-                    effectiveSprayVolume:0, 
-                    expectedSprayVolume:0, 
-                    diff:0, 
-                    diffp:0, 
+            try{                
+                const effectiveVolume = API.computeEffectiveVolume({
+                    collectedData: newData,
+                    Vt: model.workVelocity,
+                    D: model.rowSeparation
+                });
+                const res = {
+                    effectiveSprayVolume: effectiveVolume, 
+                    expectedSprayVolume: model.workVolume, 
+                    diff: effectiveVolume - model.workVolume, 
+                    diffp: (effectiveVolume - model.workVolume) / model.workVolume * 100, 
                     ready: true
                 };
-                model.update("verificationOutput", result);
-                setOutputs(result);
+                const newOutput = {...outputs, [currentArc]: res}
+                model.update("verificationOutput", newOutput);
+                setOutputs(newOutput);
             }catch(err){
                 Toast("error", err.message);
             }
         }
-        setData(newData);
+        const newTableData = {...tableData};
+        newTableData[currentArc] = newData;
+        setTableData(newTableData);
     };
 
     useEffect(() => { // Como esta creado con initial=0, hay que inicializarlo en el valor correcto
@@ -116,8 +143,7 @@ const Control = props => {
     };
 
     const toggleRunning = () => {
-        if(data.length > 0) // Solo si hay indicado un numero de picos mayor a 0
-        {
+        if(tableData[currentArc].length > 0){ // Solo si hay indicado un numero de picos mayor a 0
             if(!running){
                 timer.onChange = setTime;
                 timer.onTimeout = onTimeout;
@@ -152,25 +178,14 @@ const Control = props => {
             play2();
         if(time === 1000)
             play1();
-        if(time < 100)
+        if(time < 200)
             play0();
         // formatear de unix a min:seg:ms
         return moment(time).format('mm:ss:S');
     };
 
     const addResultsToReport = () => {
-        const {                        
-            totalEffectiveFlow,
-            diff,
-            diffp
-        } = outputs;
-        model.addControlToReport({            
-            effectiveSprayVolume,
-            totalEffectiveFlow,
-            diff,
-            diffp,
-            data
-        });
+        model.addControlToReport({tableData,outputs, arcNumber: model.arcNumber});
         f7.panel.open();       
     };
 
@@ -203,37 +218,33 @@ const Control = props => {
             </Block>
             
             <ArcConfigDisplay 
+                disabled={model.arcNumber === 1}
                 arcSide={currentArc}
                 arcConfig={model.currentArcConfig}
                 onArcSwitch={handleArcSwitch}/>
         
             <Block style={{marginBottom: "20px",textAlign:"center"}}>
                 <NozzlesControlTable 
-                    data={data} 
+                    data={tableData[currentArc]} 
                     onDataChange={updateData} 
                     rowSelectDisabled={running}
                     evalCollected={handleNewCollectedValue}/>
             </Block>
 
-            {outputs.ready && 
-                <Block className={classes.OutputBlock}>
-                    <p className="help-target-control-results"><b>Resultados</b></p>
-                    {/*<p>Caudal efectivo promedio: {formatNumber(outputs.efAvg)} l/min</p>*/}
-                    {outputs.totalEffectiveFlow && <p>Caudal pulverizado efectivo: {formatNumber(outputs.totalEffectiveFlow)} l/min</p>}
-                    <p>Volumen pulverizado efectivo: {formatNumber(outputs.effectiveSprayVolume)} l/ha</p>
-                    <p>Diferencia: {formatNumber(outputs.diff)} l/ha ({formatNumber(outputs.diffp)} %)</p>
-                    <Row style={{marginTop:30, marginBottom: 20}} className="help-target-control-reports">
-                        <Col width={20}></Col>
-                        <Col width={60}>
-                            <Button fill style={{textTransform:"none"}} onClick={addResultsToReport}>
-                                Agregar a reporte
-                            </Button>
-                        </Col>
-                        <Col width={20}></Col>
-                    </Row>
-                </Block>
+            <OutputBlock outputs={outputs.right} side={'right'}/>
+            <OutputBlock outputs={outputs.left} side={'left'}/>
+            {
+                (model.arcNumber === 2 && outputs.left.ready && outputs.right.ready || model.arcNumber === 1 && outputs.right.ready) &&
+                <Row style={{marginTop:30, marginBottom: 20}} className="help-target-control-reports">
+                    <Col width={20}></Col>
+                    <Col width={60}>
+                        <Button fill style={{textTransform:"none"}} onClick={addResultsToReport}>
+                            Agregar a reporte
+                        </Button>
+                    </Col>
+                    <Col width={20}></Col>
+                </Row>
             }
-
             <BackButton {...props} />
         </Page>
     );

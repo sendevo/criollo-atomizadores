@@ -36,7 +36,7 @@ const ArcConfig = props => {
                 long_name: "Sin pico",
                 valid: false,
                 Pnom: nominalPressure,
-                Qnom: nominalFlow,
+                Qnom: 0,
                 img: ""
             }));
             setNozzleData(temp);
@@ -86,7 +86,7 @@ const ArcConfig = props => {
                                 ...nozzle,
                                 Pnom: nominalPressure,
                                 selection,
-                                selected: true,
+                                selected: false, // Deseleccionar luego de elegir pico
                                 valid: true
                             };
                         }

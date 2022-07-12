@@ -35,13 +35,15 @@ const NozzlesControlTable = props => {
                             <col span={1} style={{width: "30%"}} />
                             <col span={1} style={{width: "20%"}} />
                         </colgroup>
-                        <tr className={classes.Header}>
-                            <th className="label-cell" style={{margin:0, padding:0}}>Pico #</th>
-                            <th className="label-cell" style={{margin:0, padding:0}}>
-                                <div>Caudal</div><div>efectivo</div></th>
-                            <th className="label-cell" style={{margin:0, padding:0}}>Desvío</th>
-                            <th className="label-cell" style={{margin:0, padding:0}}>Correcto</th>
-                        </tr>
+                        <tbody>    
+                            <tr className={classes.Header}>
+                                <th className="label-cell" style={{margin:0, padding:0}}>Pico #</th>
+                                <th className="label-cell" style={{margin:0, padding:0}}>
+                                    <div>Caudal</div><div>efectivo</div></th>
+                                <th className="label-cell" style={{margin:0, padding:0}}>Desvío</th>
+                                <th className="label-cell" style={{margin:0, padding:0}}>Correcto</th>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
                 <div style={{maxHeight:"300px",overflow: "auto"}}>

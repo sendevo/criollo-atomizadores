@@ -103,21 +103,21 @@ Funcionales
     - [x] Cargar resultados a reporte.  
   - [ ] Sección verificación de picos.  
     - [x] Vista principal.  
-    - [ ] Cálculo de resultados.  
-    - [ ] Cambio de arco.  
-    - [ ] Cargar resultados a reporte.  
+    - [x] Cálculo de resultados.  
+    - [x] Cambio de arco.  
+    - [x] Cargar resultados a reporte.  
   - [ ] Sección calculo de mezclas.  
     - [x] Vista con formulario.  
     - [x] Cálculo de insumos.  
     - [x] Navigator/Capacitor GPS.  
     - [x] Vista de resultados.  
     - [x] Control de campos.  
-    - [ ] Cargar resultados a reporte.  
+    - [x] Cargar resultados a reporte.  
   - [ ] Sección reportes.  
     - [x] Vista de listado de reportes.  
     - [x] Gestión de reportes.  
-    - [ ] Vista de presentación de reportes.  
-    - [ ] Exportar reporte a PDF y compartir. 
+    - [x] Vista de presentación de reportes.  
+    - [x] Exportar reporte a PDF y compartir. 
   - [x] Sección seguridad e higiene.  
   - [x] Sección Información y ayuda.  
     - [x] Menú de enlaces.  

@@ -1,6 +1,6 @@
 const round2 = x => Math.round(x*100)/100;
 const isString = value => (typeof value === 'string' || value instanceof String) && value !== "";
-// const isInteger = Number.isInteger;
+//const isInteger = Number.isInteger;
 //const isPositiveInteger = value => Number.isInteger(value) && value > 0;
 //const isFloat = Number.isFinite;
 const isPositiveFloat = value => Number.isFinite(value) && value > 0;
@@ -59,6 +59,12 @@ const _computeEffectiveFlow = {
     Qnom: isPositiveFloat,
     c: isPositiveFloat,
     tms: isPositiveFloat
+};
+
+const _computeEffectiveVolume = {
+    collectedData: v => v?.length > 0 && v.every(d => isPositiveFloat(d.ef)),
+    D: isPositiveFloat,
+    Vt: Number.isFinite
 };
 
 const _computeSuppliesList = {
@@ -176,6 +182,13 @@ export const computeEffectiveFlow = params => {
     const s = round2((ef - Qe) / Qe * 100); // Desviacion estandar
     const ok = Math.abs(s) <= th; // Correcto 
     return { ef, s, ok };
+};
+
+export const computeEffectiveVolume = params => {
+    checkParams(_computeEffectiveVolume, params);
+    const { collectedData, Vt, D } = params;
+    const Qe = collectedData.reduce((a, b) => a + b.ef, 0);
+    return round2(Qe*600/Vt/D);
 };
 
 const computeProductVolume = (prod, vol, Va) => { // Cantidad de insumo (gr o ml) por volumen de agua

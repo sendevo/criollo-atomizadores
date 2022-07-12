@@ -18,8 +18,9 @@ const ArcConfigDisplay = props => {
                     </Row>
                     <Row>
                         <img className={classes.ButtonIcon} 
+                            style={props.disabled ? {filter:"contrast(0.1)"}:{}}
                             src={props.arcSide === "right" ? arcRight : arcLeft} 
-                            onClick={()=>{props.onArcSwitch()}}
+                            onClick={()=>{if(!props.disabled) props.onArcSwitch()}}
                             slot="media" 
                             alt="icon"/>
                     </Row>

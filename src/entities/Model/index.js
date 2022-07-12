@@ -8,7 +8,8 @@ import { Capacitor } from "@capacitor/core";
 // El almacenamiento de datos se realiza con el valor de la version.
 // Las migraciones entre versiones no estan implementadas. 
 // Ante cualquier cambio en el modelo, se debe incrementar la version.
-const version = '3'; 
+// Preferible usar "_" en vez de "."
+const version = '3_1'; 
 
 const get_blank_arc_config = () => {
     return {
@@ -40,7 +41,7 @@ const get_blank_report = () => {
 const defaultFormParams = {
     // Parametros
     rowSeparation: 3, // Ancho de calle (m)
-    arcNumber: 1, // Numero de arcos
+    arcNumber: 1, // Numero de arcos, puede ser 1 o 2
     
     workVelocity: 10, // Velocidad de trabajo (km/h)
     velocityMeasured: false, // Para disparar render en vista de parametros
