@@ -1,9 +1,9 @@
 import { f7, Row, Col, Button } from 'framework7-react';
 import React from 'react';
-import nozzles from '../../entities/nozzles.json';
+import nozzles from '../../data/nozzles.json';
 
 const getNozzleKeyList = nozzleLeaf => Object.keys(nozzleLeaf);
-const getNozzleNameList =nozzleLeaf => getNozzleKeyList(nozzleLeaf).map(key => nozzleLeaf[key].name);
+const getNozzleNameList = nozzleLeaf => getNozzleKeyList(nozzleLeaf).map(key => nozzleLeaf[key].name);
 const getNozzleKeyFromIndex = (index, nozzleLeaf) => getNozzleKeyList(nozzleLeaf)[index];
     
 const pickerCols = [

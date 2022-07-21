@@ -15,6 +15,7 @@ const _computeQe = {
 const _computeVa = {        
     Vt: isPositiveFloat,
     D: isPositiveFloat,
+    Na: n => Number.isInteger(n) && (n === 1 || n === 2),
     ..._computeQe
 };
 
@@ -128,14 +129,14 @@ export const computeQe = params => {
     checkParams(_computeQe, params);
     const { nozzleData, Na, Pt } = params;
     const qe = nozzleData.map(nozzle => nozzle.Qnom*Math.sqrt(Pt/nozzle.Pnom));     
-    const Qe = Na * qe.reduce((a, b) => a + b, 0);
+    const Qe = qe.reduce((a, b) => a + b, 0);
     return round2(Qe);
 };
 
 export const computeVa = params => {
     checkParams(_computeVa, params);
     const Qe = computeQe(params);
-    const { Vt, D  } = params;
+    const { Vt, D, Na  } = params;
     return round2(Qe*600/Vt/D);
 };
 
