@@ -91,6 +91,13 @@ $ npx cap open android
 ### Backlog
 #### Progreso: 70%
 
+
+TODO: 
+  - valor de caudal de aire en input readonly.  
+  - agregar campos caudal aire en nueva vista.   
+  - fix calculo diff en verificacion.  
+
+
 Funcionales
   - [ ] Seccion parámetros de pulverización.  
     - [x] Vista principal.  
