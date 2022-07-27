@@ -9,7 +9,7 @@ import { Capacitor } from "@capacitor/core";
 // Las migraciones entre versiones no estan implementadas. 
 // Ante cualquier cambio en el modelo, se debe incrementar la version.
 // Preferible usar "_" en vez de "."
-const version = '3_1'; 
+const version = '3_2'; 
 
 const get_blank_arc_config = () => {
     return {
@@ -49,7 +49,6 @@ const defaultFormParams = {
     workVolume: 56, // Volumen de aplicacion (l/ha)    
     nominalFlow: 0.8, // Caudal nominal de pico seleccionado
     sprayFlow: null, // Caudal de pulverizacion (caudal de picos multiplicado por n de picos)
-    airFlow: null, // Caudal de aire
     nominalPressure: 3, // Presion nominal de pico seleccionado
     
     // TRV
@@ -57,8 +56,12 @@ const defaultFormParams = {
     plantHeight: 2, // Altura de planta (m)
     plantWidth: 1, // Ancho de planta (m)
     greenIndex: 1, // Indice verde
-    expansionFactor: 2, // Factor de expansión
     trvMeasured: false, // Para disparar render en vista de parametros
+
+    // Caudal de aire
+    airFlow: null, // Caudal de aire
+    expansionFactor: 2, // Factor de expansión
+    airFlowMeasured: false,
 
     // Verificacion de picos
     samplingTimeMs: 30000, // 30000, 60000 o 90000

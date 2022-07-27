@@ -95,6 +95,14 @@ const f7params = {
                 transition: "f7-cover"        
             }
         },
+        { // Cálculo de Caudal de aire
+            path: '/airflow/',
+            component: Views.AirFlow,
+            on:{pageInit: ()=>pushState("airflow")},
+            options: {
+                transition: "f7-cover"        
+            }
+        },
         { // Seguridad y prevencion
             path: '/security/',
             component: Views.Security,

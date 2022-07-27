@@ -5,7 +5,7 @@ import { useSound } from "use-sound";
 import moment from 'moment';
 import * as API from '../../entities/API/index.js';
 import { KeepAwake } from '@capacitor-community/keep-awake';
-import { arraySum, formatNumber } from "../../utils";
+import { formatNumber } from "../../utils";
 import { PlayButton, BackButton } from "../../components/Buttons";
 import { ArcConfigDisplay } from "../../components/ArcConfig";
 import Timer from "../../entities/Timer";
@@ -18,8 +18,7 @@ import threeSfx from '../../assets/sounds/tres.mp3';
 import readySfx from '../../assets/sounds/listo.mp3';
 import classes from './style.module.css';
 
-React.useLayoutEffect = React.useEffect; 
-
+//React.useLayoutEffect = React.useEffect; 
 
 const timer = new Timer(0, true);
 

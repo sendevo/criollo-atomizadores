@@ -6,11 +6,12 @@ import { ArcConfigInput } from "../../components/ArcConfig";
 import Toast from '../../components/Toast';
 import { ModelCtx, WalkthroughCtx } from '../../context';
 import * as API from '../../entities/API';
-import { FaStopwatch, FaTree } from 'react-icons/fa';
+import { FaStopwatch, FaWind, FaTree } from 'react-icons/fa';
 import iconDistance from '../../assets/icons/dplantas.png';
 import iconVelocity from '../../assets/icons/velocidad.png';
 import iconPressure from '../../assets/icons/presion.png';
 import iconVolume from '../../assets/icons/dosis.png';
+import iconAir from '../../assets/icons/aire.png';
 
 const Params = props => {
 
@@ -91,10 +92,18 @@ const Params = props => {
             }));
             model.trvMeasured = false;
         }
+        if(model.airFlowMeasured){
+            setInputs(prevState => ({
+                ...prevState,
+                airFlow: model.airFlow
+            }));
+            model.airFlowMeasured = false;
+        }
     }, [
         model.workVelocity, 
         model.velocityMeasured,
-        model.trvMeasured
+        model.trvMeasured,
+        model.airFlowMeasured,
     ]);
 
     const handleRowSeparationChange = value => {
@@ -310,7 +319,7 @@ const Params = props => {
                     </Col>
                 </Row>
                 
-                <Row slot="list" className="help-target-params-1 help-target-params-2">
+                <Row slot="list">
                     <Col width="80">
                         <Input
                             slot="list"
@@ -332,7 +341,7 @@ const Params = props => {
                     </span>
                 </div>}
 
-                <Row slot="list" className="help-target-params-1 help-target-params-2">
+                <Row slot="list">
                     <Col width="80">
                         <Input
                             slot="list"
@@ -353,11 +362,34 @@ const Params = props => {
                         </LinkButton>
                     </Col>
                 </Row>
+
+                {/*
                 <div slot="list">
                     <span style={{fontSize: "0.85em", color: "rgb(100, 100, 100)", marginLeft: "50px"}}>
                         Caudal de aire: {airFlow} m<sup>3</sup>/h
                     </span>
                 </div>
+                */}
+                <Row slot="list">
+                    <Col width="80">
+                        <Input
+                            slot="list"
+                            borderColor={"#EAEAEA"}
+                            label="Caudal de aire"
+                            name="airFlow"
+                            type="number"
+                            unit="m³/h"
+                            readonly
+                            icon={iconAir}
+                            value={airFlow}>
+                        </Input>
+                    </Col>
+                    <Col width="20" style={{paddingTop:"5px", marginRight:"10px"}}>
+                        <LinkButton href="/airflow/" tooltip="Calcular caudal de aire" >
+                            <FaWind size={20}/>
+                        </LinkButton>
+                    </Col>
+                </Row>
 
             </List>
 

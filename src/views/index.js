@@ -4,6 +4,7 @@ import Velocity from './Velocity';
 import ArcConfig from './Arc';
 import ArcList from './ArcList';
 import Trv from './TRV';
+import AirFlow from './AirFlow';
 import Control from './Control';
 import Info from './Info';
 import About from './About';
@@ -20,6 +21,7 @@ export {
     ArcConfig,
     ArcList,
     Trv,
+    AirFlow,
     Control,
     Info,
     About,

@@ -11,8 +11,6 @@ import iconPlantW from "../../assets/icons/plant_width.png";
 import iconPlantH from "../../assets/icons/plant_height.png";
 import iconDose from "../../assets/icons/dosis.png";
 import iconGI from "../../assets/icons/indiceverde.png";
-import iconAir from "../../assets/icons/aire.png";
-import iconFactor from "../../assets/icons/factor_expansion.png";
 
 const colStyle = {
     margin:"0px!important", 
@@ -29,8 +27,7 @@ const Trv = props => {
         rowSeparation: model.rowSeparation || 2.5,
         plantHeight: model.plantHeight || 2,
         plantWidth: model.plantWidth || 1,
-        greenIndex: model.greenIndex || 1,
-        expansionFactor: model.expansionFactor || 2
+        greenIndex: model.greenIndex || 1
     });
 
     const {
@@ -38,19 +35,12 @@ const Trv = props => {
         rowSeparation,
         plantHeight,
         plantWidth,
-        greenIndex,
-        expansionFactor
+        greenIndex
     } = inputs;
 
     // Calcular resultados en cada render
-    let qAir, dose;
+    let dose;
     try{
-        qAir = API.computeAirFlow({
-            D: rowSeparation,
-            h: plantHeight,
-            Vt: model.workVelocity || 10,
-            F: expansionFactor
-        });
         dose = API.computeVaFromTRV({
             D: rowSeparation,
             r: plantType,
@@ -82,7 +72,6 @@ const Trv = props => {
 
     const exportData = () => {
         model.update({
-            airFlow: qAir,
             workVolume: dose,
             trvMeasured: true
         });
@@ -160,33 +149,6 @@ const Trv = props => {
                                 unit="l/ha"
                                 icon={iconDose}
                                 value={dose}>
-                            </Input>
-                        </Col>
-                    </Row>
-                </List>
-
-                <BlockTitle style={{marginTop:-15, marginBottom:0}}>Caudal de aire</BlockTitle>
-
-                <List form noHairlinesMd>    
-                    <Row slot="list">
-                        <Col style={colStyle}>
-                            <Input
-                                label="Índice de expansión"
-                                name="expansionFactor"
-                                type="number"
-                                icon={iconFactor}
-                                value={expansionFactor}
-                                onChange={handleInputChange}>
-                            </Input>
-                        </Col>
-                        <Col style={colStyle}>
-                            <Input
-                                label="Caudal de aire"
-                                name="airFlow"
-                                type="number"
-                                unit="m³/h"
-                                icon={iconAir}
-                                value={qAir}>
                             </Input>
                         </Col>
                     </Row>
