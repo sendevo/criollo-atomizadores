@@ -46,6 +46,11 @@ const _computeAirFlow = {
     F: Number.isFinite
 };
 
+const _computeAirVelocity = {
+    turbineSection: isPositiveFloat,
+    airFlow: isPositiveFloat
+}
+
 const _computeVaFromTRV = {
     D: isPositiveFloat,
     r: isString,
@@ -125,7 +130,7 @@ const plantFormIndex = {
     type_c: 468.5
 };
 
-export const computeQe = params => {
+export const computeQe = params => { // Caudal efectivo
     checkParams(_computeQe, params);
     const { nozzleData, Na, Pt } = params;
     const qe = nozzleData.map(nozzle => nozzle.Qnom*Math.sqrt(Pt/nozzle.Pnom));     
@@ -133,48 +138,54 @@ export const computeQe = params => {
     return round2(Qe);
 };
 
-export const computeVa = params => {
+export const computeVa = params => { // Volumen de aplicacion
     checkParams(_computeVa, params);
     const Qe = computeQe(params);
     const { Vt, D, Na  } = params;
-    return round2(Qe*600/Vt/D);
+    return round2(Qe*1200/Vt/D);
 };
 
-export const computeVt = params => {    
+export const computeVt = params => { // Velocidad de trabajo
     checkParams(_computeVt, params);
     const Qe = computeQe(params);
     const { Va, D } = params;
-    return round2(Qe*600/Va/D);
+    return round2(Qe*1200/Va/D);
 };
 
-export const computePt = params => {
+export const computePt = params => { // Presion de trabajo
     checkParams(_computePt, params);
     const { Va, Vt, D, Na, nozzleData } = params;
     const pe = nozzleData.map(nozzle => nozzle.Qnom/Math.sqrt(nozzle.Pnom));
-    const Pe = Va*Vt*D/600/Na/pe.reduce((a, b) => a + b, 0);
+    const Pe = Va*Vt*D/1200/pe.reduce((a, b) => a + b, 0);
     return round2(Pe*Pe);
 };
 
-export const computeQNom = params => {
+export const computeQNom = params => { // Caudal nominal
     checkParams(_computeQNom, params);
     const {b, c, Pnom} = params;
     return round2(b + c * Math.sqrt(Pnom));
 };
 
-export const computeAirFlow = params => {
+export const computeAirFlow = params => { // Caudal de aire
     checkParams(_computeAirFlow, params);
     const {D, h, Vt, F} = params;
     return round2(Vt * D * h / F * 1000);
 };
 
-export const computeVaFromTRV = params => {
+export const computeAirVelocity = params => { // Velocidad de soplado
+    checkParams(_computeAirVelocity, params);
+    const {turbineSection, airFlow} = params;
+    return round2(airFlow / turbineSection * 3600);
+};
+
+export const computeVaFromTRV = params => { // Volumen de aplicacion desde TRV
     checkParams(_computeVaFromTRV, params);
     const {D, r, h, w, gI} = params;
     const rk = plantFormIndex[r];
     return round2(rk * h * w * gI / D);
 };
 
-export const computeEffectiveFlow = params => {
+export const computeEffectiveFlow = params => { // Caudal efectivo
     checkParams(_computeEffectiveFlow, params);
     const { Pt, Qnom, Pnom, c, tms } = params;
     const th = 10; // Umbral en porcentaje
@@ -185,7 +196,7 @@ export const computeEffectiveFlow = params => {
     return { ef, s, ok };
 };
 
-export const computeEffectiveVolume = params => {
+export const computeEffectiveVolume = params => { // Volumen efectivo
     checkParams(_computeEffectiveVolume, params);
     const { collectedData, Vt, D } = params;
     const Qe = collectedData.reduce((a, b) => a + b.ef, 0);

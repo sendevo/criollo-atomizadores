@@ -95,7 +95,7 @@ $ npx cap open android
 TODO: 
   - [x] valor de caudal de aire en input readonly.  
   - [x] agregar campos (ancho/alto/velocidad?) caudal aire en nueva vista.   
-  - [ ] dividir valor de volumen aplicado x2.  
+  - [x] dividir valor de volumen aplicado x2.  
   - [ ] fix calculo diff en verificacion.  
 
 

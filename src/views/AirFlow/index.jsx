@@ -7,27 +7,39 @@ import { BackButton } from '../../components/Buttons';
 import Toast from '../../components/Toast';
 import iconAir from "../../assets/icons/aire.png";
 import iconFactor from "../../assets/icons/factor_expansion.png";
+import iconSection from "../../assets/icons/seccion_soplado.png";
+import iconWind from "../../assets/icons/velocidad_aire.png";
 
 const AirFlow = props => {
 
     const model = useContext(ModelCtx);
 
     const [inputs, setInputs] = useState({
-        expansionFactor: model.expansionFactor || 2
+        airFlow: model.airFlow || 0,
+        expansionFactor: model.expansionFactor || 2,
+        turbineSection: model.turbineSection || ''
     });
 
     const {
-        expansionFactor
+        airFlow,
+        expansionFactor,
+        turbineSection,
     } = inputs;
 
     // Calcular resultados en cada render
-    let qAir, dose;
+    let airVelocity;
     try{
-        qAir = API.computeAirFlow({
+        /*
+        const newairFlow = API.computeAirFlow({
             D: model.rowSeparation,
             h: model.plantHeight,
             Vt: model.workVelocity || 10,
             F: expansionFactor
+        });
+        */
+        airVelocity = API.computeAirVelocity({
+            airFlow: airFlow,
+            turbineSection: turbineSection
         });
     }catch(e){
         Toast("error", e.message);
@@ -45,7 +57,7 @@ const AirFlow = props => {
 
     const exportData = () => {
         model.update({
-            airFlow: qAir,
+            airFlow: airFlow,
             airFlowMeasured: true
         });
         props.f7router.back();
@@ -70,8 +82,27 @@ const AirFlow = props => {
                             name="airFlow"
                             type="number"
                             unit="m³/h"
+                            onChange={handleInputChange}
                             icon={iconAir}
-                            value={qAir}>
+                            value={airFlow}>
+                        </Input>
+                        <Input
+                            label="Sección de soplado"
+                            name="turbineSection"
+                            type="number"
+                            unit="m²"
+                            icon={iconSection}
+                            value={turbineSection}
+                            onChange={handleInputChange}>
+                        </Input>
+                        <Input
+                            label="Velocidad del aire"
+                            name="airVelocity"
+                            type="number"
+                            unit="m/s"
+                            readonly
+                            icon={iconWind}
+                            value={airVelocity}>
                         </Input>
                     </Row>
                 </List>
