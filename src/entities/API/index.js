@@ -98,6 +98,8 @@ const parameterNames = { // Nombres de los parametros para mostrar en mensajes d
     w: "Ancho de plantas",
     gI: "Índice verde",
     F: "Índice de expansión",
+    airFlow: "Caudal de aire",
+    turbineSection: "Sección de soplado",
     r: "Forma de planta",
     Pt: "Presión de trabajo",
     Va: "Volumen de aplicación",
@@ -175,7 +177,7 @@ export const computeAirFlow = params => { // Caudal de aire
 export const computeAirVelocity = params => { // Velocidad de soplado
     checkParams(_computeAirVelocity, params);
     const {turbineSection, airFlow} = params;
-    return round2(airFlow / turbineSection * 3600);
+    return round2(airFlow / turbineSection / 3600);
 };
 
 export const computeVaFromTRV = params => { // Volumen de aplicacion desde TRV

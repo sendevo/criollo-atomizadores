@@ -173,6 +173,17 @@ const Params = props => {
         model.update("workVolume", wv);
     };
 
+    const handleAirFlowChange = e => {
+        const af = parseFloat(e.target.value);
+        setInputs({
+            ...inputs,
+            airFlow: af
+        });
+        model.update("airFlow", af);
+    };
+            
+
+
     const computeWorkVelocity = () => {
         try{            
             const newVel = API.computeVt({
@@ -271,9 +282,8 @@ const Params = props => {
             
             <BlockTitle style={{marginBottom: 5, marginTop:0}}>Ancho de calle</BlockTitle>
 
-            <List form noHairlinesMd style={{marginBottom:"10px", marginTop: "10px"}}>    
-                <Input
-                    className="help-target-dist-nozzle"
+            <List form noHairlinesMd style={{margin: "0px!important", padding:"0px 20px"}}>    
+                <Input                    
                     slot="list"
                     label="Distancia entre filas"
                     name="rowSeparation"
@@ -296,7 +306,7 @@ const Params = props => {
             </center>
 
             <BlockTitle style={{marginBottom: "5px"}}>Parámetros de aplicación</BlockTitle>
-            <List form noHairlinesMd style={{marginBottom:"10px"}}>
+            <List form noHairlinesMd style={{marginBottom:"10px", paddingLeft:"10px"}}>
                 <Row slot="list" className="help-target-params-1 help-target-params-2">
                     <Col width="80">
                         <Input
@@ -378,10 +388,10 @@ const Params = props => {
                             label="Caudal de aire"
                             name="airFlow"
                             type="number"
-                            unit="m³/h"
-                            readonly
+                            unit="m³/h"                            
                             icon={iconAir}
-                            value={airFlow}>
+                            value={airFlow}
+                            onChange={handleAirFlowChange}>
                         </Input>
                     </Col>
                     <Col width="20" style={{paddingTop:"5px", marginRight:"10px"}}>
@@ -390,6 +400,11 @@ const Params = props => {
                         </LinkButton>
                     </Col>
                 </Row>
+                {model.airVelocity && <div slot="list">
+                    <span style={{fontSize: "0.85em", color: "rgb(100, 100, 100)", marginLeft: "50px"}}>
+                        Velocidad de aire: {model.airVelocity} m/s
+                    </span>
+                </div>}
 
             </List>
 

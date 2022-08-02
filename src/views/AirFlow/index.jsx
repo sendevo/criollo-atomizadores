@@ -5,7 +5,6 @@ import * as API from '../../entities/API';
 import Input from "../../components/Input";
 import { BackButton } from '../../components/Buttons';
 import Toast from '../../components/Toast';
-import iconAir from "../../assets/icons/aire.png";
 import iconFactor from "../../assets/icons/factor_expansion.png";
 import iconSection from "../../assets/icons/seccion_soplado.png";
 import iconWind from "../../assets/icons/velocidad_aire.png";
@@ -14,14 +13,12 @@ const AirFlow = props => {
 
     const model = useContext(ModelCtx);
 
-    const [inputs, setInputs] = useState({
-        airFlow: model.airFlow || 0,
+    const [inputs, setInputs] = useState({        
         expansionFactor: model.expansionFactor || 2,
-        turbineSection: model.turbineSection || ''
+        turbineSection: model.turbineSection || 1
     });
 
-    const {
-        airFlow,
+    const {        
         expansionFactor,
         turbineSection,
     } = inputs;
@@ -38,9 +35,10 @@ const AirFlow = props => {
         });
         */
         airVelocity = API.computeAirVelocity({
-            airFlow: airFlow,
+            airFlow: model.airFlow,
             turbineSection: turbineSection
         });
+        model.update({airVelocity: airVelocity});        
     }catch(e){
         Toast("error", e.message);
     }
@@ -56,16 +54,15 @@ const AirFlow = props => {
     };
 
     const exportData = () => {
-        model.update({
-            airFlow: airFlow,
-            airFlowMeasured: true
+        model.update({            
+            airVelocityMeasured: true
         });
         props.f7router.back();
     };
 
     return (
         <Page>
-            <Navbar title="Cálculo de cauldal de aire" style={{maxHeight:"40px", marginBottom:"0px"}}/>      
+            <Navbar title="Cálculo de velocidad de aire" style={{maxHeight:"40px", marginBottom:"0px"}}/>      
             <Block style={{marginTop:0, padding:0}}>
                 <List form noHairlinesMd style={{margin:0}}>    
                     <Row slot="list">
@@ -76,15 +73,6 @@ const AirFlow = props => {
                             icon={iconFactor}
                             value={expansionFactor}
                             onChange={handleInputChange}>
-                        </Input>
-                        <Input
-                            label="Caudal de aire"
-                            name="airFlow"
-                            type="number"
-                            unit="m³/h"
-                            onChange={handleInputChange}
-                            icon={iconAir}
-                            value={airFlow}>
                         </Input>
                         <Input
                             label="Sección de soplado"

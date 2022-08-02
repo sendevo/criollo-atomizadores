@@ -9,7 +9,7 @@ import { Capacitor } from "@capacitor/core";
 // Las migraciones entre versiones no estan implementadas. 
 // Ante cualquier cambio en el modelo, se debe incrementar la version.
 // Preferible usar "_" en vez de "."
-const version = '3_2'; 
+const version = '3_3'; 
 
 const get_blank_arc_config = () => {
     return {
@@ -60,8 +60,11 @@ const defaultFormParams = {
 
     // Caudal de aire
     airFlow: null, // Caudal de aire
-    expansionFactor: 2, // Factor de expansión
     airFlowMeasured: false,
+    expansionFactor: 2, // Factor de expansión
+    turbineSection: null, // Seccion de soplado
+    airVelocity: null, // Velocidad de aire
+    airVelocityMeasured: false,
 
     // Verificacion de picos
     samplingTimeMs: 30000, // 30000, 60000 o 90000

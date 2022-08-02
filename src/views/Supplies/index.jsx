@@ -171,7 +171,7 @@ const Supplies = props => {
                 className="help-target-supplies-form">
                     Datos del lote
             </BlockTitle>
-            <List form noHairlinesMd style={{marginBottom:"10px"}}>    
+            <List form noHairlinesMd style={{marginBottom:"10px", paddingLeft:"10px"}}>    
                 <Input
                     slot="list"
                     label="Lote"
@@ -181,8 +181,7 @@ const Supplies = props => {
                     value={lotName}
                     onChange={v=>setMainParams('lotName', v.target.value)}
                     ></Input>
-                <Input
-                    className="help-target-supplies-form"
+                <Input                    
                     slot="list"
                     label="Superficie"
                     name="workArea"
@@ -204,7 +203,7 @@ const Supplies = props => {
             </List>
 
             <BlockTitle style={{marginBottom:"0px", marginTop: "20px"}} className="help-target-supplies-capacity">Datos de aplicación</BlockTitle>
-            <List form noHairlinesMd style={{marginBottom:"10px"}}>
+            <List form noHairlinesMd style={{marginBottom:"10px", paddingLeft:"10px"}}>
                 <Input
                     className="help-target-load-number"
                     slot="list"
@@ -245,7 +244,7 @@ const Supplies = props => {
                             <DeleteButton onClick={()=>removeProduct(index)}/>
                             <CardContent style={{paddingTop:0}}>
                                 <span style={{color:"gray"}}>Producto {index+1}</span>
-                                <List form noHairlinesMd style={{marginBottom:"0px", marginTop: "0px"}}>
+                                <List form noHairlinesMd style={{marginBottom:"0px", marginTop: "0px", paddingLeft:"10px"}}>
                                     <Input
                                         slot="list"
                                         label="Nombre"
@@ -255,8 +254,7 @@ const Supplies = props => {
                                         onInputClear={()=>setProductParams(index, "name", "")}
                                         onChange={v=>setProductParams(index, "name", v.target.value)}
                                         ></Input>
-                                    <Input
-                                        className="help-target-add-products"
+                                    <Input                                        
                                         slot="list"
                                         label="Dosis"
                                         type="number"

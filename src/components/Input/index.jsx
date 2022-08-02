@@ -15,8 +15,7 @@ const Input = props => (
                 <img className={classes.InputIcon} 
                     style={props.borderColor ? {
                         border: "3px solid "+props.borderColor, 
-                        borderRadius: "10px", 
-                        marginLeft: -5                        
+                        borderRadius: "10px"    
                     } : {}}
                     src={props.icon} 
                     onClick={props.onIconClick}
