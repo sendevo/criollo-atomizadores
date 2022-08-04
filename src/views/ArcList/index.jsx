@@ -1,19 +1,13 @@
 import { useState, useContext } from 'react';
 import { f7, Page, Navbar, Card, Checkbox, Row, Col, Button } from 'framework7-react';
 import { BackButton } from '../../components/Buttons';
-import { ModelCtx } from '../../context';
 import { countSelected } from '../../utils';
 import classes from './style.module.css';
 
 const ArcList = props => {
 
-    const model = useContext(ModelCtx);
-    const [data, setData] = useState(model.arcConfigurations.map(el => (
-        {
-            ...el,
-            selected: false
-        }
-    )));
+    
+    const [data, setData] = useState([]);
     const selectedCount = countSelected(data);
 
     const setSelectedAll = (checked) => {

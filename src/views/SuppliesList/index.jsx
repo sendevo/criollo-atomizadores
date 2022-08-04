@@ -3,7 +3,6 @@ import React, { useContext, useState } from 'react';
 import { BackButton } from '../../components/Buttons';
 import Input from '../../components/Input';
 import { SuppliesTable, PrescriptionTable } from '../../components/SuppliesTable';
-import { ModelCtx } from '../../context';
 import { formatNumber } from '../../utils';
 import iconReport from '../../assets/icons/reportes.png';
 import classes from './style.module.css';

@@ -5,7 +5,7 @@ import * as Views from './views';
 import ReportsPanel from './components/ReportsPanel';
 import Toast from './components/Toast';
 import Popovers from './components/Popover';
-import { ModelProvider, WalkthroughProvider } from './context';
+import ModelProvider from './context/ModelContext';
 import './index.css';
 
 /*
@@ -156,12 +156,6 @@ if(Capacitor.isNativePlatform())
                 Toast('info', 'Presione nuevamente para salir');
                 exitWatchDog = Date.now();
             }else{
-                try{
-                    // variable expuesta en ModelContext.js
-                    window.criollomodel.clearForms();
-                }catch(err){
-                    console.log(err);
-                }
                 cApp.exitApp();
             }            
         }else{
@@ -176,11 +170,9 @@ else
 const Criollo = () => (
     <App {...f7params}>
         <ModelProvider>
-            <WalkthroughProvider>
-                <View main url="/" className="app"/>
-                <ReportsPanel />
-                <Popovers />
-            </WalkthroughProvider>
+            <View main url="/" className="app"/>
+            <ReportsPanel />
+            <Popovers />
         </ModelProvider>
     </App>
 );

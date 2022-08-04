@@ -1,7 +1,4 @@
-import { useState, useContext } from 'react';
 import { Page, Navbar, Block, List, Row, Col, Button } from "framework7-react";
-import { ModelCtx } from '../../context';
-import * as API from '../../entities/API';
 import Input from "../../components/Input";
 import { BackButton } from '../../components/Buttons';
 import Toast from '../../components/Toast';
@@ -11,52 +8,13 @@ import iconWind from "../../assets/icons/velocidad_aire.png";
 
 const AirFlow = props => {
 
-    const model = useContext(ModelCtx);
-
-    const [inputs, setInputs] = useState({        
-        expansionFactor: model.expansionFactor || 2,
-        turbineSection: model.turbineSection || 1
-    });
-
-    const {        
-        expansionFactor,
-        turbineSection,
-    } = inputs;
-
-    // Calcular resultados en cada render
-    let airVelocity;
-    try{
-        /*
-        const newairFlow = API.computeAirFlow({
-            D: model.rowSeparation,
-            h: model.plantHeight,
-            Vt: model.workVelocity || 10,
-            F: expansionFactor
-        });
-        */
-        airVelocity = API.computeAirVelocity({
-            airFlow: model.airFlow,
-            turbineSection: turbineSection
-        });
-        model.update({airVelocity: airVelocity});        
-    }catch(e){
-        Toast("error", e.message);
-    }
-
     const handleInputChange = e => {
         const value = parseFloat(e.target.value);
-        setInputs({
-            ...inputs,
-            [e.target.name]: value,
-        });
-        if(value)
-            model.update(e.target.name, value);
+        console.log(value)
     };
 
     const exportData = () => {
-        model.update({            
-            airVelocityMeasured: true
-        });
+        
         props.f7router.back();
     };
 
@@ -71,7 +29,7 @@ const AirFlow = props => {
                             name="expansionFactor"
                             type="number"
                             icon={iconFactor}
-                            value={expansionFactor}
+                            
                             onChange={handleInputChange}>
                         </Input>
                         <Input
@@ -80,7 +38,7 @@ const AirFlow = props => {
                             type="number"
                             unit="m²"
                             icon={iconSection}
-                            value={turbineSection}
+                            
                             onChange={handleInputChange}>
                         </Input>
                         <Input
@@ -89,8 +47,7 @@ const AirFlow = props => {
                             type="number"
                             unit="m/s"
                             readonly
-                            icon={iconWind}
-                            value={airVelocity}>
+                            icon={iconWind}>
                         </Input>
                     </Row>
                 </List>

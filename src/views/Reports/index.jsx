@@ -4,13 +4,12 @@ import moment from 'moment';
 import { countSelected } from '../../utils';
 import { BackButton } from '../../components/Buttons';
 import iconEmpty from '../../assets/icons/empty_folder.png';
-import { ModelCtx } from '../../context';
 import Toast from '../../components/Toast';
 import classes from './style.module.css';
 
 const Reports = props => {
 
-    const model = useContext(ModelCtx);
+    const model = {};
 
     const [reports, setReports] = useState(model.reports || []);
     const [selectedCount, setSelectedCount] = useState(countSelected(model.reports));

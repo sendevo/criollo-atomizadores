@@ -1,11 +1,15 @@
 import { useContext } from 'react';
 import {Block, Row, Button, BlockTitle} from 'framework7-react';
-import { WalkthroughCtx } from '../../context';
+import { WalkthroughCtx } from '../../context/WalkthroughContext';
 
 const Popovers = () => {
     const wlk = useContext(WalkthroughCtx);
-    const len = wlk.steps.length;
+    //const len = wlk.steps.length;
+    const len = 0;
 
+    return null;
+
+    /*
     return (
         <>
             {
@@ -31,6 +35,7 @@ const Popovers = () => {
             }
         </>
     );
+    */
 };
 
 export default Popovers;

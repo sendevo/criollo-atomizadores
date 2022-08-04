@@ -1,6 +1,5 @@
 import { f7, Page, Navbar, Block, List, Row, Col, Button } from "framework7-react";
 import React, { useContext, useEffect, useState } from "react";
-import { ModelCtx, WalkthroughCtx } from "../../context";
 import { useSound } from "use-sound";
 import moment from 'moment';
 import * as API from '../../entities/API/index.js';
@@ -33,7 +32,7 @@ const OutputBlock = props => (
 
 const Control = props => {
     
-    const model = useContext(ModelCtx);
+    const model = {};
 
     const [firstRound, setFirstRound] = useState(true); // Muestra indicativo la primera vez
     const [elapsed, setElapsed] = useState(model.samplingTimeMs || 30000); // Duracion: 30, 60 o 90

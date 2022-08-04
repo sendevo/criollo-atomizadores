@@ -1,9 +1,8 @@
-import { Navbar, Page, Block, Row, Col, Button, BlockTitle } from 'framework7-react';
 import { useContext } from 'react';
+import { Navbar, Page, Block, Row, Col, Button, BlockTitle } from 'framework7-react';
 import { BackButton } from '../../components/Buttons';
 import NozzlesControlTable from '../../components/NozzlesControlTable';
 import { SuppliesTable, PrescriptionTable } from '../../components/SuppliesTable';
-import { ModelCtx } from '../../context';
 import { formatNumber } from '../../utils';
 import moment from 'moment';
 import { Capacitor } from '@capacitor/core';
@@ -12,8 +11,7 @@ import classes from './style.module.css';
 
 const ReportDetails = props => {
     
-    const model = useContext(ModelCtx);
-    const report = model.getReport(props.id);
+    const report = {};
 
     const exportReport = share => {
         PDFExport(report, share);

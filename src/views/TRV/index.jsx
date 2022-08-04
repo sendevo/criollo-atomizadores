@@ -1,6 +1,5 @@
 import { useState, useContext } from 'react';
 import { Page, Navbar, Block, BlockTitle, List, Row, Col, Button } from "framework7-react";
-import { ModelCtx } from '../../context';
 import * as API from '../../entities/API';
 import { TreeTypeSelector } from "../../components/Selectors";
 import Input from "../../components/Input";
@@ -20,7 +19,7 @@ const colStyle = {
 
 const Trv = props => {
 
-    const model = useContext(ModelCtx);
+    const model = {};
 
     const [inputs, setInputs] = useState({
         plantType: model.plantType || "type_a",

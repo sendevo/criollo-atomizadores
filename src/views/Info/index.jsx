@@ -1,9 +1,9 @@
 import { useContext } from 'react';
+import { WalkthroughCtx } from '../../context/WalkthroughContext';
 import { Page, Link, PageContent, Block } from 'framework7-react';
 import logoInta from '../../assets/backgrounds/logoInta.png';
 import logoMin from '../../assets/backgrounds/logomin.png';
 import { BackButton } from '../../components/Buttons';
-import { WalkthroughCtx } from '../../context';
 import classes from '../style.module.css';
 
 

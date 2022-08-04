@@ -1,13 +1,12 @@
 import { f7, View, Panel, Page, Block, BlockTitle, Button, Row } from 'framework7-react';
 import { useState, useContext } from 'react';
-import { ModelCtx } from '../../context';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import Toast from '../Toast';
 import classes from './style.module.css';
 
 const ReportsPanel = () => {
     
-    const model = useContext(ModelCtx);
+    const model = {};
     const [completedSections, setCompletedSections] = useState(model.currentReport?.completed || {params: false, control: false, supplies: false});
 
     const emptyReport = !completedSections.params && !completedSections.control && !completedSections.supplies;

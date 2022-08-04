@@ -1,17 +1,19 @@
-import React, {createContext} from 'react';
-import CriolloModel from '../entities/Model';
-import { Capacitor } from '@capacitor/core';
+import React, {createContext, useReducer} from 'react';
+import {reducer, initialState} from '../entities/Model/reducer.js';
 
-const model = new CriolloModel();
+export const ModelStateContext = createContext();
+export const ModelDispatchContext = createContext();
 
-if(Capacitor.isNativePlatform())
-    window.criollomodel = model;
+const ModelProvider = ({children}) => {
+    const [state, dispatch] = useReducer(reducer, initialState);
+    
+    return (
+        <ModelStateContext.Provider value={state}>
+            <ModelDispatchContext.Provider value={dispatch}>
+                {children}
+            </ModelDispatchContext.Provider>
+        </ModelStateContext.Provider>
+    );
+};
 
-export const ModelCtx = createContext();
-
-export const ModelProvider = props => (
-    <ModelCtx.Provider value={model}>
-        {props.children}
-    </ModelCtx.Provider>
-);
-
+export default ModelProvider;

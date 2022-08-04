@@ -1,11 +1,9 @@
 import { f7, Navbar, Page, List, BlockTitle, Row, Col, Button } from 'framework7-react';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { BackButton, LinkButton } from '../../components/Buttons';
 import Input from "../../components/Input";
 import { ArcConfigInput } from "../../components/ArcConfig";
 import Toast from '../../components/Toast';
-import { ModelCtx, WalkthroughCtx } from '../../context';
-import * as API from '../../entities/API';
 import { FaStopwatch, FaWind, FaTree } from 'react-icons/fa';
 import iconDistance from '../../assets/icons/dplantas.png';
 import iconVelocity from '../../assets/icons/velocidad.png';
@@ -14,20 +12,6 @@ import iconVolume from '../../assets/icons/dosis.png';
 import iconAir from '../../assets/icons/aire.png';
 
 const Params = props => {
-
-    const model = useContext(ModelCtx);
-
-    const [inputs, setInputs] = useState({
-        rowSeparation: model.rowSeparation || 3,        
-        arcNumber: model.arcNumber || 1,
-        workVelocity: model.workVelocity || 10,
-        workVelocityUpdated: false,
-        workPressure: model.workPressure || 2,
-        workPressureUpdated: false,
-        workVolume: model.workVolume || 56,
-        airFlow: model.airFlow || 1000,
-        workVolumeUpdated: false
-    });
 
     const {
         rowSeparation,
@@ -39,242 +23,36 @@ const Params = props => {
         workVolume,
         airFlow,
         workVolumeUpdated
-    } = inputs;
-
-    let sprayFlow = model.sprayFlow;
-    try{
-        sprayFlow = API.computeQe({
-            nozzleData: model?.currentArcConfig?.nozzleData,
-            Na: arcNumber,
-            Pt: workPressure
-        });
-        model.update("sprayFlow", sprayFlow);
-    }catch(e){
-        console.log(e.message);
-        model.update("sprayFlow", null);
-    }
-
-    // Ante cualquier cambio, borrar formularios de verificacion y de insumos
-    model.update({
-        collectedData: [],
-        verificationOutput: {
-            ready: false,
-            efAvg: undefined,
-            expectedSprayVolume: undefined,
-            effectiveSprayVolume: undefined,
-            diff: undefined,
-            diffp: undefined
-        },
-        lotName: "",
-        lotCoordinates: [],
-        workArea: '',
-        capacity: '',
-        products: []
-    });
-
-    useEffect(() => {
-        if(model.velocityMeasured){
-            setInputs(prevState => ({
-                ...prevState,
-                workVelocity: model.workVelocity,
-                workVelocityUpdated: true,
-                workPressureUpdated: false,
-                workVolumeUpdated: false
-            }));
-            model.velocityMeasured = false;
-        }
-        if(model.trvMeasured){
-            setInputs(prevState => ({
-                ...prevState,
-                workVolume: model.workVolume,
-                workVolumeUpdated: true,
-                airFlow: model.airFlow
-            }));
-            model.trvMeasured = false;
-        }
-        if(model.airFlowMeasured){
-            setInputs(prevState => ({
-                ...prevState,
-                airFlow: model.airFlow
-            }));
-            model.airFlowMeasured = false;
-        }
-    }, [
-        model.workVelocity, 
-        model.velocityMeasured,
-        model.trvMeasured,
-        model.airFlowMeasured,
-    ]);
+    } = {};
 
     const handleRowSeparationChange = value => {
-        const rs = parseFloat(value);
-        setInputs({
-            ...inputs,
-            rowSeparation: rs,
-            nozzleNumber: '',
-            workPressureUpdated: false,
-            workVelocityUpdated: false,
-            workVolumeUpdated: false
-        });
-        model.update({
-            rowSeparation: rs, 
-            nozzleNumber: '',
-            sprayFlow: null
-        });
+        
     };
 
     const handleArcNumberChange = value => {
-        setInputs({
-            ...inputs,
-            arcNumber: value,
-            workPressureUpdated: false,
-            workVelocityUpdated: false,
-            workVolumeUpdated: false
-        });
-        model.update({
-            arcNumber: value,
-            sprayFlow: null
-        });
+        
     }
 
     const handleWorkVelocityChange = e => {
         const wv = parseFloat(e.target.value);
-        setInputs({
-            ...inputs,
-            workVelocity: wv,
-            workVelocityUpdated: true,
-            workPressureUpdated: false,
-            workVolumeUpdated: false
-        });
-        model.update("workVelocity", wv);
+        
     };
 
     const handleWorkPressureChange = e => {
         const wp = parseFloat(e.target.value);
-        setInputs({
-            ...inputs,
-            workPressure: wp,
-            workPressureUpdated: true,
-            workVelocityUpdated: false,
-            workVolumeUpdated: false
-        });
-        model.update("workPressure", wp);
+        
     };
 
     const handleWorkVolumeChange = e => {
         const wv = parseFloat(e.target.value);
-        setInputs({
-            ...inputs,
-            workVolume: wv,
-            workVolumeUpdated: true,
-            workPressureUpdated: false,
-            workVelocityUpdated: false
-        });
-        model.update("workVolume", wv);
+        
     };
 
     const handleAirFlowChange = e => {
         const af = parseFloat(e.target.value);
-        setInputs({
-            ...inputs,
-            airFlow: af
-        });
-        model.update("airFlow", af);
+        
     };
             
-
-
-    const computeWorkVelocity = () => {
-        try{            
-            const newVel = API.computeVt({
-                Va: workVolume,
-                Pt: workPressure,
-                D: rowSeparation,
-                Na: arcNumber,
-                nozzleData: model.currentArcConfig?.nozzleData
-            });
-            model.update({
-                workVelocity: newVel,
-                velocityMeasured: false
-            });
-            setInputs({
-                ...inputs,
-                workVelocity: newVel,
-                workVelocityUpdated: true,
-                workPressureUpdated: true,
-                workVolumeUpdated: true
-            });
-        } catch(err) {
-            Toast("error", err.message);
-        }
-    };
-
-    const computeWorkPressure = () => {
-        try{
-            const newPres = API.computePt({
-                nozzleData: model.currentArcConfig?.nozzleData,
-                Va: workVolume,
-                Vt: workVelocity,            
-                D: rowSeparation,
-                Na: arcNumber
-            });
-            model.update("workPressure", newPres);
-            setInputs({
-                ...inputs,
-                workPressure: newPres,
-                workVelocityUpdated: true,
-                workPressureUpdated: true,
-                workVolumeUpdated: true
-            });
-        } catch(err) {
-            Toast("error", err.message);
-        }
-    };
-
-    const computeWorkVolume = () => {
-        try{
-            const newVol = API.computeVa({
-                Vt: workVelocity,
-                D: rowSeparation,
-                Pt: workPressure,
-                Na: arcNumber,
-                nozzleData: model.currentArcConfig?.nozzleData
-            });
-            model.update("workVolume", newVol);
-            setInputs({
-                ...inputs,
-                workVolume: newVol,
-                workVelocityUpdated: true,
-                workPressureUpdated: true,
-                workVolumeUpdated: true
-            });
-        } catch(err) {
-            Toast("error", err.message);
-        }
-    };
-
-    const addParamsToReport = () => {
-        model.addParamsToReport({
-            arcName: model.currentArcConfig?.name,
-            rowSeparation,
-            arcNumber,
-            workVelocity,
-            workPressure,
-            workVolume,
-            airFlow
-        });
-        f7.panel.open();
-    };
-    
-    /*
-    // Callbacks del modo ayuda
-    const wlk = useContext(WalkthroughCtx);
-    Object.assign(wlk.callbacks, {
-        params_2: () => {            
-            computeWorkVelocity();
-        }
-    });
-    */
     
     return (
         <Page>            

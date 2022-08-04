@@ -7,16 +7,12 @@ import NozzleMenu from "../../components/NozzleMenu";
 import { BackButton } from "../../components/Buttons";
 import { infoPrompt } from "../../components/Prompts";
 import * as API from '../../entities/API';
-import { ModelCtx } from '../../context';
 import { getConstantRow, countSelected } from '../../utils';
 import Toast from '../../components/Toast';
 import { FaInfo } from 'react-icons/fa';
 import iconNumber from '../../assets/icons/nozzle_cnt.png';
 
 const ArcConfig = props => {
-
-    const model = useContext(ModelCtx);
-    const currentConfig = model.getArcConfig(props.id);
 
     // Datos para la tabla de picos
     const [nozzleData, setNozzleData] = useState(currentConfig.nozzleData);

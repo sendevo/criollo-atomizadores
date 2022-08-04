@@ -7,7 +7,6 @@ import Timer from '../../entities/Timer';
 import Toast from "../../components/Toast";
 import { useContext, useState } from "react";
 import { FaPlus, FaMinus } from 'react-icons/fa';
-import { ModelCtx } from "../../context";
 import { set2Decimals } from "../../utils";
 import { PlayButton } from "../../components/Buttons";
 import classes from './style.module.css';
@@ -76,7 +75,7 @@ const timer = new Timer(0, false);
 
 const Velocity = props => { // View
     
-    const model = useContext(ModelCtx);
+    const model = {};
     const [time, setTime] = useState(0);
     const [running, setRunning] = useState(false);
     const [distance, setDistance] = useState(50);
