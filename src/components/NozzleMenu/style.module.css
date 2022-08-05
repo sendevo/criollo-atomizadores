@@ -1,3 +1,7 @@
+.SelectorContainer {    
+    padding: 0px!important;
+}
+
 .MenuContainer {
     display: flex;
     flex-direction: column;
@@ -7,7 +11,7 @@
     /*box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(150,150,150,0.6);*/
     border-radius: 5px;    
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     padding: 5px 0px;
 }
 

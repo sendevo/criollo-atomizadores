@@ -1,5 +1,5 @@
 import React, {createContext, useReducer} from 'react';
-import {reducer, initialState} from '../entities/Model/reducer.js';
+import {reducer, initialState} from '../entities/Model/paramsReducer.js';
 
 export const ModelStateContext = createContext();
 export const ModelDispatchContext = createContext();

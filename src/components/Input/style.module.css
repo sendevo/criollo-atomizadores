@@ -1,6 +1,6 @@
 .Container {
     position: relative;    
-    left: 0px!important;     
+    left: 0px!important;       
 }
 
 .Input {
@@ -8,7 +8,7 @@
 }
 
 .Input div {
-    margin-left: 0px!important;        
+    margin-left: 0px!important;            
 }
 
 .UnitLabel {

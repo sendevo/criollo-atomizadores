@@ -998,7 +998,10 @@
                 "id": "custom",
                 "name": "Personalizado",
                 "long_name": "Personalizado",
-                "img": "personalizado"
+                "img": "personalizado",
+                "b": -1,
+                "c": -1,
+                "childs": []
             }
         ]
     }

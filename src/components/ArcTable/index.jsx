@@ -1,16 +1,21 @@
+import { useContext } from "react";
 import { Card, Checkbox } from "framework7-react";
-import { countSelected } from '../../utils';
+import { ArcStateContext, ArcDispatchContext } from '../../context/ArcConfigContext';
+import * as actions from '../../entities/Model/arcsActions';
 import icons from '../../components/NozzleMenu/nozzleIcons';
 import classes from './style.module.css';
 
-const ArcTable = props => {
+const ArcTable = () => {
     
-    const selectedCount = countSelected(props.data);
+    const dispatch = useContext(ArcDispatchContext);
+    const state = useContext(ArcStateContext);
+    const { nozzleData } = state;
+    const selectedCount = nozzleData.filter(el => el.selected).length;
 
     return (
         <Card className={classes.Card}>
         {
-            props.data?.length > 0 ?
+            nozzleData?.length > 0 ?
             <div>
                 <div className="help-target-control-table">
                     <table className={["data-table", classes.Table].join(' ')} >
@@ -24,9 +29,9 @@ const ArcTable = props => {
                             <tr className={classes.Header}>
                                 <th className={classes.CheckboxCell}>
                                     <Checkbox
-                                        checked={props.data.length === selectedCount}
-                                        indeterminate={selectedCount > 0 && selectedCount < props.data.length}
-                                        onChange={e => props.setSelectedAll(e.target.checked)}
+                                        checked={nozzleData.length === selectedCount}
+                                        indeterminate={selectedCount > 0 && selectedCount < nozzleData.length}
+                                        onChange={e => actions.setSelectedAll(dispatch, e.target.checked)}
                                     />
                                 </th>
                                 <th className={classes.DataCell}>#</th>
@@ -46,12 +51,12 @@ const ArcTable = props => {
                         </colgroup>
                         <tbody style={{maxHeight:"300px",overflow: "auto"}}>
                             {
-                                props.data.map((row,idx) => (
+                                nozzleData.map((row,idx) => (
                                     <tr className={classes.TableRow} key={idx} style={{backgroundColor: row.selected ? "rgb(230,230,230)" : "white"}}>
                                         <td className={classes.CheckboxCell}>
                                             <Checkbox
                                                 checked={row.selected}                                                
-                                                onChange={e => props.setSelected(idx, e.target.checked)}
+                                                onChange={e => actions.setNozzleSelected(dispatch, idx, e.target.checked)}
                                             />
                                         </td>
                                         <td className={classes.DataCell}>{idx+1}</td>

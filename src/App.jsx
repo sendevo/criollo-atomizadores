@@ -7,6 +7,7 @@ import Toast from './components/Toast';
 import Popovers from './components/Popover';
 import ModelProvider from './context/ModelContext';
 import './index.css';
+import ArcConfigProvider from './context/ArcConfigContext';
 
 /*
     CRIOLLO ATOMIZADORES
@@ -170,9 +171,11 @@ else
 const Criollo = () => (
     <App {...f7params}>
         <ModelProvider>
-            <View main url="/" className="app"/>
-            <ReportsPanel />
-            <Popovers />
+            <ArcConfigProvider>
+                <View main url="/" className="app"/>
+                <ReportsPanel />
+                <Popovers />
+            </ArcConfigProvider>
         </ModelProvider>
     </App>
 );

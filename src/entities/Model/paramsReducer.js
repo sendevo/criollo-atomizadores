@@ -1,13 +1,15 @@
-import { generateId } from "../../utils";
+import * as API from "../API"; 
 
 export const initialState = {
     // Parametros
     rowSeparation: 3, // Ancho de calle (m)
     arcNumber: 1, // Numero de arcos, puede ser 1 o 2
     workVelocity: 10, // Velocidad de trabajo (km/h)
-    velocityMeasured: false, // Para disparar render en vista de parametros
+    workVelocityReady: false,
     workPressure: 2, // Presion de trabajo (bar)
+    workPressureReady: false,
     workVolume: 56, // Volumen de aplicacion (l/ha)    
+    workVolumeReady: false,
     nominalFlow: 0.8, // Caudal nominal de pico seleccionado
     sprayFlow: null, // Caudal de pulverizacion (caudal de picos multiplicado por n de picos)
     nominalPressure: 3, // Presion nominal de pico seleccionado
@@ -20,12 +22,10 @@ export const initialState = {
     trvMeasured: false, // Para disparar render en vista de parametros
 
     // Caudal de aire
-    airFlow: null, // Caudal de aire
-    airFlowMeasured: false,
+    airFlow: null, // Caudal de aire    
     expansionFactor: 2, // Factor de expansión
     turbineSection: null, // Seccion de soplado
-    airVelocity: null, // Velocidad de aire
-    airVelocityMeasured: false,
+    airVelocity: null, // Velocidad de aire    
 
     // Verificacion de picos
     samplingTimeMs: 30000, // 30000, 60000 o 90000
@@ -43,15 +43,16 @@ export const initialState = {
     supplies: {}, // Insumos y cantidades
 
     currentArcConfig: {
-        id: generateId(),
+        id: null,
         timestamp: 0,
         name: 'S/N',
         nozzleData: []
     },
+
     arcConfigurations: []
 };
 
-export const reducer = (state, action) => {
+export const reducer = (state, action) => {    
     switch (action.type) {
         case "SET_ROW_SEPARATION":
             return {
@@ -71,6 +72,26 @@ export const reducer = (state, action) => {
                 workPressureReady: false,
                 workVolumeReady: false
             };
+        case "COMPUTE_WORK_VELOCITY":
+            try{
+                const vt = API.computeVt({
+                    nozzleData: state.currentArcConfig.nozzleData,
+                    Pt: state.workPressure,
+                    Na: state.arcNumber,
+                    Va: state.workVolume,
+                    D: state.rowSeparation
+                });
+                return {
+                    ...state,
+                    workVelocity: vt,
+                    workVelocityReady: true,
+                    workPressureReady: true,
+                    workVolumeReady: true
+                };
+            } catch (e) {
+                console.log(e);
+                return state; 
+            }
         case "SET_WORK_PRESSURE":
             return {
                 ...state,
@@ -79,6 +100,26 @@ export const reducer = (state, action) => {
                 workPressureReady: true,
                 workVolumeReady: false
             };
+        case "COMPUTE_WORK_PRESSURE":
+            try{
+                const Pt = API.computePt({
+                    Va: state.workVolume,
+                    Vt: state.workVelocity,
+                    D: state.rowSeparation,
+                    Na: state.arcNumber,                    
+                    nozzleData: state.currentArcConfig.nozzleData
+                });
+                return {
+                    ...state,
+                    workPressure: Pt,
+                    workVelocityReady: true,
+                    workPressureReady: true,
+                    workVolumeReady: true
+                };
+            } catch (e) {
+                console.log(e);
+                return state;
+            }
         case "SET_WORK_VOLUME":
             return {
                 ...state,
@@ -87,11 +128,31 @@ export const reducer = (state, action) => {
                 workPressureReady: false,
                 workVolumeReady: true
             };
+        case "COMPUTE_WORK_VOLUME":
+            try{
+                const Va = API.computeVa({
+                    Pt: state.workPressure,
+                    Vt: state.workVelocity,
+                    D: state.rowSeparation,
+                    Na: state.arcNumber,
+                    nozzleData: state.currentArcConfig.nozzleData
+                });
+                return {
+                    ...state,
+                    workVolume: Va,
+                    workVelocityReady: true,
+                    workPressureReady: true,
+                    workVolumeReady: true
+                };
+            } catch (e) {
+                console.log(e);
+                return state;
+            }
         case "SET_AIR_FLOW":
             return {
                 ...state,
                 airFlow: action.payload
-            };
+            };  
         default:
             return state;
     }

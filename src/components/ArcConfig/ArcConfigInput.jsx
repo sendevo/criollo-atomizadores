@@ -5,7 +5,7 @@ import arcSingle from '../../assets/icons/arc_single.png';
 import arcBoth from '../../assets/icons/arc_both.png';
 import classes from './style.module.css'
 
-const ArcConfigInput = props => {
+const ArcConfigInput = ({arcNumber, onArcNumberToggle, arcConfig}) => {
     return (
         <List form noHairlinesMd style={{marginBottom:"10px", marginTop: "10px"}}>
         <Row slot="list">
@@ -15,8 +15,8 @@ const ArcConfigInput = props => {
                 </Row>
                 <Row>
                     <img className={classes.ButtonIcon} 
-                        src={props.arcNumber === 1 ? arcSingle : arcBoth} 
-                        onClick={()=>{props.onArcChange(props.arcNumber === 1 ? 2:1)}}
+                        src={arcNumber === 1 ? arcSingle : arcBoth} 
+                        onClick={onArcNumberToggle}
                         slot="media" 
                         alt="icon"/>
                 </Row>
@@ -28,10 +28,10 @@ const ArcConfigInput = props => {
                 <Row>
                     <LinkButton
                         variant="square"
-                        href={`/arc/${props.arcConfig.id}`}
+                        href={`/arc/${arcConfig?.id}`}
                         tooltip="Configuraccion actual"
                         mt={10}>
-                        {props.arcConfig.name}
+                        {arcConfig?.name || 'S/N'}
                     </LinkButton>
                 </Row>
             </Col>

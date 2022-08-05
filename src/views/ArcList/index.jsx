@@ -1,14 +1,12 @@
 import { useState, useContext } from 'react';
 import { f7, Page, Navbar, Card, Checkbox, Row, Col, Button } from 'framework7-react';
 import { BackButton } from '../../components/Buttons';
-import { countSelected } from '../../utils';
 import classes from './style.module.css';
 
 const ArcList = props => {
 
-    
     const [data, setData] = useState([]);
-    const selectedCount = countSelected(data);
+    const selectedCount = data.filter(el => el.selected).length;
 
     const setSelectedAll = (checked) => {
         const temp = [...data];

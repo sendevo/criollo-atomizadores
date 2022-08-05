@@ -1,4 +1,4 @@
-export const setRowSeparation = (dispatch, value) => {
+export const setRowSeparation = (dispatch, value) => {    
     return dispatch({
         type: "SET_ROW_SEPARATION",
         payload: value
@@ -19,10 +19,22 @@ export const setWorkVelocity = (dispatch, value) => {
     });
 };
 
+export const computeWorkVelocity = (dispatch) => {
+    return dispatch({
+        type: "COMPUTE_WORK_VELOCITY"
+    });
+};
+
 export const setWorkPressure = (dispatch, value) => {
     return dispatch({
         type: "SET_WORK_PRESSURE",
         payload: value
+    });
+};
+
+export const computeWorkPressure = (dispatch) => {
+    return dispatch({
+        type: "COMPUTE_WORK_PRESSURE"
     });
 };
 

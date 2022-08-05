@@ -1,7 +1,6 @@
 import { f7, Navbar, Page, Block, Checkbox, Row, Col, Button } from 'framework7-react';
 import { useState, useContext } from 'react';
 import moment from 'moment';
-import { countSelected } from '../../utils';
 import { BackButton } from '../../components/Buttons';
 import iconEmpty from '../../assets/icons/empty_folder.png';
 import Toast from '../../components/Toast';
@@ -12,7 +11,7 @@ const Reports = props => {
     const model = {};
 
     const [reports, setReports] = useState(model.reports || []);
-    const [selectedCount, setSelectedCount] = useState(countSelected(model.reports));
+    const [selectedCount, setSelectedCount] = useState(model.reports.filter(el => el.selected).length);
 
     const setSelectedAll = v => {
         //const temp = [...reports];

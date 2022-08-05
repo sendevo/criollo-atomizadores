@@ -1,136 +1,31 @@
 import { useState, useContext } from 'react';
 import { f7, Page, Navbar, List, Link, Row, Col, Button } from "framework7-react";
+import { ArcStateContext, ArcDispatchContext } from '../../context/ArcConfigContext';
+import * as actions from '../../entities/Model/arcsActions';
 import moment from 'moment';
 import Input from "../../components/Input";
 import ArcTable from "../../components/ArcTable";
 import NozzleMenu from "../../components/NozzleMenu";
 import { BackButton } from "../../components/Buttons";
 import { infoPrompt } from "../../components/Prompts";
-import * as API from '../../entities/API';
-import { getConstantRow, countSelected } from '../../utils';
 import Toast from '../../components/Toast';
 import { FaInfo } from 'react-icons/fa';
 import iconNumber from '../../assets/icons/nozzle_cnt.png';
 
 const ArcConfig = props => {
-
     // Datos para la tabla de picos
-    const [nozzleData, setNozzleData] = useState(currentConfig.nozzleData);
-
-    // Menu de eleccion de modelo de pico para picos del arco seleccionados
-    const [nozzleSelection, setNozzleSelection] = useState([-1,-1,-1,-1]);
-    const [{nominalPressure, nominalFlow}, setNozzleParams] = useState({nominalPressure:3, nominalFlow:0.8});
-    const [showInputs, setShowInputs] = useState(false);
-
-    const handleNozzleCntChange = e => {
-        const cnt = parseInt(e.target.value);
-        if(cnt > 0 && cnt < 100){
-            const temp = new Array(cnt).fill(0).map(el=>({
-                selected: false,
-                selection: [-1,-1,-1,-1],
-                id: "",
-                long_name: "Sin pico",
-                valid: false,
-                Pnom: nominalPressure,
-                Qnom: 0,
-                img: ""
-            }));
-            setNozzleData(temp);
-        }else{
-            setNozzleData([]);
+    const dispatch = useContext(ArcDispatchContext);
+    const state = useContext(ArcStateContext);
+    const { nozzleData, selection } = state;    
+        
+    const onNozzleModelSelected = (selection, nozzle) => { // Callback eleccion de parametros de pico
+        actions.setNozzleMenuValue(dispatch, selection); // Actualizar valor del selector de modelos
+        if(nozzle){ // Si llega al final del menu (eleccion de modelo)
+            nozzle.selection = selection;
+            nozzle.selected = false;
+            nozzle.valid = true;
+            actions.setNozzles(dispatch, nozzle);
         }
-    };
-
-    const updateSelection = () => {
-        const selectedNozzles = nozzleData.filter(el => el.selected);
-        if(selectedNozzles.length > 0){
-            const nozzleIndexes = selectedNozzles.map(el => el.selection); // Indices de seleccion de pico 
-            const sel = getConstantRow(nozzleIndexes); // Determinar si son todos iguales
-            setNozzleSelection(sel.length === 0 ? [-1,-1,-1,-1] : sel);
-            setNozzleParams({nominalPressure:selectedNozzles[0].Pnom, nominalFlow:selectedNozzles[0].Qnom});
-        }
-    };
-
-    const setSelectedAll = v => {
-        const temp = [...nozzleData];
-        temp.forEach(nozzle => {
-            nozzle.selected = v;
-        });
-        setNozzleData(temp);
-        updateSelection();        
-    };
-
-    const setSelected = (idx, v) => {
-        const temp = [...nozzleData];
-        temp[idx].selected = v;
-        setNozzleData(temp);
-        updateSelection();
-    };
-
-    const onNozzleSelected = (selection, nozzle) => { // Callback eleccion de pico
-        setNozzleSelection(selection);        
-        if(nozzle){
-            try{
-                if(nozzle.id != "custom"){ // Si es pico predefinido -> actualizar parametros en la tabla
-                    nozzle.Qnom = API.computeQNom({b: nozzle.b, c: nozzle.c, Pnom: nominalPressure});
-                    setNozzleParams({nominalPressure, nominalFlow: nozzle.Qnom});
-                    setShowInputs(false);
-                    const temp = [...nozzleData];
-                    for(let i = 0; i < temp.length; i++){
-                        if(temp[i].selected){
-                            temp[i] = {
-                                ...nozzle,
-                                Pnom: nominalPressure,
-                                selection,
-                                selected: false, // Deseleccionar luego de elegir pico
-                                valid: true
-                            };
-                        }
-                    };
-                    setNozzleData(temp);
-                }else{ // Si es personalizado, habilitar inputs
-                    setShowInputs(true);
-                }
-            }catch(err){
-                Toast("error", err.message);
-            }
-        }
-    };
-
-    const handleNominalFlowChange = e => {
-        const Qnom = parseFloat(e.target.value);
-        setNozzleParams({nominalPressure, nominalFlow: Qnom});
-        if(!Qnom)
-            Toast("error", "Caudal nominal no válido");
-    };
-
-    const handleNominalPressureChange = e => {
-        const Pnom = parseFloat(e.target.value);
-        setNozzleParams({nominalPressure:Pnom, nominalFlow});
-        if(!Pnom)
-            Toast("error", "Presión nominal no válida");
-    };
-
-    const setCustomNozzle = () => {        
-        const temp = [...nozzleData];
-        for(let i = 0; i < temp.length; i++){
-            if(temp[i].selected){
-                temp[i] = {
-                    id: "custom",
-                    long_name: `Personalizado`,
-                    img: "personalizado",
-                    b: -1,
-                    c: -1,                    
-                    Qnom: nominalFlow,
-                    Pnom: nominalPressure,
-                    selection: [4, 1, -1, -1],
-                    selected: true,
-                    valid: true
-                };
-            }
-        };
-        setShowInputs(false);
-        setNozzleData(temp);        
     };
 
     const saveArc = () => {
@@ -154,8 +49,8 @@ const ArcConfig = props => {
                             name="nozzleCnt"
                             type="number"
                             icon={iconNumber}
-                            value={nozzleData.length === 0 ? undefined : nozzleData.length}
-                            onChange={handleNozzleCntChange}>
+                            value={nozzleData.length === 0 ? "" : nozzleData.length}
+                            onChange={e => actions.setNozzleCnt(dispatch, e.target.value)}>
                         </Input>
                     </List>
                 </Col>
@@ -174,60 +69,15 @@ const ArcConfig = props => {
                 </Col>
             </Row>
 
-            <ArcTable 
-                data={nozzleData}
-                setSelected={setSelected}
-                setSelectedAll={setSelectedAll} />
+            <ArcTable data={nozzleData} />
 
-            {nozzleData.length > 0 && countSelected(nozzleData) > 0 && 
-                <>
-                    <NozzleMenu 
-                        onOptionSelected={onNozzleSelected} 
-                        selection={nozzleSelection} />
-
-                    {showInputs &&
-                        <List form noHairlinesMd style={{marginBottom:"10px", marginTop: "0px"}}>    
-                            <Row slot="list">
-                                <Col width={50}>
-                                    <Input
-                                        label="Caudal nominal"
-                                        name="nominalFlow"
-                                        type="number"
-                                        unit="l/min"                    
-                                        value={nominalFlow}
-                                        onChange={handleNominalFlowChange}>
-                                    </Input>
-                                </Col>
-                                <Col width={50}>
-                                    <Input
-                                        label="Presión nominal"
-                                        name="nominalPressure"
-                                        type="number"
-                                        unit="bar"                    
-                                        value={nominalPressure}
-                                        onChange={handleNominalPressureChange}>
-                                    </Input>
-                                </Col>
-                            </Row>
-                            <Row slot="list">
-                                <Col width={10}></Col>
-                                <Col width={80}>
-                                    <Button 
-                                        fill
-                                        color='teal'
-                                        style={{textTransform:"none"}}
-                                        onClick={setCustomNozzle}>
-                                            Aceptar
-                                    </Button>
-                                </Col>
-                                <Col width={10}></Col>                
-                            </Row>
-                        </List>
-                    }
-                </>
+            {nozzleData.filter(el => el.selected).length > 0 && 
+                <NozzleMenu 
+                    onOptionSelected={onNozzleModelSelected} 
+                    selection={selection} />
             }
 
-            <Row style={{marginTop:25, marginBottom: 20}}>
+            <Row style={{marginTop:"5px", marginBottom: "20px"}}>
                 <Col width={20}></Col>
                 <Col width={60}>
                     <Button 

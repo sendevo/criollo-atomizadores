@@ -16,11 +16,6 @@ export const getClosest = (array, attr, value) => {
     return array[index];
 };
 
-export const countSelected = array => {
-    const selected = array.filter(el => el.selected);
-    return selected?.length;
-};
-
 export const getConstantRow = matrix => {
     // Retorna la fila constante en toda la matriz o [] si hay alguna fila diferente
     if(matrix){
