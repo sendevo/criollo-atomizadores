@@ -1,7 +1,12 @@
 import { useState, useContext } from 'react';
 import { f7, Page, Navbar, List, Link, Row, Col, Button } from "framework7-react";
 import { ArcStateContext, ArcDispatchContext } from '../../context/ArcConfigContext';
-import * as actions from '../../entities/Model/arcsActions';
+import {
+    setNozzleMenuValue,
+    setNozzles,
+    saveArc,
+    setNozzleCnt
+} from '../../entities/Model/arcsActions';
 import moment from 'moment';
 import Input from "../../components/Input";
 import ArcTable from "../../components/ArcTable";
@@ -19,21 +24,21 @@ const ArcConfig = props => {
     const { nozzleData, selection } = state;    
         
     const onNozzleModelSelected = (selection, nozzle) => { // Callback eleccion de parametros de pico
-        actions.setNozzleMenuValue(dispatch, selection); // Actualizar valor del selector de modelos
+        setNozzleMenuValue(dispatch, selection); // Actualizar valor del selector de modelos
         if(nozzle){ // Si llega al final del menu (eleccion de modelo)
             nozzle.selection = selection;
             nozzle.selected = false;
             nozzle.valid = true;
-            actions.setNozzles(dispatch, nozzle);
+            setNozzles(dispatch, nozzle);
         }
     };
 
-    const saveArc = () => {
+    const saveArcPrompt = () => {
         f7.dialog.prompt('Indique un nombre para esta configuración', 'Editar nombre', arcName => {
-            model.saveArcConfig(nozzleData, arcName);
-            Toast("success", "Nueva configuración guardada", 2000, "center");
-            props.f7router.back();
-        }, null, "Config "+moment(Date.now()).format("DD-MM-YYYY HH-mm"));
+            saveArc(dispatch, arcName);
+            Toast("success", "Configuración de arco guardada", 2000, "center");
+            props.f7router.navigate('/params/');
+        }, null, state.id ? state.name : "Config "+moment(Date.now()).format("DD-MM-YYYY HH-mm"));
     };
 
     return (
@@ -50,7 +55,7 @@ const ArcConfig = props => {
                             type="number"
                             icon={iconNumber}
                             value={nozzleData.length === 0 ? "" : nozzleData.length}
-                            onChange={e => actions.setNozzleCnt(dispatch, e.target.value)}>
+                            onChange={e => setNozzleCnt(dispatch, e.target.value)}>
                         </Input>
                     </List>
                 </Col>
@@ -84,7 +89,7 @@ const ArcConfig = props => {
                         fill
                         style={{textTransform:"none"}} 
                         disabled={nozzleData.length === 0 || !nozzleData.every(el => el.valid)} 
-                        onClick={saveArc}>
+                        onClick={saveArcPrompt}>
                             Guardar y salir
                     </Button>
                 </Col>

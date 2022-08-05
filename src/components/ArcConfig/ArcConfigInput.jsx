@@ -1,11 +1,22 @@
-import { Row, Col, List } from 'framework7-react';
+import { useContext } from 'react';
+import { f7, Row, Col, List } from 'framework7-react';
+import { ArcDispatchContext } from '../../context/ArcConfigContext';
+import { newArc } from '../../entities/Model/arcsActions';
 import { LinkButton } from '../Buttons';
 import { FaPlus, FaFolder } from 'react-icons/fa';
 import arcSingle from '../../assets/icons/arc_single.png';
 import arcBoth from '../../assets/icons/arc_both.png';
 import classes from './style.module.css'
 
-const ArcConfigInput = ({arcNumber, onArcNumberToggle, arcConfig}) => {
+const ArcConfigInput = ({arcNumber, onArcNumberToggle, arcConfigName}) => {
+
+    const dispatch = useContext(ArcDispatchContext);
+
+    const openNewArc = () => {
+        newArc(dispatch);
+        f7.views.main.router.navigate('/arc/');
+    }
+
     return (
         <List form noHairlinesMd style={{marginBottom:"10px", marginTop: "10px"}}>
         <Row slot="list">
@@ -28,10 +39,10 @@ const ArcConfigInput = ({arcNumber, onArcNumberToggle, arcConfig}) => {
                 <Row>
                     <LinkButton
                         variant="square"
-                        href={`/arc/${arcConfig?.id}`}
+                        href="/arc/"
                         tooltip="Configuraccion actual"
                         mt={10}>
-                        {arcConfig?.name || 'S/N'}
+                        {arcConfigName}
                     </LinkButton>
                 </Row>
             </Col>
@@ -39,7 +50,7 @@ const ArcConfigInput = ({arcNumber, onArcNumberToggle, arcConfig}) => {
                 <Row>
                     <LinkButton 
                         color="rgb(200, 50, 50)" 
-                        href="/arc/"
+                        onClick={openNewArc}
                         tooltip="Nueva"
                         mt={10}>
                         <FaPlus size={20}/>

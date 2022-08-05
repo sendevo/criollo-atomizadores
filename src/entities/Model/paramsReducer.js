@@ -42,13 +42,6 @@ export const initialState = {
     products: [], // Lista de prductos
     supplies: {}, // Insumos y cantidades
 
-    currentArcConfig: {
-        id: null,
-        timestamp: 0,
-        name: 'S/N',
-        nozzleData: []
-    },
-
     arcConfigurations: []
 };
 

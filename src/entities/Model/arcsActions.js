@@ -32,3 +32,30 @@ export const setNozzleMenuValue = (dispatch, value) => {
         payload: value
     });
 };
+
+export const newArc = (dispatch) => {
+    return dispatch({
+        type: "NEW_ARC"
+    });
+};
+
+export const loadArc = (dispatch, id) => {
+    return dispatch({
+        type: "LOAD_ARC",
+        payload: id
+    });
+};
+
+export const saveArc = (dispatch, name) => {        
+    return dispatch({
+        type: "SAVE_ARC",
+        payload: name
+    });
+};
+
+export const deleteArc = (dispatch, id) => {
+    return dispatch({
+        type: "DELETE_ARC",
+        payload: id
+    });
+};

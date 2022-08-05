@@ -73,7 +73,7 @@ const f7params = {
             }
         },
         { // Configuracion de arcos
-            path: '/arc/:id?',
+            path: '/arc/',
             component: Views.ArcConfig,
             on:{pageInit: ()=>pushState("arc")},
             options: {

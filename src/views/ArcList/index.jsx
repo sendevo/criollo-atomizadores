@@ -1,11 +1,16 @@
 import { useState, useContext } from 'react';
 import { f7, Page, Navbar, Card, Checkbox, Row, Col, Button } from 'framework7-react';
+import { ArcDispatchContext } from '../../context/ArcConfigContext';
+import { loadArc, deleteArc } from '../../entities/Model/arcsActions';
 import { BackButton } from '../../components/Buttons';
 import classes from './style.module.css';
 
 const ArcList = props => {
+    
+    const dispatch = useContext(ArcDispatchContext);
 
-    const [data, setData] = useState([]);
+    const arcs = JSON.parse(localStorage.getItem("arcs"));
+    const [data, setData] = useState(arcs || []);
     const selectedCount = data.filter(el => el.selected).length;
 
     const setSelectedAll = (checked) => {
@@ -20,11 +25,11 @@ const ArcList = props => {
         setData(temp);
     };
 
-    const handleOpenConfig = () => {
+    const handleSelectConfig = path => {
         const selected = data.filter(el => el.selected);
         if(selected.length === 1){
-            model.getArcConfig(selected[0].id);
-            props.f7router.back();
+            loadArc(dispatch, selected[0].id);
+            props.f7router.navigate(path);
         }
     };
 
@@ -35,7 +40,7 @@ const ArcList = props => {
                 const selected = data.filter(el => el.selected);
                 if(selected.length > 0){
                     try{
-                        selected.forEach(el => model.deleteArcConfig(el.id));
+                        selected.forEach(el => deleteArc(dispatch, el.id));
                         setData(data.filter(el => !el.selected));
                     }catch(err){
                         Toast("error", err.message);
@@ -116,8 +121,23 @@ const ArcList = props => {
                         fill
                         style={{textTransform:"none"}} 
                         disabled={selectedCount !== 1} 
-                        onClick={handleOpenConfig}>
-                            Abrir
+                        onClick={() => handleSelectConfig('/arc/')}>
+                            Editar
+                    </Button>
+                </Col>
+                <Col width={20}></Col>
+            </Row>
+
+            <Row style={{marginTop:10, marginBottom: 10}}>
+                <Col width={20}></Col>
+                <Col width={60}>
+                    <Button 
+                        fill
+                        color='teal'
+                        style={{textTransform:"none"}} 
+                        disabled={selectedCount !== 1} 
+                        onClick={() => handleSelectConfig('/params/')}>
+                            Seleccionar
                     </Button>
                 </Col>
                 <Col width={20}></Col>

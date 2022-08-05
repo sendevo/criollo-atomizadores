@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Menu, MenuDropdown, MenuDropdownItem, MenuItem, List, Col, Row } from 'framework7-react';
 import Input from "../../components/Input";
+import Toast from '../../components/Toast';
 import { GoButton } from '../Buttons';
 import nozzles from '../../data/nozzles';
 import nozzleIcons from './nozzleIcons';

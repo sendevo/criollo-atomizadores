@@ -1,9 +1,10 @@
-import { getConstantRow } from "../../utils";
+import { generateId, getConstantRow } from "../../utils";
 import { computeQNom } from "../API";
 export const initialState = {
     id: null,
-    timestamp: 0,
     name: 'S/N',
+    created: 0,
+    modified: 0,
     nozzleData: [],
     selection: [-1,-1,-1,-1]
 };
@@ -17,7 +18,7 @@ const getNozzleSelection = data => {
     return sel.length === 0 ? [-1,-1,-1,-1] : sel;
 };
 
-export const reducer = (state, action) => {
+export const reducer = (state = initialState, action) => {    
     switch (action.type) {
         case "SET_NOZZLE_CNT": // Cambiar cantidad de picos
             const cnt = parseInt(action.payload);
@@ -32,17 +33,14 @@ export const reducer = (state, action) => {
                     Qnom: 0,
                     img: ""
                 }));
-                return {
-                    ...state,
-                    nozzleData
-                };
+                return {...state,nozzleData};
             } else {
                 return state;
             }
         case "SET_SELECTED_ALL":{ // Seleccionar/deseleccionar todos
             const selected = action.payload;
             const nozzleData = state.nozzleData.map(el => ({...el,selected}));
-            const selection = getNozzleSelection(data);
+            const selection = getNozzleSelection(nozzleData);
             return {...state, nozzleData, selection};
         }
         case "SET_NOZZLE_SELECTED": { // Seleccionar/deseleccionar un pico
@@ -67,6 +65,53 @@ export const reducer = (state, action) => {
                 ...state,
                 nozzleData
             }            
+        }
+        case "NEW_ARC": { 
+            return initialState;
+        }
+        case "LOAD_ARC":{
+            const arcs = JSON.parse(localStorage.getItem("arcs"));
+            if(arcs) {
+                const data = arcs.find(el => el.id === action.payload);
+                return data ? data : initialState;
+            }else
+                return initialState;
+        }
+        case "SAVE_ARC":{            
+            if(state.id){ // Actualizar existente
+                const arcs = JSON.parse(localStorage.getItem("arcs"));
+                if(arcs){
+                    const arcIndex = arcs.findIndex(el => el.id === state.id);
+                    if(arcIndex !== -1){                        
+                        arcs[arcIndex] = state;
+                        localStorage.setItem("arcs", JSON.stringify(arcs));
+                    }
+                }
+                return state;
+            }else{ // Guardar nuevo
+                const data = {
+                    ...state, 
+                    created: Date.now(), 
+                    modified: Date.now(),
+                    id: generateId(), 
+                    name: action.payload || "S/N"
+                };
+                let arcs = JSON.parse(localStorage.getItem("arcs"));
+                if(arcs) 
+                    arcs.push(data);
+                else
+                    arcs = [data];                
+                localStorage.setItem("arcs", JSON.stringify(arcs));
+                return data;
+            }
+        }        
+        case "DELETE_ARC":{
+            const arcs = JSON.parse(localStorage.getItem("arcs"));
+            if(arcs) {
+                const data = arcs.filter(el => el.id !== action.payload);
+                localStorage.setItem("arcs", JSON.stringify(data));
+            }
+            return state;
         }
         default:
             return state;

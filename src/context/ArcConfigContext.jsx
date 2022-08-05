@@ -4,7 +4,7 @@ import {reducer, initialState} from '../entities/Model/arcsReducer.js';
 export const ArcStateContext = createContext();
 export const ArcDispatchContext = createContext();
 
-const ArcConfigProvider = ({children}) => {
+const ArcConfigProvider = ({children}) => {    
     const [state, dispatch] = useReducer(reducer, initialState);
     
     return (

@@ -6,6 +6,7 @@ import { ArcConfigInput } from "../../components/ArcConfig";
 import Toast from '../../components/Toast';
 import { FaStopwatch, FaWind, FaTree } from 'react-icons/fa';
 import { ModelStateContext, ModelDispatchContext } from '../../context/ModelContext';
+import { ArcStateContext } from '../../context/ArcConfigContext';
 import * as actions from '../../entities/Model/paramsActions.js';
 import iconDistance from '../../assets/icons/dplantas.png';
 import iconVelocity from '../../assets/icons/velocidad.png';
@@ -17,11 +18,11 @@ const Params = props => {
 
     const dispatch = useContext(ModelDispatchContext);
     const state = useContext(ModelStateContext);
+    const arcState = useContext(ArcStateContext);
 
     const {
         rowSeparation,
         arcNumber,
-        currentArcConfig,
         workVelocity,
         workVelocityReady,
         workPressure,
@@ -58,7 +59,7 @@ const Params = props => {
                 <ArcConfigInput 
                     arcNumber={arcNumber}
                     onArcNumberToggle={()=>actions.setArcNumber(dispatch, arcNumber === 1 ? 2 : 1)}
-                    arcConfig={currentArcConfig}
+                    arcConfigName={arcState.name || "S/N"}
                 />
             </center>
 
