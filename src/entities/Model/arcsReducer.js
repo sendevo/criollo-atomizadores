@@ -1,5 +1,7 @@
 import { generateId, getConstantRow } from "../../utils";
 import { computeQNom } from "../API";
+import { saveData, getData } from "../Storage";
+
 export const initialState = {
     id: null,
     name: 'S/N',
@@ -70,7 +72,7 @@ export const reducer = (state = initialState, action) => {
             return initialState;
         }
         case "LOAD_ARC":{
-            const arcs = JSON.parse(localStorage.getItem("arcs"));
+            const arcs = getData("arcs");
             if(arcs) {
                 const data = arcs.find(el => el.id === action.payload);
                 return data ? data : initialState;
@@ -79,12 +81,12 @@ export const reducer = (state = initialState, action) => {
         }
         case "SAVE_ARC":{            
             if(state.id){ // Actualizar existente
-                const arcs = JSON.parse(localStorage.getItem("arcs"));
+                const arcs = getData("arcs");
                 if(arcs){
                     const arcIndex = arcs.findIndex(el => el.id === state.id);
                     if(arcIndex !== -1){                        
                         arcs[arcIndex] = state;
-                        localStorage.setItem("arcs", JSON.stringify(arcs));
+                        saveData("arcs", arcs);
                     }
                 }
                 return state;
@@ -96,20 +98,20 @@ export const reducer = (state = initialState, action) => {
                     id: generateId(), 
                     name: action.payload || "S/N"
                 };
-                let arcs = JSON.parse(localStorage.getItem("arcs"));
+                let arcs = getData("arcs");
                 if(arcs) 
                     arcs.push(data);
                 else
                     arcs = [data];                
-                localStorage.setItem("arcs", JSON.stringify(arcs));
+                saveData("arcs", arcs);
                 return data;
             }
         }        
         case "DELETE_ARC":{
-            const arcs = JSON.parse(localStorage.getItem("arcs"));
+            const arcs = getData("arcs");
             if(arcs) {
                 const data = arcs.filter(el => el.id !== action.payload);
-                localStorage.setItem("arcs", JSON.stringify(data));
+                saveData("arcs", data);
             }
             return state;
         }

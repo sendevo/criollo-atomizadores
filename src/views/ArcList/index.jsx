@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { f7, Page, Navbar, Card, Checkbox, Row, Col, Button } from 'framework7-react';
+import { getData } from '../../entities/Storage';
 import { ArcDispatchContext } from '../../context/ArcConfigContext';
 import { loadArc, deleteArc } from '../../entities/Model/arcsActions';
 import { BackButton } from '../../components/Buttons';
@@ -9,7 +10,7 @@ const ArcList = props => {
     
     const dispatch = useContext(ArcDispatchContext);
 
-    const arcs = JSON.parse(localStorage.getItem("arcs"));
+    const arcs = getData("arcs");
     const [data, setData] = useState(arcs || []);
     const selectedCount = data.filter(el => el.selected).length;
 
