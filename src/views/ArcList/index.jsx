@@ -10,8 +10,7 @@ const ArcList = props => {
     
     const dispatch = useContext(ArcDispatchContext);
 
-    const arcs = getData("arcs");
-    const [data, setData] = useState(arcs || []);
+    const [data, setData] = useState(getData("arcs") || []);
     const selectedCount = data.filter(el => el.selected).length;
 
     const setSelectedAll = (checked) => {

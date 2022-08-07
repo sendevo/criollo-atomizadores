@@ -1,5 +1,5 @@
-import { f7, Page, Navbar, Block, List, Row, Col, Button } from "framework7-react";
-import React, { useContext, useEffect, useState } from "react";
+import { f7, Page, Navbar, Block, Row, Col, Button } from "framework7-react";
+import React, { useEffect, useState, useContext } from "react";
 import { useSound } from "use-sound";
 import moment from 'moment';
 import * as API from '../../entities/API/index.js';
@@ -10,6 +10,7 @@ import { ArcConfigDisplay } from "../../components/ArcConfig";
 import Timer from "../../entities/Timer";
 import Toast from "../../components/Toast";
 import { ElapsedSelector } from "../../components/Selectors";
+import { ArcStateContext } from "../../context/ArcConfigContext.jsx";
 import NozzlesControlTable from "../../components/NozzlesControlTable";
 import oneSfx from '../../assets/sounds/uno.mp3';
 import twoSfx from '../../assets/sounds/dos.mp3';
@@ -30,18 +31,96 @@ const OutputBlock = props => (
     </Block>
 );
 
+const TimerBlock = () => {
+    const [elapsed, setElapsed] = useState(30000);
+    const [time, setTime] = useState(30000); 
+    const [running, setRunning] = useState(false);        
+    
+    // Sonidos de alerta
+    const [play3] = useSound(threeSfx);
+    const [play2] = useSound(twoSfx);
+    const [play1] = useSound(oneSfx);
+    const [play0] = useSound(readySfx);
+    
+    const handleElapsedChange = value => {
+        timer.setInitial(value);        
+        setTime(value);
+        setElapsed(value);
+    };
+
+    useEffect(() => { // Como esta creado con initial=0, hay que inicializarlo en el valor correcto
+        timer.setInitial(elapsed);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const onTimeout = () => {
+        KeepAwake.allowSleep();
+        setRunning(false);        
+        setTime(elapsed);
+    };
+
+    const toggleRunning = () => {
+        if(!running){
+            timer.onChange = setTime;
+            timer.onTimeout = onTimeout;
+            timer.clear();
+            timer.start();
+            KeepAwake.keepAwake()                
+            .catch(err => {
+                console.log("Error de KeepAwake");
+                console.log(err);                    
+            });
+            setRunning(true);
+        }else{
+            timer.stop();
+            timer.clear();
+            setTime(elapsed);            
+            KeepAwake.allowSleep()
+            .catch(err => {
+                console.log("Error de KeepAwake");
+                console.log(err);                    
+            });
+            setRunning(false);
+        }
+    };
+
+    const getTime = () => {
+        if(time === 3000)
+            play3();
+        if(time === 2000)
+            play2();
+        if(time === 1000)
+            play1();
+        if(time < 200)
+            play0();
+        // formatear de unix a min:seg:ms
+        return moment(time).format('mm:ss:S');
+    };
+
+    return (
+        <Block>
+            <ElapsedSelector value={elapsed} disabled={running} onChange={handleElapsedChange}/>
+
+            <Block style={{marginTop:"20px", textAlign:"center"}} className="help-target-control-play">
+                <p style={{fontSize:"50px", margin:"0px"}}>{getTime()} <PlayButton onClick={toggleRunning} running={running} /></p>
+            </Block>
+        </Block>
+    );
+}
+
+
+
 const Control = props => {
     
     const model = {};
 
-    const [firstRound, setFirstRound] = useState(true); // Muestra indicativo la primera vez
-    const [elapsed, setElapsed] = useState(model.samplingTimeMs || 30000); // Duracion: 30, 60 o 90
+    const currentArcConfig = useContext(ArcStateContext);
     
     // Inputs
     const [currentArc, setCurrentArc] = useState("right");
     const initialData = {
-        right: model.currentArcConfig.nozzleData.map(n => ({updated: false})),
-        left: model.currentArcConfig.nozzleData.map(n => ({updated: false}))
+        right: currentArcConfig.nozzleData.map(n => ({updated: false})),
+        left: currentArcConfig.nozzleData.map(n => ({updated: false}))
     };
     const [tableData, setTableData] = useState(initialData); // Datos de la tabla
 
@@ -63,26 +142,9 @@ const Control = props => {
         }
     });
     
-    // Estado del timer
-    const [time, setTime] = useState(model.samplingTimeMs || 30000); 
-    const [running, setRunning] = useState(false);        
-    
-    // Sonidos de alerta
-    const [play3] = useSound(threeSfx);
-    const [play2] = useSound(twoSfx);
-    const [play1] = useSound(oneSfx);
-    const [play0] = useSound(readySfx);
-    
-    const handleElapsedChange = value => {
-        timer.setInitial(value);
-        model.update("samplingTimeMs", value);
-        setTime(value);
-        setElapsed(value);        
-    };
-
     const handleNewCollectedValue = (row,value) => {           
         try{
-            const nozzle = model.currentArcConfig.nozzleData[row];
+            const nozzle = currentArcConfig.nozzleData[row];
             const res = API.computeEffectiveFlow({ // Funcion para evaluar volumen recolectado
                 c: value, 
                 tms: elapsed,
@@ -125,68 +187,7 @@ const Control = props => {
         setTableData(newTableData);
     };
 
-    useEffect(() => { // Como esta creado con initial=0, hay que inicializarlo en el valor correcto
-        timer.setInitial(elapsed);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const onTimeout = () => {
-        KeepAwake.allowSleep();
-        setRunning(false);        
-        setTime(elapsed);        
-        if(firstRound){ // Mostrar instructivo la primera vez
-            Toast("success", "Ingrese el valor recolectado seleccionando la fila correspondiente", 2000, "center");
-            setFirstRound(false);
-        }
-    };
-
-    const toggleRunning = () => {
-        if(tableData[currentArc].length > 0){ // Solo si hay indicado un numero de picos mayor a 0
-            if(!running){
-                timer.onChange = setTime;
-                timer.onTimeout = onTimeout;
-                timer.clear();
-                timer.start();
-                KeepAwake.keepAwake()                
-                .catch(err => {
-                    console.log("Error de KeepAwake");
-                    console.log(err);                    
-                });
-                setRunning(true);
-            }else{
-                timer.stop();
-                timer.clear();
-                setTime(elapsed);            
-                KeepAwake.allowSleep()
-                .catch(err => {
-                    console.log("Error de KeepAwake");
-                    console.log(err);                    
-                });
-                setRunning(false);
-            }
-        }else{ // Si no hay datos, no se puede iniciar el timer
-            Toast("error", "Indique la cantidad de picos a controlar", 3000, "bottom");
-        }
-    };
-
-    const getTime = () => {
-        if(time === 3000)
-            play3();
-        if(time === 2000)
-            play2();
-        if(time === 1000)
-            play1();
-        if(time < 200)
-            play0();
-        // formatear de unix a min:seg:ms
-        return moment(time).format('mm:ss:S');
-    };
-
-    const addResultsToReport = () => {
-        model.addControlToReport({tableData,outputs, arcNumber: model.arcNumber});
-        f7.panel.open();       
-    };
-
+    
     const handleArcSwitch = () => {
         f7.dialog.confirm('Está a punto de cambiar la lista de picos. ¿Desea continuar?', 
             'Advertencia', 
@@ -197,52 +198,39 @@ const Control = props => {
         );
     }
 
-    /*
-    const wlk = useContext(WalkthroughCtx);
-    Object.assign(wlk.callbacks, {
-        control_results: () => {
-            updateData(model.collectedData);
-        }
-    });
-    */
-
     return (
         <Page>
             <Navbar title="Verificación de picos" style={{maxHeight:"40px", marginBottom:"0px"}}/>      
-            <ElapsedSelector value={elapsed} disabled={running} onChange={handleElapsedChange}/>
-
-            <Block style={{marginTop:"20px", textAlign:"center"}} className="help-target-control-play">
-                <p style={{fontSize:"50px", margin:"0px"}}>{getTime()} <PlayButton onClick={toggleRunning} running={running} /></p>
-            </Block>
+            
+            <TimerBlock />
             
             <ArcConfigDisplay 
                 disabled={model.arcNumber === 1}
                 arcSide={currentArc}
-                arcConfig={model.currentArcConfig}
+                arcConfig={currentArcConfig}
                 onArcSwitch={handleArcSwitch}/>
         
             <Block style={{marginBottom: "20px",textAlign:"center"}}>
                 <NozzlesControlTable 
                     data={tableData[currentArc]} 
                     onDataChange={updateData} 
-                    rowSelectDisabled={running}
+                    rowSelectDisabled={false}
                     evalCollected={handleNewCollectedValue}/>
             </Block>
 
             <OutputBlock outputs={outputs.right} side={'right'}/>
             <OutputBlock outputs={outputs.left} side={'left'}/>
-            {
-                (model.arcNumber === 2 && outputs.left.ready && outputs.right.ready || model.arcNumber === 1 && outputs.right.ready) &&
-                <Row style={{marginTop:30, marginBottom: 20}} className="help-target-control-reports">
-                    <Col width={20}></Col>
-                    <Col width={60}>
-                        <Button fill style={{textTransform:"none"}} onClick={addResultsToReport}>
-                            Agregar a reporte
-                        </Button>
-                    </Col>
-                    <Col width={20}></Col>
-                </Row>
-            }
+            
+            <Row style={{marginTop:30, marginBottom: 20}} className="help-target-control-reports">
+                <Col width={20}></Col>
+                <Col width={60}>
+                    <Button fill style={{textTransform:"none"}} onClick={() => {}}>
+                        Agregar a reporte
+                    </Button>
+                </Col>
+                <Col width={20}></Col>
+            </Row>
+            
             <BackButton {...props} />
         </Page>
     );

@@ -1,25 +1,21 @@
-import { f7, Navbar, Page, Block, Checkbox, Row, Col, Button } from 'framework7-react';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
+import { Navbar, Page, Block, Checkbox, Row, Col, Button } from 'framework7-react';
+import { getData } from '../../entities/Storage';
 import moment from 'moment';
 import { BackButton } from '../../components/Buttons';
 import iconEmpty from '../../assets/icons/empty_folder.png';
-import Toast from '../../components/Toast';
 import classes from './style.module.css';
 
 const Reports = props => {
 
-    const model = {};
+    const [reports, setReports] = useState(getData("reports") || []);
+    
+    const selectedReports = reports.filter(el => el.selected);
+    const selectedCount = selectedReports.length;
 
-    const [reports, setReports] = useState(model.reports || []);
-    const [selectedCount, setSelectedCount] = useState(model.reports.filter(el => el.selected).length);
-
-    const setSelectedAll = v => {
-        //const temp = [...reports];
-        const temp = [...model.reports]; 
-        temp.forEach(report => {
-            report.selected = v;
-        });
-        setSelectedCount(v ? temp.length : 0);
+    const setSelectedAll = v => {        
+        const temp = [...reports]; 
+        temp.forEach(r => {r.selected = v;});        
         setReports(temp);
     };
 
@@ -28,66 +24,8 @@ const Reports = props => {
         temp.forEach(report => {
             if (report.id === id)
                 report.selected = v;
-        });
-        setSelectedCount(countSelected(temp));
+        });        
         setReports(temp);
-    };
-
-    const getSelected = () => {
-        return reports.filter(report => report.selected);
-    };
-
-    const getSingleSelected = () => {
-        const selectedIds = getSelected().map(el => el.id);
-        if (selectedIds.length === 0) {
-            Toast("info", "Seleccione al menos un reporte", 2000, "center");
-            return;
-        }
-        if (selectedIds.length > 1) {
-            Toast("info", "Solo puede renombrar un reporte a la vez", 2000, "center");
-            return;
-        }
-        return model.getReport(selectedIds[0]);
-    };
-
-    const openSelected = () => {
-        const selectedReport = getSingleSelected();
-        props.f7router.navigate("/reportDetails/" + selectedReport.id);
-    };
-
-    const renameSelected = () => {
-        const selectedReport = getSingleSelected();
-        f7.dialog.prompt('Indique el nuevo nombre para el reporte seleccionado', 'Editar nombre', newName => {
-            const res = model.renameReport(selectedReport.id, newName);
-            if(res.status === "success"){
-                Toast("success", "Reporte renombrado exitosamente", 2000, "center");
-                setSelectedAll(false); // Deseleccionar todos y actualizar vista
-            }else
-                Toast("error", res.message, 2000, "center");
-        }, null, selectedReport.name);
-    };
-
-    const deleteSelected = () => {
-        f7.dialog.confirm('¿Está seguro que desea eliminar los reportes seleccionados?', 'Eliminar reportes', () => {
-            const selectedIds = getSelected().map(el => el.id);
-            if (selectedIds.length > 0) {
-                let errors = 0;
-                for(let i = 0; i < selectedIds.length; i++){
-                    try{
-                        model.deleteReport(selectedIds[i]);
-                    }catch(err){
-                        Toast("error", err.message, 2000, "center");
-                        errors++;
-                    }
-                }
-                if(errors === 0){
-                    Toast("success", "Reportes eliminados exitosamente", 2000, "center");
-                    setSelectedAll(false); // Deseleccionar todos y actualizar vista
-                }
-            }else{
-                Toast("info", "Seleccione al menos un reporte", 2000, "center");
-            }
-        });
     };
 
     return (
@@ -149,14 +87,14 @@ const Reports = props => {
                     <Row style={{marginTop:20}}>
                         <Col width={20}></Col>
                         <Col width={60}>
-                            <Button fill onClick={renameSelected} color="teal" style={{textTransform:"none"}}>Cambiar nombre</Button>
+                            <Button fill onClick={()=>{}} color="teal" style={{textTransform:"none"}}>Cambiar nombre</Button>
                         </Col>
                         <Col width={20}></Col>
                     </Row>
                     <Row style={{marginTop:10}}>
                         <Col width={20}></Col>
                         <Col width={60}>
-                            <Button fill onClick={openSelected} style={{textTransform:"none"}}>Abrir</Button>
+                            <Button fill onClick={()=>{}} style={{textTransform:"none"}}>Abrir</Button>
                         </Col>
                         <Col width={20}></Col>
                     </Row>
@@ -169,7 +107,7 @@ const Reports = props => {
                 <Row style={{marginTop:10}}>
                     <Col width={20}></Col>
                     <Col width={60}>
-                        <Button fill onClick={deleteSelected} color="red" style={{textTransform:"none"}}>Borrar</Button>
+                        <Button fill onClick={()=>{}} color="red" style={{textTransform:"none"}}>Borrar</Button>
                     </Col>
                     <Col width={20}></Col>
                 </Row>
