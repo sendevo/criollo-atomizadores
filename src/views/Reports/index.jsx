@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Navbar, Page, Block, Checkbox, Row, Col, Button } from 'framework7-react';
+import { f7, Navbar, Page, Block, Checkbox, Row, Col, Button } from 'framework7-react';
+import { deleteReport, renameReport } from '../../entities/Model/reportsActions';
 import { getData } from '../../entities/Storage';
 import moment from 'moment';
 import { BackButton } from '../../components/Buttons';
@@ -26,6 +27,46 @@ const Reports = props => {
                 report.selected = v;
         });        
         setReports(temp);
+    };
+
+    const renameRep = () => {
+        const selected = selectedReports.length === 1 ? selectedReports[0] : null;        
+        if (selected) {
+            f7.dialog.prompt('Ingrese el nuevo nombre', 'Renombrar reporte', (value) => {
+                if (value) {
+                    renameReport(selected.id, value);
+                    setReports(reports.map(report => {
+                        if (report.id === selected.id)
+                            report.name = value;
+                        return report;
+                    }));
+                }
+            }, null, selected.name);
+        }
+    };
+
+    const openRep = () => {
+        const selected = selectedReports.length === 1 ? selectedReports[0] : null;        
+        if (selected)
+            props.f7router.navigate("/reportDetails/" + selected.id);
+    };
+
+    const deleteRep = () => {
+        f7.dialog.confirm('¿Está seguro que desea eliminar los reportes seleccionadas?', 
+            'Eliminar reportes', 
+            () => {
+                if(selectedReports.length > 0){
+                    try{
+                        selectedReports.forEach(el => deleteReport(el.id));
+                        setReports(reports.filter(el => !el.selected));
+                    }catch(err){
+                        Toast("error", err.message);
+                    }
+                }else{
+                    Toast("error", "No hay reportes seleccionadas");
+                }
+            }
+        );
     };
 
     return (
@@ -87,14 +128,14 @@ const Reports = props => {
                     <Row style={{marginTop:20}}>
                         <Col width={20}></Col>
                         <Col width={60}>
-                            <Button fill onClick={()=>{}} color="teal" style={{textTransform:"none"}}>Cambiar nombre</Button>
+                            <Button fill onClick={renameRep} color="teal" style={{textTransform:"none"}}>Cambiar nombre</Button>
                         </Col>
                         <Col width={20}></Col>
                     </Row>
                     <Row style={{marginTop:10}}>
                         <Col width={20}></Col>
                         <Col width={60}>
-                            <Button fill onClick={()=>{}} style={{textTransform:"none"}}>Abrir</Button>
+                            <Button fill onClick={openRep} style={{textTransform:"none"}}>Abrir</Button>
                         </Col>
                         <Col width={20}></Col>
                     </Row>
@@ -107,7 +148,7 @@ const Reports = props => {
                 <Row style={{marginTop:10}}>
                     <Col width={20}></Col>
                     <Col width={60}>
-                        <Button fill onClick={()=>{}} color="red" style={{textTransform:"none"}}>Borrar</Button>
+                        <Button fill onClick={deleteRep} color="red" style={{textTransform:"none"}}>Borrar</Button>
                     </Col>
                     <Col width={20}></Col>
                 </Row>

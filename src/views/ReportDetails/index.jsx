@@ -1,5 +1,5 @@
-import { useContext } from 'react';
 import { Navbar, Page, Block, Row, Col, Button, BlockTitle } from 'framework7-react';
+import { loadReport } from '../../entities/Model/reportsActions';
 import { BackButton } from '../../components/Buttons';
 import NozzlesControlTable from '../../components/NozzlesControlTable';
 import { SuppliesTable, PrescriptionTable } from '../../components/SuppliesTable';
@@ -11,7 +11,9 @@ import classes from './style.module.css';
 
 const ReportDetails = props => {
     
-    const report = {};
+    const report = loadReport(props.id);
+
+    console.log(report);
 
     const exportReport = share => {
         PDFExport(report, share);

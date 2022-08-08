@@ -3,7 +3,7 @@ import { presentationUnits } from "../../entities/API";
 import classes from './style.module.css';
 import { formatNumber } from '../../utils';
 
-const PrescriptionTable = props => (
+const PrescriptionTable = ({supplies}) => (
     <Card className={classes.Card}>
         <table className={["data-table", classes.SuppliesTable].join(' ')}>
             <tr>
@@ -12,7 +12,7 @@ const PrescriptionTable = props => (
             </tr>
             <tbody>
             {
-                props.supplies.pr?.map(prod => (
+                supplies.pr?.map(prod => (
                     <tr key={prod.key}>
                         <td>{prod.name}</td>
                         <td>{formatNumber(prod.dose)} {presentationUnits[prod.presentation]}</td>

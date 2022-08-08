@@ -1,6 +1,8 @@
 import { f7, Navbar, Page, Row, Col, Button, BlockTitle, List, Block } from 'framework7-react';
 import React, { useContext, useState } from 'react';
 import { SuppliesStateContext } from '../../context/SuppliesContext';
+import { ReportsDispatchContext } from '../../context/ReportsContext';
+import { addSupplies } from '../../entities/Model/reportsActions';
 import { ModelStateContext } from '../../context/ModelContext';
 import { BackButton } from '../../components/Buttons';
 import Input from '../../components/Input';
@@ -20,6 +22,7 @@ const SuppliesList = props => {
         capacity
     } = useContext(SuppliesStateContext);
     const { workVolume } = useContext(ModelStateContext);
+    const dispatch = useContext(ReportsDispatchContext);
     
     const [comments, setComments] = useState('');
 
@@ -27,6 +30,21 @@ const SuppliesList = props => {
         supplies.Ncb+" carga(s) de " +Math.round(supplies.Vcb)+ " litros " 
         : 
         supplies.Ncc+" carga(s) completa(s)"+(supplies.Vf > 0 ? " y 1 fracción de carga de " +Math.round(supplies.Vf)+ " litros" : "");
+
+    const addToReport = () => {        
+        addSupplies(dispatch, {
+            lotName,
+            workArea,
+            workVolume,
+            lotCoordinates,
+            loadBalancingEnabled,
+            loadsText,
+            pr:supplies.pr,
+            capacity,
+            comments
+        });
+        f7.panel.open();
+    };
 
     return (
         <Page>
@@ -88,7 +106,7 @@ const SuppliesList = props => {
             <Row style={{marginTop:"20px", marginBottom: "15px"}}>
                 <Col width={20}></Col>
                 <Col width={60}>
-                    <Button className="help-target-add-report" fill onClick={()=>{}} style={{textTransform:"none"}}>
+                    <Button className="help-target-add-report" fill onClick={addToReport} style={{textTransform:"none"}}>
                         Agregar a reporte
                     </Button>
                 </Col>

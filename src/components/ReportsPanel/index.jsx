@@ -1,20 +1,19 @@
 import { f7, View, Panel, Page, Block, BlockTitle, Button, Row } from 'framework7-react';
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
+import moment from 'moment';
+import { ReportsStateContext, ReportsDispatchContext } from '../../context/ReportsContext';
+import * as actions from '../../entities/Model/reportsActions.js';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import Toast from '../Toast';
 import classes from './style.module.css';
 
 const ReportsPanel = () => {
     
-    const model = {};
-    const [completedSections, setCompletedSections] = useState(model.currentReport?.completed || {params: false, control: false, supplies: false});
-
-    const emptyReport = !completedSections.params && !completedSections.control && !completedSections.supplies;
+    const state = useContext(ReportsStateContext);
+    const dispatch = useContext(ReportsDispatchContext);
+    
+    const emptyReport = !state.completed.params && !state.completed.control && !state.completed.supplies;
  
-    const onOpened = () => {
-        setCompletedSections({...model.currentReport.completed});
-    };
-
     const saveReport = () => {
         f7.dialog.create({
             title: '¿Confirma que desea finalizar y guardar el reporte?',
@@ -28,15 +27,17 @@ const ReportsPanel = () => {
                 },
                 {
                     text: 'Aceptar',
-                    onClick: function () {                        
-                        model.saveReport();                        
-                        setTimeout(function () {
-                            f7.panel.close();
-                            setTimeout(function () { // Dar tiempo a que se cierre el panel
-                                f7.views.main.router.navigate('/reports/');
-                                setCompletedSections(model.currentReport);
+                    onClick: function () {                                                
+                        f7.dialog.prompt('Indique un nombre para este reporte', 'Editar nombre', reportName => {
+                            actions.saveReport(dispatch, reportName);
+                            Toast("success", "Nuevo reporte guardado", 2000, "center");                        
+                            setTimeout(function () {
+                                f7.panel.close();
+                                setTimeout(function () { // Dar tiempo a que se cierre el panel
+                                    f7.views.main.router.navigate('/reports/');                                
+                                }, 500);
                             }, 500);
-                        }, 500);
+                        }, null, state.name || "Reporte "+moment(Date.now()).format("DD-MM-YYYY HH-mm"));
                     }
                 }
             ],
@@ -56,11 +57,10 @@ const ReportsPanel = () => {
                     text: 'Aceptar',
                     onClick: function () {
                         f7.panel.close();
-                        model.clearReport();
+                        actions.newReport(dispatch);
                         Toast("success", "Reporte restablecido", 2000, "center");
                         setTimeout(function(){ // Dar tiempo a que se cierre el panel
-                            f7.dialog.close();
-                            setCompletedSections(model.currentReport);
+                            f7.dialog.close();                            
                         }, 500);
                     }
                 }
@@ -77,7 +77,7 @@ const ReportsPanel = () => {
     };
 
     return (
-        <Panel right onPanelOpen={onOpened} swipe>
+        <Panel right swipe>
             <View>
                 <Page>
                     <Block>
@@ -95,7 +95,7 @@ const ReportsPanel = () => {
                                         <td>Parámetros de pulverización</td>
                                         <td className={classes.SectionStatus}>
                                         {
-                                            completedSections.params ? 
+                                            state.completed.params ? 
                                             <FaCheck size={20} color="green"/> 
                                             : 
                                             <FaTimes size={20} color="red"/>
@@ -106,7 +106,7 @@ const ReportsPanel = () => {
                                         <td>Verificación de picos</td>
                                         <td className={classes.SectionStatus}>
                                         {
-                                            completedSections.control ? 
+                                            state.completed.control ? 
                                             <FaCheck size={20} color="green"/> 
                                             : 
                                             <FaTimes size={20} color="red"/>
@@ -117,7 +117,7 @@ const ReportsPanel = () => {
                                         <td>Cálculo de mezcla</td>
                                         <td className={classes.SectionStatus}>
                                         {
-                                            completedSections.supplies ? 
+                                            state.completed.supplies ? 
                                             <FaCheck size={20} color="green"/> 
                                             : 
                                             <FaTimes size={20} color="red"/>

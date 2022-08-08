@@ -12,6 +12,8 @@ import Toast from "../../components/Toast";
 import { ElapsedSelector } from "../../components/Selectors";
 import { ArcStateContext } from "../../context/ArcConfigContext.jsx";
 import { ModelStateContext } from "../../context/ModelContext.jsx";
+import { ReportsDispatchContext } from "../../context/ReportsContext.jsx";
+import { addControl } from "../../entities/Model/reportsActions.js";
 import NozzlesControlTable from "../../components/NozzlesControlTable";
 import oneSfx from '../../assets/sounds/uno.mp3';
 import twoSfx from '../../assets/sounds/dos.mp3';
@@ -99,7 +101,7 @@ const TimerBlock = ({value, setValue, onTimeout}) => {
     };
 
     return (
-        <Block style={{margin:"0px!important"}}>
+        <Block className={classes.TimerBlock}>
             <ElapsedSelector 
                 value={value} 
                 disabled={running} 
@@ -124,6 +126,7 @@ const Control = props => {
     } = useContext(ModelStateContext);
 
     const currentArcConfig = useContext(ArcStateContext);
+    const reportsDispatch = useContext(ReportsDispatchContext);
     
     // Inputs
     const [currentArc, setCurrentArc] = useState("right");
@@ -204,7 +207,15 @@ const Control = props => {
                 setCurrentArc(currentArc === "right" ? "left":"right");
             }
         );
-    }
+    };
+
+    const addToReport = () => {
+        addControl(reportsDispatch, {
+            tableData,
+            outputs
+        });
+        f7.panel.open();
+    };
 
     return (
         <Page>
@@ -235,7 +246,7 @@ const Control = props => {
             <Row style={{marginTop:30, marginBottom: 20}} className="help-target-control-reports">
                 <Col width={20}></Col>
                 <Col width={60}>
-                    <Button fill style={{textTransform:"none"}} onClick={() => {}}>
+                    <Button fill style={{textTransform:"none"}} onClick={addToReport}>
                         Agregar a reporte
                     </Button>
                 </Col>

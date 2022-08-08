@@ -76,8 +76,8 @@ export const reducer = (state = initialState, action) => {
             if(arcs) {
                 const data = arcs.find(el => el.id === action.payload);
                 return data ? data : initialState;
-            }else
-                return initialState;
+            }
+            return initialState;
         }
         case "SAVE_ARC":{            
             if(state.id){ // Actualizar existente
@@ -103,23 +103,12 @@ export const reducer = (state = initialState, action) => {
                     id: generateId(), 
                     name: action.payload || "S/N"
                 };
-                let arcs = getData("arcs");
-                if(arcs) 
-                    arcs.push(data);
-                else
-                    arcs = [data];                
+                const arcs = getData("arcs") || [];
+                arcs.push(data);
                 saveData("arcs", arcs);
                 return data;
             }
         }        
-        case "DELETE_ARC":{
-            const arcs = getData("arcs");
-            if(arcs) {
-                const data = arcs.filter(el => el.id !== action.payload);
-                saveData("arcs", data);
-            }
-            return state;
-        }
         default:
             return state;
     }

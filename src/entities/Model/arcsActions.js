@@ -1,3 +1,5 @@
+import { saveData, getData } from "../Storage";
+
 export const setNozzleCnt = (dispatch, value) => {
     return dispatch({
         type: "SET_NOZZLE_CNT",
@@ -53,9 +55,10 @@ export const saveArc = (dispatch, name) => {
     });
 };
 
-export const deleteArc = (dispatch, id) => {
-    return dispatch({
-        type: "DELETE_ARC",
-        payload: id
-    });
+export const deleteArc = id => {
+    const arcs = getData("arcs");
+    if(arcs) {
+        const data = arcs.filter(el => el.id !== id);
+        saveData("arcs", data);
+    }
 };

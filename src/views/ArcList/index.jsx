@@ -44,7 +44,7 @@ const ArcList = props => {
                 const selected = data.filter(el => el.selected);
                 if(selected.length > 0){
                     try{
-                        selected.forEach(el => deleteArc(dispatch, el.id));
+                        selected.forEach(el => deleteArc(el.id));
                         setData(data.filter(el => !el.selected));
                     }catch(err){
                         Toast("error", err.message);
