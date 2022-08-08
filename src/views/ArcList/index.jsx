@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { f7, Page, Navbar, Card, Checkbox, Row, Col, Button } from 'framework7-react';
+import moment  from 'moment';
 import { getData } from '../../entities/Storage';
 import { ArcDispatchContext } from '../../context/ArcConfigContext';
 import { loadArc, deleteArc } from '../../entities/Model/arcsActions';
@@ -25,11 +26,14 @@ const ArcList = props => {
         setData(temp);
     };
 
-    const handleSelectConfig = path => {
+    const handleSelectConfig = edit => {
         const selected = data.filter(el => el.selected);
         if(selected.length === 1){
             loadArc(dispatch, selected[0].id);
-            props.f7router.navigate(path);
+            if(edit)
+                props.f7router.navigate("/arc/");
+            else 
+                props.f7router.back();
         }
     };
 
@@ -54,17 +58,20 @@ const ArcList = props => {
 
     return(
         <Page>
-            <Navbar title="Configuraciones de arco guardadas" style={{maxHeight:"40px", marginBottom:"0px"}}/>
-            <Card>
+            <Navbar title="Registro de configuraciones" style={{maxHeight:"40px", marginBottom:"0px"}}/>
+            <Card style={{margin:"0px"}}>
             {
                 data?.length > 0 ?
                 <div>
+                    <h3 style={{marginTop:0, paddingTop:0, paddingLeft:10}}>Configuraciones de arco guardadas:</h3>
                     <div>
                         <table className={["data-table", classes.Table].join(' ')} >
                             <colgroup>
-                                <col span={1} style={{width: "15%"}} />
-                                <col span={1} style={{width: "65%"}} />
-                                <col span={1} style={{width: "20%"}} />
+                                <col span={1} style={{width: "10%"}} />
+                                <col span={1} style={{width: "55%"}} />
+                                <col span={1} style={{width: "10%"}} />
+                                <col span={1} style={{width: "25%"}} />
+
                             </colgroup>
                             <thead className={classes.Header}>
                                 <tr className={classes.Header}>
@@ -77,6 +84,7 @@ const ArcList = props => {
                                     </th>
                                     <th className={classes.DataCell}>Nombre</th>
                                     <th className={classes.DataCell}>Picos</th>
+                                    <th className={classes.DataCell}>Modificado</th>
                                 </tr>
                             </thead>
                         </table>
@@ -84,9 +92,10 @@ const ArcList = props => {
                     <div style={{overflow: "auto"}}>
                         <table className={["data-table", classes.Table].join(' ')} >
                             <colgroup>
-                                <col span={1} style={{width: "15%"}} />
-                                <col span={1} style={{width: "65%"}} />
-                                <col span={1} style={{width: "20%"}} />
+                                <col span={1} style={{width: "10%"}} />
+                                <col span={1} style={{width: "55%"}} />
+                                <col span={1} style={{width: "10%"}} />
+                                <col span={1} style={{width: "25%"}} />
                             </colgroup>
                             <tbody style={{overflow: "auto"}}>
                                 {
@@ -100,6 +109,7 @@ const ArcList = props => {
                                             </td>
                                             <td className={classes.DataCell}>{row.name}</td>
                                             <td className={classes.DataCell}>{row.nozzleData.length}</td>
+                                            <td className={classes.DataCell}>{moment(row.modified).format("DD/MM HH:mm")}</td>
                                         </tr>
                                     ))
                                 }
@@ -114,21 +124,21 @@ const ArcList = props => {
             }
             </Card>
 
-            <Row style={{marginTop:10, marginBottom: 10}}>
+            <Row style={{marginTop:25, marginBottom: 5}}>
                 <Col width={20}></Col>
                 <Col width={60}>
                     <Button 
                         fill
                         style={{textTransform:"none"}} 
                         disabled={selectedCount !== 1} 
-                        onClick={() => handleSelectConfig('/arc/')}>
+                        onClick={() => handleSelectConfig(true)}>
                             Editar
                     </Button>
                 </Col>
                 <Col width={20}></Col>
             </Row>
 
-            <Row style={{marginTop:10, marginBottom: 10}}>
+            <Row style={{marginTop:5, marginBottom: 5}}>
                 <Col width={20}></Col>
                 <Col width={60}>
                     <Button 
@@ -136,7 +146,7 @@ const ArcList = props => {
                         color='teal'
                         style={{textTransform:"none"}} 
                         disabled={selectedCount !== 1} 
-                        onClick={() => handleSelectConfig('/params/')}>
+                        onClick={() => handleSelectConfig(false)}>
                             Seleccionar
                     </Button>
                 </Col>

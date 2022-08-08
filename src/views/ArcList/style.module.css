@@ -26,8 +26,7 @@
 }
 
 .DataCell {
-    padding-top: 5px!important;
-    padding-bottom: 5px!important;
+    padding: 0px!important;    
     margin: 0px;
     font-size: 12px;    
     text-align: center;
@@ -42,6 +41,7 @@
 }
 
 .CheckboxCell {
+    padding: 0px!important;
     text-align: center;    
 }
 

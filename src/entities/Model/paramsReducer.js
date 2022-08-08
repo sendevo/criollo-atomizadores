@@ -26,19 +26,6 @@ export const initialState = {
     expansionFactor: 2, // Factor de expansión
     turbineSection: 1, // Seccion de soplado
     airVelocity: "", // Velocidad de aire    
-
-    // Verificacion de picos
-    samplingTimeMs: 30000, // 30000, 60000 o 90000
-
-    // Variables de insumos
-    workArea: "", // Superficie de lote
-    lotName: "", // Nombre del lote
-    lotCoordinates: "", // Coordenadas del lote
-    gpsEnabled: false, // Habilitacion coordenadas lote
-    loadBalancingEnabled: true, // Habilitacion balanceo de carga
-    capacity: "", // Capacidad del tanque
-    products: [], // Lista de prductos
-    supplies: {}, // Insumos y cantidades
 };
 
 const nonEditableParams = [

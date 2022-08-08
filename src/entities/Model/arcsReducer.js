@@ -87,7 +87,8 @@ export const reducer = (state = initialState, action) => {
                     if(arcIndex !== -1){                        
                         arcs[arcIndex] = {
                             ...state,
-                            name: action.payload || state.name
+                            name: action.payload || state.name,
+                            modified: Date.now()
                         };
                         saveData("arcs", arcs);
                     }

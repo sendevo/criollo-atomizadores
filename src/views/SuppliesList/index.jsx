@@ -1,5 +1,7 @@
 import { f7, Navbar, Page, Row, Col, Button, BlockTitle, List, Block } from 'framework7-react';
 import React, { useContext, useState } from 'react';
+import { SuppliesStateContext } from '../../context/SuppliesContext';
+import { ModelStateContext } from '../../context/ModelContext';
 import { BackButton } from '../../components/Buttons';
 import Input from '../../components/Input';
 import { SuppliesTable, PrescriptionTable } from '../../components/SuppliesTable';
@@ -9,38 +11,22 @@ import classes from './style.module.css';
 
 const SuppliesList = props => {
 
-    const model = useContext(ModelCtx);
-
+    const {
+        lotName,
+        workArea,
+        lotCoordinates,
+        loadBalancingEnabled,
+        supplies,
+        capacity
+    } = useContext(SuppliesStateContext);
+    const { workVolume } = useContext(ModelStateContext);
+    
     const [comments, setComments] = useState('');
 
-    const addSuppliesToReport = () => {
-        const {
-            loadBalancingEnabled,
-            supplies,
-            lotName,
-            lotCoordinates,
-            workArea,
-            workVolume,
-            capacity
-        } = model;
-        model.addSuppliesToReport({
-            loadsText,
-            loadBalancingEnabled,
-            pr: supplies.pr,
-            lotName,
-            lotCoordinates,
-            workArea,
-            workVolume,
-            capacity,
-            comments
-        });
-        f7.panel.open();
-    };
-
-    const loadsText = model.loadBalancingEnabled ? 
-        model.supplies.Ncb+" carga(s) de " +Math.round(model.supplies.Vcb)+ " litros " 
+    const loadsText = loadBalancingEnabled ? 
+        supplies.Ncb+" carga(s) de " +Math.round(supplies.Vcb)+ " litros " 
         : 
-        model.supplies.Ncc+" carga(s) completa(s)"+(model.supplies.Vf > 0 ? " y 1 fracción de carga de " +Math.round(model.supplies.Vf)+ " litros" : "");
+        supplies.Ncc+" carga(s) completa(s)"+(supplies.Vf > 0 ? " y 1 fracción de carga de " +Math.round(supplies.Vf)+ " litros" : "");
 
     return (
         <Page>
@@ -50,26 +36,26 @@ const SuppliesList = props => {
                 <table className={["data-table", classes.MainTable].join(' ')}>
                     <tr>
                         <td><b>Lote:</b></td>
-                        <td>{model.lotName}</td>
+                        <td>{lotName}</td>
                     </tr>
                     {
-                        model.lotCoordinates && 
+                        lotCoordinates && 
                         <tr>
                             <td><b>Ubicación:</b></td>
-                            <td>{model.lotCoordinates.length > 0 ? "lat: "+model.lotCoordinates.join(', long:') : " - "}</td>
+                            <td>{lotCoordinates.length > 0 ? "lat: "+lotCoordinates.join(', long:') : " - "}</td>
                         </tr>
                     }
                     <tr>
                         <td><b>Superficie:</b></td>
-                        <td>{model.workArea} ha</td>
+                        <td>{workArea} ha</td>
                     </tr>
                     <tr>
                         <td><b>Volumen de pulverización:</b></td>
-                        <td>{formatNumber(model.workVolume)} l/ha</td>
+                        <td>{formatNumber(workVolume)} l/ha</td>
                     </tr>
                     <tr>
                         <td><b>Capacidad del tanque:</b></td>
-                        <td>{model.capacity} litros</td>
+                        <td>{capacity} litros</td>
                     </tr>
                     <tr>
                         <td><b>Cantidad de cargas:</b></td>
@@ -80,10 +66,10 @@ const SuppliesList = props => {
 
             <Block style={{marginTop:20}}>
                 <BlockTitle className={classes.SectionTitle}>Prescripción</BlockTitle>
-                <PrescriptionTable supplies={model.supplies}/>
+                <PrescriptionTable supplies={supplies}/>
                 
                 <BlockTitle className={classes.SectionTitle}>Insumos</BlockTitle>
-                <SuppliesTable supplies={model.supplies} loadBalancing={model.loadBalancingEnabled}/>
+                <SuppliesTable supplies={supplies} loadBalancing={loadBalancingEnabled}/>
             </Block>
             
 
@@ -102,7 +88,7 @@ const SuppliesList = props => {
             <Row style={{marginTop:"20px", marginBottom: "15px"}}>
                 <Col width={20}></Col>
                 <Col width={60}>
-                    <Button className="help-target-add-report" fill onClick={addSuppliesToReport} style={{textTransform:"none"}}>
+                    <Button className="help-target-add-report" fill onClick={()=>{}} style={{textTransform:"none"}}>
                         Agregar a reporte
                     </Button>
                 </Col>

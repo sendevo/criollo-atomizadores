@@ -8,11 +8,11 @@ const ArcConfigProvider = ({children}) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     
     return (
-        <ArcStateContext.Provider value={state}>
-            <ArcDispatchContext.Provider value={dispatch}>
+        <ArcDispatchContext.Provider value={dispatch}>
+            <ArcStateContext.Provider value={state}>
                 {children}
-            </ArcDispatchContext.Provider>
-        </ArcStateContext.Provider>
+            </ArcStateContext.Provider>
+        </ArcDispatchContext.Provider>
     );
 };
 

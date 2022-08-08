@@ -36,7 +36,7 @@ const ArcConfig = props => {
     const saveArcPrompt = () => {
         f7.dialog.prompt('Indique un nombre para esta configuración', 'Editar nombre', arcName => {
             saveArc(dispatch, arcName);
-            Toast("success", "Configuración de arco guardada", 2000, "center");
+            Toast("success", "Configuración de arco guardada", 2000, "center");                        
             props.f7router.navigate('/params/');
         }, null, state.id ? state.name : "Config "+moment(Date.now()).format("DD-MM-YYYY HH-mm"));
     };

@@ -8,11 +8,11 @@ const ModelProvider = ({children}) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     
     return (
-        <ModelStateContext.Provider value={state}>
-            <ModelDispatchContext.Provider value={dispatch}>
+        <ModelDispatchContext.Provider value={dispatch}>
+            <ModelStateContext.Provider value={state}>
                 {children}
-            </ModelDispatchContext.Provider>
-        </ModelStateContext.Provider>
+            </ModelStateContext.Provider>
+        </ModelDispatchContext.Provider>
     );
 };
 
