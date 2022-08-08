@@ -3,8 +3,7 @@ import typeATree from "../../assets/icons/tree_type_a.png";
 import typeBTree from "../../assets/icons/tree_type_b.png";
 import typeCTree from "../../assets/icons/tree_type_c.png";
 
-
-const NozzleSeparationSelector = ({name, value, disabled, onChange}) => {
+export const NozzleSeparationSelector = ({name, value, disabled, onChange}) => {
 
     const setValue = (el, val) => {
         if(el.target.checked)
@@ -55,7 +54,7 @@ const label = {
     color: "#777777"
 };
 
-const PresentationSelector = ({name, value, disabled, onChange}) => (
+export const PresentationSelector = ({value, onChange}) => (
     <div>
         <Row style={{fontSize:"0.8em", marginBottom: 5, marginTop: 10}}>
             <Col width={50}>
@@ -74,32 +73,32 @@ const PresentationSelector = ({name, value, disabled, onChange}) => (
                 <Radio 
                     name="input-type" 
                     checked={value === 0} 
-                    onChange={e=>onChange(0)}/> ml/ha
+                    onChange={e=>onChange({target:{value:0}})}/> ml/ha
             </Col>
             <Col width={25}>
                 <Radio 
                     name="input-type" 
                     checked={value === 2} 
-                    onChange={e=>onChange(2)}/> ml/100l
+                    onChange={e=>onChange({target:{value:2}})}/> ml/100l
             </Col>
             <Col  width={25}>
                 <Radio 
                     name="input-type" 
                     checked={value === 1} 
-                    onChange={e=>onChange(1)}/> gr/ha
+                    onChange={e=>onChange({target:{value:1}})}/> gr/ha
             </Col>
             <Col width={25}>
                 <Radio 
                     name="input-type" 
                     checked={value === 3} 
-                    onChange={e=>onChange(3)}/> gr/100l
+                    onChange={e=>onChange({target:{value:3}})}/> gr/100l
             </Col>
         </Row>
     </div>
 );
 
 
-const ElapsedSelector = ({name, value, disabled, onChange}) => {
+export const ElapsedSelector = ({name, value, disabled, onChange}) => {
 
     const setElapsed = (el, val) => {
         if(el.target.checked)
@@ -150,7 +149,7 @@ const iconStyle = {
     height: "60px"
 }
 
-const TreeTypeSelector = ({name, value, disabled, onChange}) => {
+export const TreeTypeSelector = ({name, value, disabled, onChange}) => {
 
     const setType = (e, val) => {
         if(e.target.checked)
@@ -193,12 +192,4 @@ const TreeTypeSelector = ({name, value, disabled, onChange}) => {
             </Row>
         </Block>
     );
-};
-
-
-export { 
-    NozzleSeparationSelector, 
-    PresentationSelector, 
-    ElapsedSelector, 
-    TreeTypeSelector 
 };

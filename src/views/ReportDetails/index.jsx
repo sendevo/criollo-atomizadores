@@ -13,8 +13,6 @@ const ReportDetails = props => {
     
     const report = loadReport(props.id);
 
-    console.log(report);
-
     const exportReport = share => {
         PDFExport(report, share);
     };
