@@ -2,7 +2,7 @@ import { f7, Page, Navbar, Block, Row, Col, Button } from "framework7-react";
 import React, { useEffect, useState, useContext } from "react";
 import { useSound } from "use-sound";
 import moment from 'moment';
-import * as API from '../../entities/API/index.js';
+import { computeEffectiveFlow, computeEffectiveVolume } from '../../entities/API/index.js';
 import { KeepAwake } from '@capacitor-community/keep-awake';
 import { formatNumber } from "../../utils";
 import { PlayButton, BackButton } from "../../components/Buttons";
@@ -32,8 +32,7 @@ const OutputBlock = props => (
     </Block>
 );
 
-const TimerBlock = ({onTimeout}) => {
-    const [elapsed, setElapsed] = useState(30000);
+const TimerBlock = ({value, setValue, onTimeout}) => {    
     const [time, setTime] = useState(30000); 
     const [running, setRunning] = useState(false);        
     
@@ -43,21 +42,21 @@ const TimerBlock = ({onTimeout}) => {
     const [play1] = useSound(oneSfx);
     const [play0] = useSound(readySfx);
     
-    const handleElapsedChange = ({target:{name, value}}) => {
-        timer.setInitial(value);        
-        setTime(value);
-        setElapsed(value);
+    const handleElapsedChange = val => {
+        timer.setInitial(val);
+        setTime(val);
+        setValue(val);
     };
 
     useEffect(() => { // Como esta creado con initial=0, hay que inicializarlo en el valor correcto
-        timer.setInitial(elapsed);
+        timer.setInitial(value);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const timeout = () => {
         KeepAwake.allowSleep();
         setRunning(false);        
-        setTime(elapsed);
+        setTime(value);
         onTimeout();
     };
 
@@ -76,7 +75,7 @@ const TimerBlock = ({onTimeout}) => {
         }else{ // Reset
             timer.stop();
             timer.clear();
-            setTime(elapsed);            
+            setTime(value);            
             KeepAwake.allowSleep()
             .catch(err => {
                 console.log("Error de KeepAwake");
@@ -102,9 +101,9 @@ const TimerBlock = ({onTimeout}) => {
     return (
         <Block style={{margin:"0px!important"}}>
             <ElapsedSelector 
-                value={elapsed} 
+                value={value} 
                 disabled={running} 
-                onChange={handleElapsedChange}/>
+                onChange={e => handleElapsedChange(e.target.value)}/>
 
             <Block style={{marginTop:"20px", textAlign:"center"}} className="help-target-control-play">
                 <p style={{fontSize:"50px", margin:"0px"}}>{getTime()} <PlayButton onClick={toggleRunning} running={running} /></p>
@@ -116,12 +115,19 @@ const TimerBlock = ({onTimeout}) => {
 
 const Control = props => {
     
-    const model = {};
+    const {
+        rowSeparation,
+        workPressure,
+        workVelocity,
+        workVolume,
+        arcNumber
+    } = useContext(ModelStateContext);
 
     const currentArcConfig = useContext(ArcStateContext);
     
     // Inputs
     const [currentArc, setCurrentArc] = useState("right");
+    const [elapsed, setElapsed] = useState(30000);
     const initialData = {
         right: currentArcConfig.nozzleData.map(n => ({updated: false})),
         left: currentArcConfig.nozzleData.map(n => ({updated: false}))
@@ -149,10 +155,10 @@ const Control = props => {
     const handleNewCollectedValue = (row,value) => {           
         try{
             const nozzle = currentArcConfig.nozzleData[row];
-            const res = API.computeEffectiveFlow({ // Funcion para evaluar volumen recolectado
+            const res = computeEffectiveFlow({ // Calcular caudal a partir de lo recolectado
                 c: value, 
                 tms: elapsed,
-                Pt: model.workPressure,
+                Pt: workPressure,
                 Pnom: nozzle.Pnom,
                 Qnom: nozzle.Qnom
             });
@@ -163,24 +169,22 @@ const Control = props => {
         return {updated: false};
     };
 
-    const updateData = newData => {
-        model.update("collectedData", newData);
+    const updateData = newData => {        
         if(newData.every(d => d.updated)){ // Verificacion completada
             try{
-                const effectiveVolume = API.computeEffectiveVolume({
+                const effectiveVolume = computeEffectiveVolume({
                     collectedData: newData,
-                    Vt: model.workVelocity,
-                    D: model.rowSeparation
+                    Vt: workVelocity,
+                    D: rowSeparation
                 });
                 const res = {
                     effectiveSprayVolume: effectiveVolume, 
-                    expectedSprayVolume: model.workVolume, 
-                    diff: effectiveVolume - model.workVolume, 
-                    diffp: (effectiveVolume - model.workVolume) / model.workVolume * 100, 
+                    expectedSprayVolume: workVolume, 
+                    diff: effectiveVolume - workVolume, 
+                    diffp: (effectiveVolume - workVolume) / workVolume * 100, 
                     ready: true
                 };
-                const newOutput = {...outputs, [currentArc]: res}
-                model.update("verificationOutput", newOutput);
+                const newOutput = {...outputs, [currentArc]: res}                
                 setOutputs(newOutput);
             }catch(err){
                 Toast("error", err.message);
@@ -206,10 +210,13 @@ const Control = props => {
         <Page>
             <Navbar title="Verificación de picos" style={{maxHeight:"40px", marginBottom:"0px"}}/>      
             
-            <TimerBlock onTimeout={()=>console.log("Timeout")}/>
+            <TimerBlock 
+                value={elapsed}
+                setValue={setElapsed}
+                onTimeout={()=>console.log("Timeout")}/>
             
             <ArcConfigDisplay 
-                disabled={model.arcNumber === 1}
+                disabled={arcNumber === 1}
                 arcSide={currentArc}
                 arcConfig={currentArcConfig}
                 onArcSwitch={handleArcSwitch}/>

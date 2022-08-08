@@ -14,11 +14,6 @@ import iconVolume from '../../assets/icons/dosis.png';
 import iconAir from '../../assets/icons/aire.png';
 
 const Params = props => {
-
-    const dispatch = useContext(ModelDispatchContext);
-    const paramsState = useContext(ModelStateContext);
-    const arcState = useContext(ArcStateContext);
-
     const {
         rowSeparation,
         arcNumber,
@@ -31,7 +26,9 @@ const Params = props => {
         airVelocity,
         workVolumeReady,
         sprayFlow
-    } = paramsState;
+    } = useContext(ModelStateContext);
+    const dispatch = useContext(ModelDispatchContext);
+    const {name, nozzleData} = useContext(ArcStateContext);
     
     return (
         <Page>
@@ -58,7 +55,7 @@ const Params = props => {
                 <ArcConfigInput 
                     arcNumber={arcNumber}
                     onArcNumberToggle={()=>actions.setParameter(dispatch, "arcNumber", arcNumber === 1 ? 2 : 1)}
-                    arcConfigName={arcState.name || "S/N"}
+                    arcConfigName={name || "S/N"}
                 />
             </center>
 
@@ -75,7 +72,7 @@ const Params = props => {
                             unit="km/h"
                             icon={iconVelocity}
                             value={workVelocity}
-                            onIconClick={() => actions.computeWorkVelocity(dispatch, arcState.nozzleData)}
+                            onIconClick={() => actions.computeWorkVelocity(dispatch, nozzleData)}
                             onChange={e => actions.setWorkVelocity(dispatch, parseFloat(e.target.value))}>
                         </Input>        
                     </Col>
@@ -97,7 +94,7 @@ const Params = props => {
                             unit="bar"
                             icon={iconPressure}
                             value={workPressure}
-                            onIconClick={()=>actions.computeWorkPressure(dispatch, arcState.nozzleData)}
+                            onIconClick={()=>actions.computeWorkPressure(dispatch, nozzleData)}
                             onChange={e => actions.setWorkPressure(dispatch, parseFloat(e.target.value))}>
                         </Input>
                     </Col>
@@ -119,7 +116,7 @@ const Params = props => {
                             unit="l/ha"
                             icon={iconVolume}
                             value={workVolume}
-                            onIconClick={()=>actions.computeWorkVolume(dispatch, arcState.nozzleData)}
+                            onIconClick={()=>actions.computeWorkVolume(dispatch, nozzleData)}
                             onChange={e => actions.setWorkVolume(dispatch, parseFloat(e.target.value))}>
                         </Input>
                     </Col>
