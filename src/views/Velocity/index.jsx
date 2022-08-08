@@ -1,14 +1,15 @@
+import { useContext, useState } from "react";
 import { Page, Navbar, Block, List, Row, Col, Button } from "framework7-react";
-import Input from "../../components/Input";
-import { BackButton } from "../../components/Buttons";
-import DistanceIcon from "../../assets/icons/distancia.png";
+import { FaPlus, FaMinus } from 'react-icons/fa';
+import { ModelDispatchContext } from "../../context/ModelContext";
+import { setWorkVelocity } from "../../entities/Model/paramsActions";
 import moment from 'moment';
 import Timer from '../../entities/Timer';
-import Toast from "../../components/Toast";
-import { useContext, useState } from "react";
-import { FaPlus, FaMinus } from 'react-icons/fa';
 import { set2Decimals } from "../../utils";
-import { PlayButton } from "../../components/Buttons";
+import Input from "../../components/Input";
+import { BackButton, PlayButton } from "../../components/Buttons";
+import Toast from "../../components/Toast";
+import DistanceIcon from "../../assets/icons/distancia.png";
 import classes from './style.module.css';
 
 const InputBlock = props => ( // Input de distancia
@@ -75,7 +76,8 @@ const timer = new Timer(0, false);
 
 const Velocity = props => { // View
     
-    const model = {};
+    const dispatch = useContext(ModelDispatchContext);
+
     const [time, setTime] = useState(0);
     const [running, setRunning] = useState(false);
     const [distance, setDistance] = useState(50);
@@ -135,10 +137,7 @@ const Velocity = props => { // View
 
     const exportData = () => { 
         const vel = set2Decimals(dataAvg());
-        model.update({
-            workVelocity: vel,
-            velocityMeasured: true
-        });
+        setWorkVelocity(dispatch, vel);
         props.f7router.back();        
     };
 

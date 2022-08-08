@@ -48,7 +48,8 @@ const _computeAirFlow = {
 
 const _computeAirVelocity = {
     turbineSection: isPositiveFloat,
-    airFlow: isPositiveFloat
+    airFlow: isPositiveFloat,
+    F: isPositiveFloat
 }
 
 const _computeVaFromTRV = {
@@ -176,8 +177,8 @@ export const computeAirFlow = params => { // Caudal de aire
 
 export const computeAirVelocity = params => { // Velocidad de soplado
     checkParams(_computeAirVelocity, params);
-    const {turbineSection, airFlow} = params;
-    return round2(airFlow / turbineSection / 3600);
+    const {turbineSection, airFlow, F} = params;
+    return round2(F * airFlow / turbineSection / 3600);
 };
 
 export const computeVaFromTRV = params => { // Volumen de aplicacion desde TRV

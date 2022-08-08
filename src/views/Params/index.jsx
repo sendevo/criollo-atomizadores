@@ -3,7 +3,6 @@ import { useContext } from 'react';
 import { BackButton, LinkButton } from '../../components/Buttons';
 import Input from "../../components/Input";
 import { ArcConfigInput } from "../../components/ArcConfig";
-import Toast from '../../components/Toast';
 import { FaStopwatch, FaWind, FaTree } from 'react-icons/fa';
 import { ModelStateContext, ModelDispatchContext } from '../../context/ModelContext';
 import { ArcStateContext } from '../../context/ArcConfigContext';
@@ -17,7 +16,7 @@ import iconAir from '../../assets/icons/aire.png';
 const Params = props => {
 
     const dispatch = useContext(ModelDispatchContext);
-    const state = useContext(ModelStateContext);
+    const paramsState = useContext(ModelStateContext);
     const arcState = useContext(ArcStateContext);
 
     const {
@@ -32,10 +31,10 @@ const Params = props => {
         airVelocity,
         workVolumeReady,
         sprayFlow
-    } = state;
+    } = paramsState;
     
     return (
-        <Page>            
+        <Page>
             <Navbar title="Parámetros de aplicación" style={{maxHeight:"40px", marginBottom:"0px"}}/>            
             
             <BlockTitle style={{marginBottom: 5, marginTop:0}}>Ancho de calle</BlockTitle>
@@ -49,7 +48,7 @@ const Params = props => {
                     unit="m"
                     icon={iconDistance}
                     value={rowSeparation}
-                    onChange={e => actions.setRowSeparation(dispatch, e.target.value)}>
+                    onChange={({target: {name, value}}) => actions.setRowSeparation(dispatch, parseFloat(value))}>
                 </Input>
             </List>
 
@@ -58,7 +57,7 @@ const Params = props => {
             <center>
                 <ArcConfigInput 
                     arcNumber={arcNumber}
-                    onArcNumberToggle={()=>actions.setArcNumber(dispatch, arcNumber === 1 ? 2 : 1)}
+                    onArcNumberToggle={()=>actions.setParameter(dispatch, "arcNumber", arcNumber === 1 ? 2 : 1)}
                     arcConfigName={arcState.name || "S/N"}
                 />
             </center>
@@ -76,8 +75,8 @@ const Params = props => {
                             unit="km/h"
                             icon={iconVelocity}
                             value={workVelocity}
-                            onIconClick={() => actions.computeWorkVelocity(dispatch)}
-                            onChange={e => actions.setWorkVelocity(dispatch, e.target.value)}>
+                            onIconClick={() => actions.computeWorkVelocity(dispatch, arcState.nozzleData)}
+                            onChange={e => actions.setWorkVelocity(dispatch, parseFloat(e.target.value))}>
                         </Input>        
                     </Col>
                     <Col width="20" style={{paddingTop:"5px", marginRight:"10px"}}>
@@ -98,8 +97,8 @@ const Params = props => {
                             unit="bar"
                             icon={iconPressure}
                             value={workPressure}
-                            onIconClick={()=>actions.computeWorkPressure(dispatch)}
-                            onChange={e => actions.setWorkPressure(dispatch, e.target.value)}>
+                            onIconClick={()=>actions.computeWorkPressure(dispatch, arcState.nozzleData)}
+                            onChange={e => actions.setWorkPressure(dispatch, parseFloat(e.target.value))}>
                         </Input>
                     </Col>
                 </Row>
@@ -120,8 +119,8 @@ const Params = props => {
                             unit="l/ha"
                             icon={iconVolume}
                             value={workVolume}
-                            onIconClick={()=>actions.computeWorkVolume(dispatch)}
-                            onChange={e => actions.setWorkVolume(dispatch, e.target.value)}>
+                            onIconClick={()=>actions.computeWorkVolume(dispatch, arcState.nozzleData)}
+                            onChange={e => actions.setWorkVolume(dispatch, parseFloat(e.target.value))}>
                         </Input>
                     </Col>
                     <Col width="20" style={{paddingTop:"5px", marginRight:"10px"}}>
@@ -149,7 +148,7 @@ const Params = props => {
                             unit="m³/h"                            
                             icon={iconAir}
                             value={airFlow}
-                            onChange={e => actions.setAirFlow(dispatch, e.target.value)}>
+                            onChange={({target:{name, value}}) => actions.setParameter(dispatch, name, parseFloat(value))}>
                         </Input>
                     </Col>
                     <Col width="20" style={{paddingTop:"5px", marginRight:"10px"}}>
@@ -160,7 +159,7 @@ const Params = props => {
                 </Row>
                 {airVelocity && <div slot="list">
                     <span style={{fontSize: "0.85em", color: "rgb(100, 100, 100)", marginLeft: "50px"}}>
-                        Velocidad de aire: {model.airVelocity} m/s
+                        Velocidad de aire: {airVelocity} m/s
                     </span>
                 </div>}
 

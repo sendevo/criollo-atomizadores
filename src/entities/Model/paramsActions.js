@@ -1,13 +1,13 @@
-export const setRowSeparation = (dispatch, value) => {    
+export const setParameter = (dispatch, name, value) => {
     return dispatch({
-        type: "SET_ROW_SEPARATION",
-        payload: value
+        type: "SET_PARAMETER",
+        payload:{name,value}
     });
 };
 
-export const setArcNumber = (dispatch, value) => {
+export const setRowSeparation = (dispatch, value) => {
     return dispatch({
-        type: "SET_ARC_NUMBER",
+        type: "SET_ROW_SEPARATION",
         payload: value
     });
 };
@@ -19,9 +19,10 @@ export const setWorkVelocity = (dispatch, value) => {
     });
 };
 
-export const computeWorkVelocity = (dispatch) => {
+export const computeWorkVelocity = (dispatch, value) => {
     return dispatch({
-        type: "COMPUTE_WORK_VELOCITY"
+        type: "COMPUTE_WORK_VELOCITY",
+        payload: value
     });
 };
 
@@ -32,15 +33,23 @@ export const setWorkPressure = (dispatch, value) => {
     });
 };
 
-export const computeWorkPressure = (dispatch) => {
+export const computeWorkPressure = (dispatch, value) => {
     return dispatch({
-        type: "COMPUTE_WORK_PRESSURE"
+        type: "COMPUTE_WORK_PRESSURE",
+        payload: value
     });
 };
 
 export const setWorkVolume = (dispatch, value) => {
     return dispatch({
         type: "SET_WORK_VOLUME",
+        payload: value
+    });
+};
+
+export const computeWorkVolume = (dispatch, value) => {
+    return dispatch({
+        type: "COMPUTE_WORK_VOLUME",
         payload: value
     });
 };

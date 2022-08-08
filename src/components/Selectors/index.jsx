@@ -4,12 +4,16 @@ import typeBTree from "../../assets/icons/tree_type_b.png";
 import typeCTree from "../../assets/icons/tree_type_c.png";
 
 
-const NozzleSeparationSelector = props => {
+const NozzleSeparationSelector = ({name, value, disabled, onChange}) => {
 
-    const setValue = (el, value) => {
-        if(el.target.checked){
-            props.onChange(value);
-        }
+    const setValue = (el, val) => {
+        if(el.target.checked)
+            onChange({
+                target:{
+                    name, 
+                    value: val
+                }
+            });
     };
 
     return (
@@ -18,23 +22,23 @@ const NozzleSeparationSelector = props => {
             <Row>
                 <Col style={{textAlign:"center"}}>
                     <Radio 
-                        disabled={props.disabled}
+                        disabled={disabled}
                         name="input-type" 
-                        checked={props.value===0.35} 
+                        checked={value===0.35} 
                         onChange={e=>setValue(e,0.35)}/> 0,35 m
                 </Col>
                 <Col style={{textAlign:"center"}}>
                     <Radio 
-                        disabled={props.disabled}
+                        disabled={disabled}
                         name="input-type" 
-                        checked={props.value===0.52} 
+                        checked={value===0.52} 
                         onChange={e=>setValue(e,0.52)}/> 0,52 m
                 </Col>
                 <Col style={{textAlign:"center"}}>
                     <Radio 
-                        disabled={props.disabled}
+                        disabled={disabled}
                         name="input-type" 
-                        checked={props.value===0.7} 
+                        checked={value===0.7} 
                         onChange={e=>setValue(e,0.7)}/> 0,7 m
                 </Col>
             </Row>
@@ -51,7 +55,7 @@ const label = {
     color: "#777777"
 };
 
-const PresentationSelector = props => (
+const PresentationSelector = ({name, value, disabled, onChange}) => (
     <div>
         <Row style={{fontSize:"0.8em", marginBottom: 5, marginTop: 10}}>
             <Col width={50}>
@@ -69,38 +73,42 @@ const PresentationSelector = props => (
             <Col  width={25}>
                 <Radio 
                     name="input-type" 
-                    checked={props.value === 0} 
-                    onChange={e=>props.onChange(0)}/> ml/ha
+                    checked={value === 0} 
+                    onChange={e=>onChange(0)}/> ml/ha
             </Col>
             <Col width={25}>
                 <Radio 
                     name="input-type" 
-                    checked={props.value === 2} 
-                    onChange={e=>props.onChange(2)}/> ml/100l
+                    checked={value === 2} 
+                    onChange={e=>onChange(2)}/> ml/100l
             </Col>
             <Col  width={25}>
                 <Radio 
                     name="input-type" 
-                    checked={props.value === 1} 
-                    onChange={e=>props.onChange(1)}/> gr/ha
+                    checked={value === 1} 
+                    onChange={e=>onChange(1)}/> gr/ha
             </Col>
             <Col width={25}>
                 <Radio 
                     name="input-type" 
-                    checked={props.value === 3} 
-                    onChange={e=>props.onChange(3)}/> gr/100l
+                    checked={value === 3} 
+                    onChange={e=>onChange(3)}/> gr/100l
             </Col>
         </Row>
     </div>
 );
 
 
-const ElapsedSelector = props => {
+const ElapsedSelector = ({name, value, disabled, onChange}) => {
 
-    const setElapsed = (el, value) => {
-        if(el.target.checked){
-            props.onChange(value);
-        }
+    const setElapsed = (el, val) => {
+        if(el.target.checked)
+            onChange({
+                target:{
+                    name, 
+                    value: val
+                }
+            });
     };
 
     return (
@@ -109,23 +117,23 @@ const ElapsedSelector = props => {
             <Row>
                 <Col style={{textAlign:"center"}}>
                     <Radio 
-                        disabled={props.disabled}
+                        disabled={disabled}
                         name="input-type" 
-                        checked={props.value===30000} 
+                        checked={value===30000} 
                         onChange={e=>setElapsed(e,30000)}/> 30 seg.
                 </Col>
                 <Col style={{textAlign:"center"}}>
                     <Radio 
-                        disabled={props.disabled}
+                        disabled={disabled}
                         name="input-type" 
-                        checked={props.value===60000} 
+                        checked={value===60000} 
                         onChange={e=>setElapsed(e,60000)}/> 60 seg.
                 </Col>
                 <Col style={{textAlign:"center"}}>
                     <Radio 
-                        disabled={props.disabled}
+                        disabled={disabled}
                         name="input-type" 
-                        checked={props.value===90000} 
+                        checked={value===90000} 
                         onChange={e=>setElapsed(e,90000)}/> 90 seg.
                 </Col>
             </Row>
@@ -142,12 +150,16 @@ const iconStyle = {
     height: "60px"
 }
 
-const TreeTypeSelector = props => {
+const TreeTypeSelector = ({name, value, disabled, onChange}) => {
 
-    const setType = (el, value) => {
-        if(el.target.checked){
-            props.onChange(value);
-        }
+    const setType = (e, val) => {
+        if(e.target.checked)
+            onChange({
+                target:{
+                    name, 
+                    value: val
+                }
+            });
     };
 
     return (
@@ -156,25 +168,25 @@ const TreeTypeSelector = props => {
             <Row>
                 <Col style={{textAlign:"center"}}>
                     <Radio 
-                        disabled={props.disabled}
+                        disabled={disabled}
                         name="input-type" 
-                        checked={props.value==="type_a"} 
+                        checked={value==="type_a"} 
                         onChange={e=>setType(e,"type_a")}/> 
                     <img src={typeATree} alt="" style={iconStyle}/>
                 </Col>
                 <Col style={{textAlign:"center"}}>
                     <Radio 
-                        disabled={props.disabled}
+                        disabled={disabled}
                         name="input-type" 
-                        checked={props.value==="type_b"} 
+                        checked={value==="type_b"} 
                         onChange={e=>setType(e,"type_b")}/> 
                     <img src={typeBTree} alt="" style={iconStyle}/>
                 </Col>
                 <Col style={{textAlign:"center"}}>
                     <Radio 
-                        disabled={props.disabled}
+                        disabled={disabled}
                         name="input-type" 
-                        checked={props.value==="type_c"} 
+                        checked={value==="type_c"} 
                         onChange={e=>setType(e,"type_c")}/> 
                     <img src={typeCTree} alt="" style={iconStyle}/>
                 </Col>
@@ -184,4 +196,9 @@ const TreeTypeSelector = props => {
 };
 
 
-export { NozzleSeparationSelector, PresentationSelector, ElapsedSelector, TreeTypeSelector };
+export { 
+    NozzleSeparationSelector, 
+    PresentationSelector, 
+    ElapsedSelector, 
+    TreeTypeSelector 
+};

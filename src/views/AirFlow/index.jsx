@@ -1,4 +1,8 @@
+import { useContext } from "react";
 import { Page, Navbar, Block, List, Row, Col, Button } from "framework7-react";
+import { ModelStateContext, ModelDispatchContext } from '../../context/ModelContext';
+import { setParameter } from '../../entities/Model/paramsActions';
+import { computeAirVelocity } from "../../entities/API";
 import Input from "../../components/Input";
 import { BackButton } from '../../components/Buttons';
 import Toast from '../../components/Toast';
@@ -8,13 +12,33 @@ import iconWind from "../../assets/icons/velocidad_aire.png";
 
 const AirFlow = props => {
 
-    const handleInputChange = e => {
-        const value = parseFloat(e.target.value);
-        console.log(value)
+    const state = useContext(ModelStateContext);
+    const dispatch = useContext(ModelDispatchContext);
+
+    const {
+        expansionFactor,
+        turbineSection,
+        airFlow
+    } = state;
+
+    let airVel;
+    try{
+        airVel = computeAirVelocity({
+            turbineSection,
+            airFlow,
+            F: expansionFactor
+        });
+    }catch(e){
+        Toast("error", e.message);
+    }
+
+    const handleInputChange = ({target:{name, value}}) => {
+        const val = parseFloat(value);
+        setParameter(dispatch, name, val);
     };
 
     const exportData = () => {
-        
+        setParameter(dispatch, "airVelocity", airVel);
         props.f7router.back();
     };
 
@@ -29,7 +53,7 @@ const AirFlow = props => {
                             name="expansionFactor"
                             type="number"
                             icon={iconFactor}
-                            
+                            value={expansionFactor}
                             onChange={handleInputChange}>
                         </Input>
                         <Input
@@ -38,7 +62,7 @@ const AirFlow = props => {
                             type="number"
                             unit="m²"
                             icon={iconSection}
-                            
+                            value={turbineSection}
                             onChange={handleInputChange}>
                         </Input>
                         <Input
@@ -47,6 +71,7 @@ const AirFlow = props => {
                             type="number"
                             unit="m/s"
                             readonly
+                            value={airVel}
                             icon={iconWind}>
                         </Input>
                     </Row>

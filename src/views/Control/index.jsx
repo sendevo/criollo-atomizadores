@@ -11,6 +11,7 @@ import Timer from "../../entities/Timer";
 import Toast from "../../components/Toast";
 import { ElapsedSelector } from "../../components/Selectors";
 import { ArcStateContext } from "../../context/ArcConfigContext.jsx";
+import { ModelStateContext } from "../../context/ModelContext.jsx";
 import NozzlesControlTable from "../../components/NozzlesControlTable";
 import oneSfx from '../../assets/sounds/uno.mp3';
 import twoSfx from '../../assets/sounds/dos.mp3';
@@ -31,7 +32,7 @@ const OutputBlock = props => (
     </Block>
 );
 
-const TimerBlock = () => {
+const TimerBlock = ({onTimeout}) => {
     const [elapsed, setElapsed] = useState(30000);
     const [time, setTime] = useState(30000); 
     const [running, setRunning] = useState(false);        
@@ -42,7 +43,7 @@ const TimerBlock = () => {
     const [play1] = useSound(oneSfx);
     const [play0] = useSound(readySfx);
     
-    const handleElapsedChange = value => {
+    const handleElapsedChange = ({target:{name, value}}) => {
         timer.setInitial(value);        
         setTime(value);
         setElapsed(value);
@@ -53,16 +54,17 @@ const TimerBlock = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const onTimeout = () => {
+    const timeout = () => {
         KeepAwake.allowSleep();
         setRunning(false);        
         setTime(elapsed);
+        onTimeout();
     };
 
     const toggleRunning = () => {
-        if(!running){
+        if(!running){ // Start
             timer.onChange = setTime;
-            timer.onTimeout = onTimeout;
+            timer.onTimeout = timeout;
             timer.clear();
             timer.start();
             KeepAwake.keepAwake()                
@@ -71,7 +73,7 @@ const TimerBlock = () => {
                 console.log(err);                    
             });
             setRunning(true);
-        }else{
+        }else{ // Reset
             timer.stop();
             timer.clear();
             setTime(elapsed);            
@@ -80,7 +82,7 @@ const TimerBlock = () => {
                 console.log("Error de KeepAwake");
                 console.log(err);                    
             });
-            setRunning(false);
+            setRunning(false);            
         }
     };
 
@@ -98,8 +100,11 @@ const TimerBlock = () => {
     };
 
     return (
-        <Block>
-            <ElapsedSelector value={elapsed} disabled={running} onChange={handleElapsedChange}/>
+        <Block style={{margin:"0px!important"}}>
+            <ElapsedSelector 
+                value={elapsed} 
+                disabled={running} 
+                onChange={handleElapsedChange}/>
 
             <Block style={{marginTop:"20px", textAlign:"center"}} className="help-target-control-play">
                 <p style={{fontSize:"50px", margin:"0px"}}>{getTime()} <PlayButton onClick={toggleRunning} running={running} /></p>
@@ -107,7 +112,6 @@ const TimerBlock = () => {
         </Block>
     );
 }
-
 
 
 const Control = props => {
@@ -159,10 +163,10 @@ const Control = props => {
         return {updated: false};
     };
 
-    const updateData = newData => {        
+    const updateData = newData => {
         model.update("collectedData", newData);
         if(newData.every(d => d.updated)){ // Verificacion completada
-            try{                
+            try{
                 const effectiveVolume = API.computeEffectiveVolume({
                     collectedData: newData,
                     Vt: model.workVelocity,
@@ -202,7 +206,7 @@ const Control = props => {
         <Page>
             <Navbar title="Verificación de picos" style={{maxHeight:"40px", marginBottom:"0px"}}/>      
             
-            <TimerBlock />
+            <TimerBlock onTimeout={()=>console.log("Timeout")}/>
             
             <ArcConfigDisplay 
                 disabled={model.arcNumber === 1}

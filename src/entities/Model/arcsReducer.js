@@ -85,9 +85,13 @@ export const reducer = (state = initialState, action) => {
                 if(arcs){
                     const arcIndex = arcs.findIndex(el => el.id === state.id);
                     if(arcIndex !== -1){                        
-                        arcs[arcIndex] = state;
+                        arcs[arcIndex] = {
+                            ...state,
+                            name: action.payload || state.name
+                        };
                         saveData("arcs", arcs);
                     }
+                    return arcs[arcIndex];
                 }
                 return state;
             }else{ // Guardar nuevo

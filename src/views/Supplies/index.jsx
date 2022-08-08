@@ -264,7 +264,9 @@ const Supplies = props => {
                                         onChange={v=>setProductParams(index, "dose", parseFloat(v.target.value))}
                                         ></Input>
                                 </List>
-                                <PresentationSelector value={p.presentation} onChange={v=>{setProductParams(index, "presentation", v)}}/>
+                                <PresentationSelector 
+                                    value={p.presentation} 
+                                    onChange={e=>{setProductParams(index, "presentation", e.target.value)}}/>
                             </CardContent>                    
                         </Card>
                     ))

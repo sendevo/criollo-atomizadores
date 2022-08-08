@@ -1,6 +1,8 @@
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import { Page, Navbar, Block, BlockTitle, List, Row, Col, Button } from "framework7-react";
-import * as API from '../../entities/API';
+import { computeVaFromTRV } from '../../entities/API';
+import { ModelStateContext, ModelDispatchContext } from '../../context/ModelContext';
+import { setParameter, setWorkVolume } from '../../entities/Model/paramsActions';
 import { TreeTypeSelector } from "../../components/Selectors";
 import Input from "../../components/Input";
 import { BackButton } from '../../components/Buttons';
@@ -19,15 +21,8 @@ const colStyle = {
 
 const Trv = props => {
 
-    const model = {};
-
-    const [inputs, setInputs] = useState({
-        plantType: model.plantType || "type_a",
-        rowSeparation: model.rowSeparation || 2.5,
-        plantHeight: model.plantHeight || 2,
-        plantWidth: model.plantWidth || 1,
-        greenIndex: model.greenIndex || 1
-    });
+    const state = useContext(ModelStateContext);
+    const dispatch = useContext(ModelDispatchContext);
 
     const {
         plantType,
@@ -35,12 +30,12 @@ const Trv = props => {
         plantHeight,
         plantWidth,
         greenIndex
-    } = inputs;
+    } = state;
 
     // Calcular resultados en cada render
     let dose;
     try{
-        dose = API.computeVaFromTRV({
+        dose = computeVaFromTRV({
             D: rowSeparation,
             r: plantType,
             h: plantHeight,
@@ -51,29 +46,18 @@ const Trv = props => {
         Toast("error", e.message);
     }
 
-    const handleInputChange = e => {
-        const value = parseFloat(e.target.value);
-        setInputs({
-            ...inputs,
-            [e.target.name]: value,
-        });
-        if(value)
-            model.update(e.target.name, value);
-    };
-
-    const handlePlantTypeChange = value => {
-        setInputs({
-            ...inputs,
-            plantType: value,
-        });
-        model.update("plantType", value);
+    const handleInputChange = ({target:{name, value}}) => {
+        if(name == "plantType")
+            setParameter(dispatch, "plantType", value);
+        else{
+            const v = parseFloat(value);
+            if(value)
+                setParameter(dispatch, name, v);
+        }
     };
 
     const exportData = () => {
-        model.update({
-            workVolume: dose,
-            trvMeasured: true
-        });
+        setWorkVolume(dispatch, dose);
         props.f7router.back();
     };
 
@@ -82,7 +66,10 @@ const Trv = props => {
             <Navbar title="Cálculo TRV" style={{maxHeight:"40px", marginBottom:"0px"}}/>      
             <Block style={{marginTop:0, padding:0}}>
                 
-                <TreeTypeSelector value={plantType} onChange={handlePlantTypeChange}/>
+                <TreeTypeSelector 
+                    name="plantType"
+                    value={plantType} 
+                    onChange={handleInputChange}/>
 
                 <BlockTitle>Parámetros de la planta</BlockTitle>
 
