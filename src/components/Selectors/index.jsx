@@ -111,7 +111,7 @@ export const ElapsedSelector = ({name, value, disabled, onChange}) => {
     };
 
     return (
-        <Block style={{margin:"0px"}} className="help-target-control-sampling">
+        <Block style={{margin:"0px"}} className="help-target-control_sampling">
             <BlockTitle>Tiempo de muestreo</BlockTitle>
             <Row>
                 <Col style={{textAlign:"center"}}>

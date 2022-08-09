@@ -11,7 +11,7 @@ import {
     Card, 
     CardContent
 } from 'framework7-react';
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import { ModelStateContext } from '../../context/ModelContext';
 import { SuppliesStateContext, SuppliesDispatchContext } from '../../context/SuppliesContext';
 import * as actions from '../../entities/Model/suppliesActions.js';
@@ -30,6 +30,8 @@ import iconCapacity from '../../assets/icons/capacidad_carga.png';
 const Supplies = props => {
 
     const { workVolume } = useContext(ModelStateContext);
+    // El volumen de aplicacion debe editarse por separado
+    const [workVolume2, setWorkVolume2] = useState(workVolume);
 
     const {
         lotName,
@@ -43,16 +45,45 @@ const Supplies = props => {
 
     const dispatch = useContext(SuppliesDispatchContext);
 
-    const submit = () => {
-        actions.getSuppliesList(dispatch, workVolume);
+    const handleWorkVolumeChange = e => {
+        const value = parseFloat(e.target.value);
+        if(value){
+            actions.setParameter(dispatch, 'workVolume', value);
+            setWorkVolume2(value);
+        }
     };
+
+    const submit = () => {
+        // La variable workVolume de SuppliesStateContext se actualiza al cambiar workVolume2,
+        // pero si se deja con el valor original de workVolume de ModelStateContext, vale "".
+        // Por lo tanto, debe actualizarse antes de ir a la vista de resumen de insumos.
+        if(workVolume === workVolume2){
+            actions.setParameter(dispatch, 'workVolume', workVolume);
+        }
+        actions.getSuppliesList(dispatch, workVolume2);
+    };
+
+    if(window.walkthrough){
+        if(window.walkthrough.running){
+            window.walkthrough.callbacks["supplies_capacity"] = () => {
+                actions.setParameter(dispatch, 'lotName', 'Lote 1');
+                actions.setParameter(dispatch, 'workArea', '10');
+                actions.setParameter(dispatch, 'capacity', '1000');
+            };
+            window.walkthrough.callbacks["supplies_add"] = () => {
+                actions.newProduct(dispatch);
+                actions.setProductParams(dispatch, 0, {name: "Producto 1"});
+                actions.setProductParams(dispatch, 0, {dose: 100});
+            };
+        }
+    }
 
     return (
         <Page>            
             <Navbar title="Calculador de insumos" style={{maxHeight:"40px", marginBottom:"0px"}}/>      
             <BlockTitle 
                 style={{marginBottom:"0px", marginTop: "0px"}}
-                className="help-target-supplies-form">
+                className="help-target-supplies_form">
                     Datos del lote
             </BlockTitle>
             <List form noHairlinesMd style={{marginBottom:"10px", paddingLeft:"10px"}}>    
@@ -78,7 +109,7 @@ const Supplies = props => {
                 <div 
                     slot="list" 
                     style={{paddingLeft: 30, paddingBottom: 10}}
-                    className="help-target-supplies-gps">
+                    className="help-target-supplies_gps">
                     <Checkbox
                         checked={gpsEnabled}
                         onChange={v=>actions.toggleGPS(dispatch, v.target.checked)}/>
@@ -86,21 +117,19 @@ const Supplies = props => {
                 </div>
             </List>
 
-            <BlockTitle style={{marginBottom:"0px", marginTop: "20px"}} className="help-target-supplies-capacity">Datos de aplicación</BlockTitle>
+            <BlockTitle style={{marginBottom:"0px", marginTop: "20px"}} className="help-target-supplies_capacity">Datos de aplicación</BlockTitle>
             <List form noHairlinesMd style={{marginBottom:"10px", paddingLeft:"10px"}}>
-                <Input
-                    className="help-target-load-number"
+                <Input                    
                     slot="list"
                     label="Volumen de aplicación"
                     name="capacity"
                     type="number"
                     unit="l/ha"
                     icon={iconVolume}
-                    value={workVolume}
-                    onChange={v=>actions.setParameter(dispatch,'workVolume', parseFloat(v.target.value))}
+                    value={workVolume2}
+                    onChange={handleWorkVolumeChange}
                     ></Input>
-                <Input
-                    className="help-target-load-number"
+                <Input                    
                     slot="list"
                     label="Capacidad de carga"
                     name="capacity"
@@ -113,7 +142,7 @@ const Supplies = props => {
                 <div 
                     slot="list" 
                     style={{paddingLeft: 30, paddingBottom: 10}}
-                    className="help-target-supplies-balancing">
+                    className="help-target-supplies_balancing">
                     <Checkbox
                         checked={loadBalancingEnabled}
                         onChange={v=>actions.setParameter(dispatch,'loadBalancingEnabled', v.target.checked)}/>
@@ -121,7 +150,7 @@ const Supplies = props => {
                 </div>
             </List>
             <Block style={{marginTop: "0px", marginBottom: "0px"}}>
-                <BlockTitle className="help-target-supplies-add" style={{marginBottom:"0px", marginTop: "0px"}}>Lista de insumos</BlockTitle>
+                <BlockTitle className="help-target-supplies_add" style={{marginBottom:"0px", marginTop: "0px"}}>Lista de insumos</BlockTitle>
                 {
                     products.map((p, index) =>(
                         <Card key={p.key} style={{margin:"0px 0px 10px 0px"}}>
@@ -168,7 +197,7 @@ const Supplies = props => {
             <Block style={{margin:0}}>
                 <AddButton onClick={() => actions.newProduct(dispatch)}/>
             </Block>
-            <Row style={{marginBottom:"15px"}} className="help-target-supplies-results">
+            <Row style={{marginBottom:"15px"}} className="help-target-supplies_results">
                 <Col width={20}></Col>
                 <Col width={60}>
                     <Button fill onClick={submit} style={{textTransform:"none"}}>Calcular insumos</Button>

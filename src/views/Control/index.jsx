@@ -28,7 +28,7 @@ const timer = new Timer(0, true);
 const OutputBlock = props => (
     props.outputs.ready && 
     <Block className={classes.OutputBlock}>
-        <p className="help-target-control-results"><b>Resultados lado {props.side === 'left' ? 'izquierdo' : 'derecho'}</b></p>
+        <p className="help-target-control_results"><b>Resultados lado {props.side === 'left' ? 'izquierdo' : 'derecho'}</b></p>
         <p>Volumen pulverizado efectivo: {formatNumber(props.outputs.effectiveSprayVolume)} l/ha</p>
         <p>Diferencia: {formatNumber(props.outputs.diff)} l/ha ({formatNumber(props.outputs.diffp)} %)</p>
     </Block>
@@ -107,7 +107,7 @@ const TimerBlock = ({value, setValue, onTimeout}) => {
                 disabled={running} 
                 onChange={e => handleElapsedChange(e.target.value)}/>
 
-            <Block style={{marginTop:"20px", textAlign:"center"}} className="help-target-control-play">
+            <Block style={{marginTop:"20px", textAlign:"center"}} className="help-target-control_play">
                 <p style={{fontSize:"50px", margin:"0px"}}>{getTime()} <PlayButton onClick={toggleRunning} running={running} /></p>
             </Block>
         </Block>
@@ -217,6 +217,50 @@ const Control = props => {
         f7.panel.open();
     };
 
+    if(window.walkthrough){
+        if(window.walkthrough.running){
+            window.walkthrough.callbacks["control_table"] = () => {
+                updateData([
+                    {
+                        value: 0.31,
+                        updated: true, 
+                        ef: 0.62, 
+                        s: -5.08, 
+                        ok: true
+                    },
+                    {
+                        value: 0.4, 
+                        updated: true, 
+                        ef: 0.8, 
+                        s: 22.47, 
+                        ok: false
+                    },
+                    {
+                        value: 0.29, 
+                        updated: true, 
+                        ef: 0.58, 
+                        s: -11.21, 
+                        ok: false
+                    },
+                    {
+                        value: 0.3, 
+                        updated: true, 
+                        ef: 0.6, 
+                        s: -8.14, 
+                        ok: true
+                    },
+                    {
+                        value: 0.35, 
+                        updated: true, 
+                        ef: 0.7, 
+                        s: -7.17, 
+                        ok: true
+                    }
+                ])
+            };
+        }
+    }
+
     return (
         <Page>
             <Navbar title="Verificación de picos" style={{maxHeight:"40px", marginBottom:"0px"}}/>      
@@ -243,7 +287,7 @@ const Control = props => {
             <OutputBlock outputs={outputs.right} side={'right'}/>
             <OutputBlock outputs={outputs.left} side={'left'}/>
             
-            <Row style={{marginTop:30, marginBottom: 20}} className="help-target-control-reports">
+            <Row style={{marginTop:30, marginBottom: 20}} className="help-target-control_reports">
                 <Col width={20}></Col>
                 <Col width={60}>
                     <Button fill style={{textTransform:"none"}} onClick={addToReport}>

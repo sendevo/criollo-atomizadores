@@ -1,11 +1,12 @@
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import { f7, Page, Navbar, List, Link, Row, Col, Button } from "framework7-react";
 import { ArcStateContext, ArcDispatchContext } from '../../context/ArcConfigContext';
 import {
     setNozzleMenuValue,
     setNozzles,
     saveArc,
-    setNozzleCnt
+    setNozzleCnt,
+    setSelectedAll
 } from '../../entities/Model/arcsActions';
 import moment from 'moment';
 import Input from "../../components/Input";
@@ -21,7 +22,7 @@ const ArcConfig = props => {
     // Datos para la tabla de picos
     const dispatch = useContext(ArcDispatchContext);
     const state = useContext(ArcStateContext);
-    const { nozzleData, selection } = state;    
+    const { nozzleData, selection } = state;
         
     const onNozzleModelSelected = (selection, nozzle) => { // Callback eleccion de parametros de pico
         setNozzleMenuValue(dispatch, selection); // Actualizar valor del selector de modelos
@@ -41,13 +42,40 @@ const ArcConfig = props => {
         }, null, state.id ? state.name : "Config "+moment(Date.now()).format("DD-MM-YYYY HH-mm"));
     };
 
+    if(window.walkthrough){
+        if(window.walkthrough.running){
+            window.walkthrough.callbacks["nozzle_cnt"] = () => {
+                setNozzleCnt(dispatch, 5);
+            };
+
+            window.walkthrough.callbacks["nozzle_config"] = () => {
+                setSelectedAll(dispatch, true);
+                setNozzles(dispatch, {
+                    "id": "iso02",
+                    "name": "020 Amarillo",
+                    "long_name": "ISO 020 Amarillo",
+                    "img": "iso02",
+                    "b": 0,
+                    "c": 0.4619,
+                    "Pnom": 3,
+                    "Qnom": 0.8
+                });
+            };
+
+            window.walkthrough.callbacks["arc_save"] = () => {
+                setSelectedAll(dispatch, false);
+                saveArc(dispatch, "Ejemplo de config.");
+            };
+        }
+    }
+
     return (
         <Page>
             <Navbar title="Configuración del arco" style={{maxHeight:"40px", marginBottom:"0px"}}/>      
             
             <Row>
                 <Col width={80}>
-                    <List form noHairlinesMd style={{marginBottom:"20px", marginTop: "0px"}} className="help-target-control-nozzles">    
+                    <List form noHairlinesMd style={{marginBottom:"20px", marginTop: "0px"}} className="help-target-nozzle_cnt">    
                         <Input
                             slot="list"
                             label="Cantidad de picos"
@@ -82,7 +110,9 @@ const ArcConfig = props => {
                     selection={selection} />
             }
 
-            <Row style={{marginTop:"5px", marginBottom: "20px"}}>
+            <Row
+                className='help-target-arc_save' 
+                style={{marginTop:"5px", marginBottom: "20px"}}>
                 <Col width={20}></Col>
                 <Col width={60}>
                     <Button 

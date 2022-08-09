@@ -17,7 +17,7 @@ const ArcTable = () => {
         {
             nozzleData?.length > 0 ?
             <div>
-                <div className="help-target-control-table">
+                <div className="help-target-nozzle_config">
                     <table className={["data-table", classes.Table].join(' ')} >
                         <colgroup>
                             <col span={1} style={{width: "15%"}} />

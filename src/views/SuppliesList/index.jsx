@@ -3,7 +3,6 @@ import React, { useContext, useState } from 'react';
 import { SuppliesStateContext } from '../../context/SuppliesContext';
 import { ReportsDispatchContext } from '../../context/ReportsContext';
 import { addSupplies } from '../../entities/Model/reportsActions';
-import { ModelStateContext } from '../../context/ModelContext';
 import { BackButton } from '../../components/Buttons';
 import Input from '../../components/Input';
 import { SuppliesTable, PrescriptionTable } from '../../components/SuppliesTable';
@@ -16,12 +15,13 @@ const SuppliesList = props => {
     const {
         lotName,
         workArea,
+        workVolume,
         lotCoordinates,
         loadBalancingEnabled,
         supplies,
         capacity
     } = useContext(SuppliesStateContext);
-    const { workVolume } = useContext(ModelStateContext);
+    
     const dispatch = useContext(ReportsDispatchContext);
     
     const [comments, setComments] = useState('');

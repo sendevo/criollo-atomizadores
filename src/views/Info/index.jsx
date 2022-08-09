@@ -1,5 +1,3 @@
-import { useContext } from 'react';
-import { WalkthroughCtx } from '../../context/WalkthroughContext';
 import { Page, Link, PageContent, Block } from 'framework7-react';
 import logoInta from '../../assets/backgrounds/logoInta.png';
 import logoMin from '../../assets/backgrounds/logomin.png';
@@ -8,14 +6,11 @@ import classes from '../style.module.css';
 
 
 const Info = props => {
-
-    const wlk = useContext(WalkthroughCtx);
-
     return (
         <Page name="info" className={classes.InfoPage}>
             <PageContent>
                 <Block className={classes.ButtonContainer}>
-                    <Link className={classes.MenuButton} onClick={()=>wlk.start()}>
+                    <Link className={classes.MenuButton} onClick={()=>window?.walkthrough?.start()}>
                         <p>Iniciar ayuda</p>
                     </Link>
                     <Link external rel="noopener noreferrer" target="_blank" href="https://inta.gob.ar/documentos/campero-y-criollo-informacion-y-novedades-para-usuarios" className={[classes.MenuButton]}>

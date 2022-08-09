@@ -6,6 +6,7 @@ import Toast from "../../components/Toast";
 export const initialState = {
     lotName: "", // Nombre del lote
     workArea: "", // Superficie de lote
+    workVolume: "", // Volumen de aplicacion
     lotCoordinates: "", // Coordenadas del lote
     gpsEnabled: false, // Habilitacion coordenadas lote
     loadBalancingEnabled: true, // Habilitacion balanceo de carga

@@ -48,13 +48,21 @@ const Params = props => {
         f7.panel.open();
     };
 
+    if(window.walkthrough){
+        if(window.walkthrough.running){
+            window.walkthrough.callbacks["params_2"] = () => {
+                actions.computeWorkVelocity(paramsDispatch, nozzleData);
+            };
+        }
+    }
+
     return (
         <Page>
             <Navbar title="Parámetros de aplicación" style={{maxHeight:"40px", marginBottom:"0px"}}/>            
             
             <BlockTitle style={{marginBottom: 5, marginTop:0}}>Ancho de calle</BlockTitle>
 
-            <List form noHairlinesMd style={{margin: "0px!important", padding:"0px 20px"}}>    
+            <List form noHairlinesMd style={{margin: "0px!important", padding:"0px 20px"}} className="help-target-row_separation">    
                 <Input                    
                     slot="list"
                     label="Distancia entre filas"
@@ -69,7 +77,7 @@ const Params = props => {
 
             <BlockTitle style={{marginBottom: 5}}>Configuración del arco</BlockTitle>
             
-            <center>
+            <center className="help-target-arc_config">
                 <ArcConfigInput 
                     arcNumber={arcNumber}
                     onArcNumberToggle={()=>actions.setParameter(paramsDispatch, "arcNumber", arcNumber === 1 ? 2 : 1)}
@@ -79,7 +87,7 @@ const Params = props => {
 
             <BlockTitle style={{marginBottom: "5px"}}>Parámetros de aplicación</BlockTitle>
             <List form noHairlinesMd style={{marginBottom:"10px", paddingLeft:"10px"}}>
-                <Row slot="list" className="help-target-params-1 help-target-params-2">
+                <Row slot="list" className="help-target-params_1 help-target-params_2">
                     <Col width="80">
                         <Input
                             slot="list"
@@ -138,7 +146,10 @@ const Params = props => {
                             onChange={e => actions.setWorkVolume(paramsDispatch, parseFloat(e.target.value))}>
                         </Input>
                     </Col>
-                    <Col width="20" style={{paddingTop:"5px", marginRight:"10px"}}>
+                    <Col
+                        className='help-target-params_3' 
+                        width="20" 
+                        style={{paddingTop:"5px", marginRight:"10px"}}>
                         <LinkButton href="/trv/" tooltip="Calcular TRV" >
                             <FaTree size={20}/>
                         </LinkButton>
@@ -182,7 +193,7 @@ const Params = props => {
 
             <Row style={{marginTop:20, marginBottom: 20}}>
                 <Col width={20}></Col>
-                <Col width={60} className="help-target-params-report">
+                <Col width={60} className="help-target-params_report">
                     <Button 
                         fill    
                         style={{textTransform:"none"}} 

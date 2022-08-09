@@ -1,20 +1,17 @@
-import { useContext } from 'react';
 import {Block, Row, Button, BlockTitle} from 'framework7-react';
-import { WalkthroughCtx } from '../../context/WalkthroughContext';
+import WalkthroughModel from '../../entities/Walkthrough';
+
+window.walkthrough = new WalkthroughModel();
 
 const Popovers = () => {
-    const wlk = useContext(WalkthroughCtx);
-    //const len = wlk.steps.length;
-    const len = 0;
-
-    return null;
-
-    /*
+    const wlk = window.walkthrough;
+    const len = wlk?.steps?.length;
+    
     return (
         <>
             {
-            wlk.steps.map((step, index) => (
-                <div className={`popover ios ${step.popover_el}`} key={step.key}>
+            len > 0 && wlk.steps.map((step, index) => (
+                <div className={`popover ios help-popover-${step.key}`} key={step.key}>
                     <div className={`popover-angle ${step.angle ? step.angle : "on-top"}`} style={{left:"50%"}}></div>
                     <Block>
                         <BlockTitle>Paso {index+1} de {len}</BlockTitle>
@@ -35,7 +32,6 @@ const Popovers = () => {
             }
         </>
     );
-    */
 };
 
 export default Popovers;

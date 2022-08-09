@@ -1,7 +1,13 @@
 
 export const set2Decimals = value => Math.round(value*100)/100;
 
-export const formatNumber = (value, decimals=2) => value?.toFixed(decimals)?.replace('.',',');
+export const formatNumber = (value, decimals=2) => {
+    if(Number.isFinite(value)){
+        return value.toFixed(decimals).replace('.',',');
+    }else{
+        return value;
+    }
+}
 
 export const generateId = () => "_" + Math.random().toString(36).substr(2) + Date.now();
 
