@@ -203,7 +203,7 @@ export const computeEffectiveVolume = params => { // Volumen efectivo
     checkParams(_computeEffectiveVolume, params);
     const { collectedData, Vt, D } = params;
     const Qe = collectedData.reduce((a, b) => a + b.ef, 0);
-    return round2(Qe*600/Vt/D);
+    return round2(Qe*1200/Vt/D);
 };
 
 const computeProductVolume = (prod, vol, Va) => { // Cantidad de insumo (gr o ml) por volumen de agua
