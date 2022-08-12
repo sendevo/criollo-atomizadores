@@ -60,10 +60,3 @@ export const setAirFlow = (dispatch, value) => {
         payload: value
     });
 };
-
-export const a = (dispatch, value) => {
-    return dispatch({
-        type: "",
-        payload: value
-    });
-};

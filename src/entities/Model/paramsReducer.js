@@ -7,9 +7,9 @@ export const initialState = {
     arcNumber: 1, // Numero de arcos, puede ser 1 o 2
     workVelocity: 10, // Velocidad de trabajo (km/h)
     workVelocityReady: false,
-    workPressure: 2, // Presion de trabajo (bar)
+    workPressure: 6, // Presion de trabajo (bar)
     workPressureReady: false,
-    workVolume: 56, // Volumen de aplicacion (l/ha)    
+    workVolume: 200, // Volumen de aplicacion (l/ha)    
     workVolumeReady: false,
     nominalFlow: 0.8, // Caudal nominal de pico seleccionado
     sprayFlow: "", // Caudal de pulverizacion (caudal de picos multiplicado por n de picos)
@@ -22,40 +22,34 @@ export const initialState = {
     greenIndex: 1, // Indice verde
 
     // Caudal de aire
-    airFlow: 1000, // Caudal de aire    
+    airFlow: 30000, // Caudal de aire    
+    airFlowReady: false, // Indicador del estado de variable
     expansionFactor: 2, // Factor de expansión
     turbineSection: 1, // Seccion de soplado
     airVelocity: "", // Velocidad de aire    
 };
 
-const nonEditableParams = [
-    "workVelocity",
-    "workPressure",
-    "workVolume",
-    "rowSeparation"
-];
-
 export const reducer = (state, action) => {    
     switch (action.type) {
         case "SET_PARAMETER": {
             const {name, value} = action.payload;
-            if(nonEditableParams.includes(name)){
-                console.log("El parámetro "+name+" requiere lógica adicional para editar");
-                return state;
-            }
-            return {
+            const nextState = {
                 ...state,
                 [name]: value
-            }
+            };
+            if(["plantHeight", "expansionFactor"].includes(name))
+                return reducer(nextState, {type: "COMPUTE_AIR_FLOW"});
+            return nextState;
         }
         case "SET_ROW_SEPARATION": {
-            return {
+            const nextState = {
                 ...state,
                 rowSeparation: action.payload,
                 workVelocityReady: false,
                 workPressureReady: false,
                 workVolumeReady: false
-            }
+            };
+            return reducer(nextState, {type:"COMPUTE_AIR_FLOW"});
         }
         case "SET_WORK_VELOCITY":
             return {
@@ -74,13 +68,14 @@ export const reducer = (state, action) => {
                     Va: state.workVolume,
                     D: state.rowSeparation
                 });
-                return {
+                const nextState = {
                     ...state,
                     workVelocity: vt,
                     workVelocityReady: true,
                     workPressureReady: true,
                     workVolumeReady: true
                 };
+                return reducer(nextState, {type: "COMPUTE_AIR_FLOW"});
             } catch (e) {
                 Toast("error", e.message, 2000, "bottom");
                 return state; 
@@ -142,10 +137,37 @@ export const reducer = (state, action) => {
                 return state;
             }
         case "SET_AIR_FLOW":
-            return {
+            const nextState = {
                 ...state,
-                airFlow: action.payload
+                airFlow: action.payload,
+                airFlowReady: true
             };  
+            try{
+                nextState.airVelocity = API.computeAirVelocity({
+                    turbineSection: nextState.turbineSection,
+                    airFlow: nextState.airFlow,
+                    F: nextState.expansionFactor
+                });
+            }catch(e){
+                console.log(e);
+                Toast("error", e.message, 2000, "bottom");
+            }
+            return nextState;
+        case "COMPUTE_AIR_FLOW":{
+            try{
+                const airFlow = API.computeAirFlow({
+                    D: state.rowSeparation, 
+                    h: state.plantHeight, 
+                    Vt: state.workVelocity, 
+                    F: state.expansionFactor
+                });
+                return reducer(state, {type:"SET_AIR_FLOW", payload: airFlow});
+            }catch(e){
+                console.log(e);
+                Toast("error", e.message, 2000, "bottom");
+                return state;
+            }
+        }
         default:
             return state;
     }

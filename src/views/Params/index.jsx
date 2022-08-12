@@ -25,6 +25,7 @@ const Params = props => {
         workPressureReady,
         workVolume,
         airFlow,
+        airFlowReady,
         airVelocity,
         workVolumeReady,
         sprayFlow
@@ -167,14 +168,14 @@ const Params = props => {
                     <Col width="80">
                         <Input
                             slot="list"
-                            borderColor={"#EAEAEA"}
+                            borderColor={airFlowReady ? "green":"#EAEAEA"}
                             label="Caudal de aire"
                             name="airFlow"
                             type="number"
                             unit="m³/h"                            
                             icon={iconAir}
                             value={airFlow}
-                            onChange={({target:{name, value}}) => actions.setParameter(paramsDispatch, name, parseFloat(value))}>
+                            onChange={e => actions.setAirFlow(paramsDispatch, parseFloat(e.target.value))}>
                         </Input>
                     </Col>
                     <Col width="20" style={{paddingTop:"5px", marginRight:"10px"}}>
