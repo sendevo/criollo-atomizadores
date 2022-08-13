@@ -57,9 +57,9 @@ const ReportsPanel = () => {
                     text: 'Aceptar',
                     onClick: function () {
                         f7.panel.close();
-                        actions.newReport(dispatch);
-                        Toast("success", "Reporte restablecido", 2000, "center");
                         setTimeout(function(){ // Dar tiempo a que se cierre el panel
+                            actions.newReport(dispatch);
+                            Toast("success", "Reporte restablecido", 2000, "center");
                             f7.dialog.close();                            
                         }, 500);
                     }

@@ -3,34 +3,22 @@ import { Page, Navbar, Block, BlockTitle, List, Row, Col, Button } from "framewo
 import { computeVaFromTRV } from '../../entities/API';
 import { ModelStateContext, ModelDispatchContext } from '../../context/ModelContext';
 import { setParameter, setWorkVolume } from '../../entities/Model/paramsActions';
-import { TreeTypeSelector } from "../../components/Selectors";
 import Input from "../../components/Input";
 import { BackButton } from '../../components/Buttons';
 import Toast from '../../components/Toast';
-import iconDistance from "../../assets/icons/dplantas.png";
-import iconPlantW from "../../assets/icons/plant_width.png";
-import iconPlantH from "../../assets/icons/plant_height.png";
 import iconDose from "../../assets/icons/dosis.png";
 import iconGI from "../../assets/icons/indiceverde.png";
 
-const colStyle = {
-    margin:"0px!important", 
-    padding:"0px!important", 
-    width:"50%"
-};
-
 const Trv = props => {
 
-    const state = useContext(ModelStateContext);
-    const dispatch = useContext(ModelDispatchContext);
-
     const {
-        plantType,
+        greenIndex,
         rowSeparation,
+        plantType,
         plantHeight,
-        plantWidth,
-        greenIndex
-    } = state;
+        plantWidth
+    } = useContext(ModelStateContext);
+    const paramsDispatch = useContext(ModelDispatchContext);
 
     // Calcular resultados en cada render
     let dose;
@@ -46,98 +34,37 @@ const Trv = props => {
         Toast("error", e.message);
     }
 
-    const handleInputChange = ({target:{name, value}}) => {
-        if(name == "plantType")
-            setParameter(dispatch, "plantType", value);
-        else{
-            const v = parseFloat(value);
-            if(value)
-                setParameter(dispatch, name, v);
-        }
-    };
-
     const exportData = () => {
-        setWorkVolume(dispatch, dose);
+        setWorkVolume(paramsDispatch, dose);
         props.f7router.back();
     };
 
     return (
         <Page>
             <Navbar title="Cálculo TRV" style={{maxHeight:"40px", marginBottom:"0px"}}/>      
-            <Block style={{marginTop:0, padding:0}}>
-                
-                <TreeTypeSelector 
-                    name="plantType"
-                    value={plantType} 
-                    onChange={handleInputChange}/>
+            <Block style={{padding:0}}>
 
-                <BlockTitle>Parámetros de la planta</BlockTitle>
+                <BlockTitle style={{paddingLeft:"10px"}}>Volumen de pulverización</BlockTitle>
 
-                <List form noHairlinesMd style={{marginTop: "-10px"}}>    
-                    <Row slot="list" style={{paddingLeft:20, paddingRight: 20}}>
-                        <Input
-                            style={{width:"100%"}}
-                            label="Distancia entre filas"
-                            name="rowSeparation"
-                            type="number"
-                            unit="m"
-                            icon={iconDistance}
-                            value={rowSeparation}
-                            onChange={handleInputChange}>
-                        </Input>
-                    </Row>
-
-                    <Row slot="list">
-                        <Col style={colStyle}>
-                            <Input
-                                label="Altura de plantas"
-                                name="plantHeight"
-                                type="number"
-                                unit="m"
-                                icon={iconPlantH}
-                                value={plantHeight}
-                                onChange={handleInputChange}>
-                            </Input>
-                        </Col>
-                        <Col style={colStyle}>
-                            <Input
-                                label="Ancho de plantas"
-                                name="plantWidth"
-                                type="number"
-                                unit="m"
-                                icon={iconPlantW}
-                                value={plantWidth}
-                                onChange={handleInputChange}>
-                            </Input>
-                        </Col>
-                    </Row>
-                </List>
-
-                <BlockTitle style={{marginTop:-15, marginBottom:0}}>Volumen de pulverización</BlockTitle>
-
-                <List form noHairlinesMd>    
-                    <Row slot="list">
-                        <Col style={colStyle}>
-                            <Input
-                                label="Indice verde"
-                                name="greenIndex"
-                                type="number"
-                                icon={iconGI}
-                                value={greenIndex}
-                                onChange={handleInputChange}>
-                            </Input>
-                        </Col>
-                        <Col style={colStyle}>
-                            <Input
-                                label="Volumen pulverizado"
-                                name="dose"
-                                type="number"
-                                unit="l/ha"
-                                icon={iconDose}
-                                value={dose}>
-                            </Input>
-                        </Col>
-                    </Row>
+                <List form noHairlinesMd style={{padding:"0px 15px"}}>
+                    <Input
+                        slot="list"
+                        label="Indice verde"
+                        name="greenIndex"
+                        type="number"
+                        icon={iconGI}
+                        value={greenIndex}
+                        onChange={e => setParameter(paramsDispatch, "greenIndex", parseFloat(e.target.value))}>
+                    </Input>
+                    <Input
+                        slot="list"
+                        label="Volumen pulverizado"
+                        name="dose"
+                        type="number"
+                        unit="l/ha"
+                        icon={iconDose}
+                        value={dose}>
+                    </Input>
                 </List>
 
                 <Row style={{marginTop:20, marginBottom: 20}}>

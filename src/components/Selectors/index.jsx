@@ -162,8 +162,7 @@ export const TreeTypeSelector = ({name, value, disabled, onChange}) => {
     };
 
     return (
-        <Block style={{margin:"0px"}}>
-            <BlockTitle>Forma de la planta</BlockTitle>
+        <Block style={{marginTop:"0px"}}>
             <Row>
                 <Col style={{textAlign:"center"}}>
                     <Radio 

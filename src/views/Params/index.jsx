@@ -2,6 +2,7 @@ import { f7, Navbar, Page, List, BlockTitle, Row, Col, Button } from 'framework7
 import { useContext } from 'react';
 import { BackButton, LinkButton } from '../../components/Buttons';
 import Input from "../../components/Input";
+import { TreeTypeSelector } from "../../components/Selectors";
 import { ArcConfigInput } from "../../components/ArcConfig";
 import { FaStopwatch, FaWind, FaTree } from 'react-icons/fa';
 import { ModelStateContext, ModelDispatchContext } from '../../context/ModelContext';
@@ -14,6 +15,8 @@ import iconVelocity from '../../assets/icons/velocidad.png';
 import iconPressure from '../../assets/icons/presion.png';
 import iconVolume from '../../assets/icons/dosis.png';
 import iconAir from '../../assets/icons/aire.png';
+import iconPlantW from "../../assets/icons/plant_width.png";
+import iconPlantH from "../../assets/icons/plant_height.png";
 
 const Params = props => {
     const {
@@ -28,7 +31,10 @@ const Params = props => {
         airFlowReady,
         airVelocity,
         workVolumeReady,
-        sprayFlow
+        sprayFlow,
+        plantType,
+        plantHeight,
+        plantWidth,
     } = useContext(ModelStateContext);
     const {name, nozzleData} = useContext(ArcStateContext);
 
@@ -60,22 +66,55 @@ const Params = props => {
     return (
         <Page>
             <Navbar title="Parámetros de aplicación" style={{maxHeight:"40px", marginBottom:"0px"}}/>            
-            
-            <BlockTitle style={{marginBottom: 5, marginTop:0}}>Ancho de calle</BlockTitle>
 
-            <List form noHairlinesMd style={{margin: "0px!important", padding:"0px 20px"}} className="help-target-row_separation">    
-                <Input                    
-                    slot="list"
-                    label="Distancia entre filas"
-                    name="rowSeparation"
-                    type="number"
-                    unit="m"
-                    icon={iconDistance}
-                    value={rowSeparation}
-                    onChange={({target: {name, value}}) => actions.setRowSeparation(paramsDispatch, parseFloat(value))}>
-                </Input>
-            </List>
+                <BlockTitle style={{marginTop: "0px"}}>Parámetros de la planta</BlockTitle>
 
+                <TreeTypeSelector 
+                    name="plantType"
+                    value={plantType} 
+                    onChange={e => actions.setParameter(paramsDispatch, "plantType", e.target.value)}/>
+
+                <List form noHairlinesMd style={{marginTop: "-10px"}} className="help-target-row_separation">    
+                    <Row slot="list" style={{paddingLeft:20, paddingRight: 20}}>
+                        <Input
+                            style={{width:"100%"}}
+                            label="Distancia entre filas"
+                            name="rowSeparation"
+                            type="number"
+                            unit="m"
+                            icon={iconDistance}
+                            value={rowSeparation}
+                            onChange={({target: {name, value}}) => actions.setRowSeparation(paramsDispatch, parseFloat(value))}>
+                        </Input>
+                    </Row>
+
+                    <Row slot="list">
+                        <Col style={{margin:"0px", padding:"0px", width:"50%"}}>
+                            <Input
+                                label="Altura de plantas"
+                                name="plantHeight"
+                                type="number"
+                                unit="m"
+                                icon={iconPlantH}
+                                value={plantHeight}
+                                onChange={({target: {name, value}}) => actions.setParameter(paramsDispatch, name, parseFloat(value))}>
+                            </Input>
+                        </Col>
+                        <Col style={{margin:"0px", padding:"0px", width:"50%"}}>
+                            <Input
+                                label="Ancho de plantas"
+                                name="plantWidth"
+                                type="number"
+                                unit="m"
+                                icon={iconPlantW}
+                                value={plantWidth}
+                                onChange={({target: {name, value}}) => actions.setParameter(paramsDispatch, name, parseFloat(value))}>
+                            </Input>
+                        </Col>
+                    </Row>
+                </List>
+
+    
             <BlockTitle style={{marginBottom: 5}}>Configuración del arco</BlockTitle>
             
             <center className="help-target-arc_config">

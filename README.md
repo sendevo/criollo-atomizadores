@@ -9,7 +9,7 @@ Una vez instalada, la utilización de Campero no requiere disponibilidad de señ
 
 ![criollo-atm](doc/promocion_criollo_atm.jpg)
 
-### Versión 4.0 [8] (Migración nativo -> híbrido)
+### Versión 3.0 [3] (Migración nativo -> híbrido)
   - Implementación con Vite (Rollup): ReactJS (v18) + Framework7 + Capacitor.
   - Nueva presentación. Mejoras en control y validación de campos.  
   - Se pierde el control de volumen en la vista de verificación de picos. En lugar de forzar el volumen al máximo, se avisa al usuario de que suba el volumen para que las alertas sean audibles. El control de "keep awake" se realiza con un plugin CapacitorJS.  
@@ -89,11 +89,11 @@ $ npx cap open android
 
 
 ### Backlog
-#### Progreso: 70%
+#### Progreso: 90%
 
 
 Funcionales
-  - [ ] Seccion parámetros de pulverización.  
+  - [x] Sección parámetros de pulverización.  
     - [x] Vista principal.  
     - [x] Configuración de arcos.  
     - [x] Gestión de arcos.  
@@ -102,19 +102,19 @@ Funcionales
     - [x] Medidor de TRV.  
     - [x] Control de campos.  
     - [x] Cargar resultados a reporte.  
-  - [ ] Sección verificación de picos.  
+  - [x] Sección verificación de picos.  
     - [x] Vista principal.  
     - [x] Cálculo de resultados.  
     - [x] Cambio de arco.  
     - [x] Cargar resultados a reporte.  
-  - [ ] Sección calculo de mezclas.  
+  - [x] Sección calculo de mezclas.  
     - [x] Vista con formulario.  
     - [x] Cálculo de insumos.  
     - [x] Navigator/Capacitor GPS.  
     - [x] Vista de resultados.  
     - [x] Control de campos.  
     - [x] Cargar resultados a reporte.  
-  - [ ] Sección reportes.  
+  - [x] Sección reportes.  
     - [x] Vista de listado de reportes.  
     - [x] Gestión de reportes.  
     - [x] Vista de presentación de reportes.  
@@ -124,7 +124,7 @@ Funcionales
     - [x] Menú de enlaces.  
     - [x] Sección acerca de.  
     - [x] Enlace informacion adicional.  
-    - [ ] Recorrido por la app (modo ayuda).  
+    - [x] Recorrido por la app (modo ayuda).  
 
 No funcionales  
   - [x] Creación repositorio.  
