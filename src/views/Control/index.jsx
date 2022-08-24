@@ -211,6 +211,7 @@ const Control = props => {
 
     const addToReport = () => {
         addControl(reportsDispatch, {
+            arcNumber,
             tableData,
             outputs
         });
@@ -290,7 +291,11 @@ const Control = props => {
             <Row style={{marginTop:30, marginBottom: 20}} className="help-target-control_reports">
                 <Col width={20}></Col>
                 <Col width={60}>
-                    <Button fill style={{textTransform:"none"}} onClick={addToReport}>
+                    <Button 
+                        disabled={!(arcNumber === 1 && outputs.right.ready || arcNumber === 2 && outputs.right.ready && outputs.left.ready)}
+                        fill 
+                        style={{textTransform:"none"}} 
+                        onClick={addToReport}>
                         Agregar a reporte
                     </Button>
                 </Col>
