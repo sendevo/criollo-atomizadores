@@ -24,7 +24,7 @@ const STEPS = [
     {
         page: "/params/",
         key: "row_separation",
-        text: "Para comenzar, indique la distancia entre filas de plantas ingresando la medida en metros.",
+        text: "Para comenzar, indique los parámetros de la planta, como altura, ancho y distancia entre filas ingresando las medidas en metros.",
     },
     {
         page: "/params/",
