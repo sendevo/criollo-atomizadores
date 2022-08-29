@@ -9,7 +9,7 @@ Una vez instalada, la utilización de Campero no requiere disponibilidad de señ
 
 ![criollo-atm](doc/promocion_criollo_atm.jpg)
 
-### Versión 3.0 [3] (Migración nativo -> híbrido)
+### Versión 3.0 [4] (Migración nativo -> híbrido)
   - Implementación con Vite (Rollup): ReactJS (v18) + Framework7 + Capacitor.
   - Nueva presentación. Mejoras en control y validación de campos.  
   - Se pierde el control de volumen en la vista de verificación de picos. En lugar de forzar el volumen al máximo, se avisa al usuario de que suba el volumen para que las alertas sean audibles. El control de "keep awake" se realiza con un plugin CapacitorJS.  
