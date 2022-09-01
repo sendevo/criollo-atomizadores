@@ -2,7 +2,7 @@ import { Storage } from '@capacitor/storage';
 import { Capacitor } from "@capacitor/core";
 
 const appname = "criollo_atm";
-const version = "3.5";
+const version = "4"; // Usar versionCode (para version avt, no usar "." u otros caracteres similares)
 const versionKey = "criollo_atm_version";
 
 const storageWrite = (key, value) => { // Guardar datos en localStorage    
@@ -25,10 +25,9 @@ const storageWrite = (key, value) => { // Guardar datos en localStorage
                 //console.log(e);
                 Function.prototype();
             }
-        }else{
-            //console.log("set: Fallback a localStorage");
-            localStorage.setItem(key, v);
         }
+        //console.log("set: Fallback a localStorage");
+        localStorage.setItem(key, v);
     }
 };
 
@@ -37,26 +36,10 @@ const storageRead = key => {
         Storage.get({key}).then(result => {
             return JSON.parse(result.value);
         });
-    else{
-        if(window.avt){
-            const userData = window.avt.generalData.getUserData();
-            const req = {ids:[userData.id], keys:[key]};
-            window.avt.storage.user.get(req)
-            .then(result => {                                    
-                if(result){
-                    if(result.info?.objects[userData.id]){
-                        if(result.info.objects[userData.id][key]){
-                            const data = result.info.objects[userData.id][key].data;
-                            return JSON.parse(data);
-                        }
-                    }
-                }
-            });
-        }else{            
-            const content = localStorage.getItem(key);
-            if(content){
-                return JSON.parse(content);
-            }
+    else{            
+        const content = localStorage.getItem(key);
+        if(content){
+            return JSON.parse(content);
         }
     }
 };
@@ -69,13 +52,51 @@ export const getData = key => {
     return storageRead(`${appname}_${version}_${key}`);
 };
 
-// Check data version
-const dataVersion = storageRead(versionKey);
-if(version !== dataVersion){
-    if(Capacitor.isNativePlatform()){
-        Storage.clear();
-    }else{
-        localStorage.clear();
+const checkVersion = () => {// Check data version
+    const dataVersion = storageRead(versionKey);
+    if(version !== dataVersion){
+        if(Capacitor.isNativePlatform()){
+            Storage.clear();
+        }else{
+            localStorage.clear();
+        }
+        storageWrite(versionKey, version);
     }
-    storageWrite(versionKey, version);
+};
+
+// El metodo getData es async, por lo que no se puede usar get() aqui
+// A modo de parche, se copia los datos de avt.storage a localStorage al inicio
+if(window.avt){
+    const avtTolocalStorage = k => {
+        const key = `${appname}_${version}_${k}`;
+        return new Promise((resolve, reject) => {
+            const userData = window.avt.generalData.getUserData();
+            const req = {ids:[userData.id], keys:[key]};
+            window.avt.storage.user.get(req)
+            .then(result => {   
+                let success = false;
+                if(result){
+                    if(result.info?.objects[userData.id]){
+                        if(result.info.objects[userData.id][key]){
+                            const data = result.info.objects[userData.id][key].data;
+                            localStorage.setItem(key, data);
+                            success = true;
+                        }
+                    }
+                }
+                if(!success)
+                    reject("AVT Read Err. (wrong format)");
+            })
+            .catch(reject);
+        });
+    };
+    Promise.all([
+        avtTolocalStorage(versionKey), 
+        avtTolocalStorage("arcs"), 
+        avtTolocalStorage("reports")
+    ]).then(() => {
+        checkVersion();
+    });
+}else{
+    checkVersion();
 }
