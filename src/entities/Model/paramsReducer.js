@@ -149,7 +149,7 @@ export const reducer = (state, action) => {
                     F: nextState.expansionFactor
                 });
             }catch(e){
-                console.log(e);
+                //console.log(e);
                 Toast("error", e.message, 2000, "bottom");
             }
             return nextState;
@@ -163,7 +163,7 @@ export const reducer = (state, action) => {
                 });
                 return reducer(state, {type:"SET_AIR_FLOW", payload: airFlow});
             }catch(e){
-                console.log(e);
+                //console.log(e);
                 Toast("error", e.message, 2000, "bottom");
                 return state;
             }

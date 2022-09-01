@@ -70,8 +70,9 @@ const TimerBlock = ({value, setValue, onTimeout}) => {
             timer.start();
             KeepAwake.keepAwake()                
             .catch(err => {
-                console.log("Error de KeepAwake");
-                console.log(err);                    
+                //console.log("Error de KeepAwake");
+                //console.log(err);                    
+                Function.prototype();
             });
             setRunning(true);
         }else{ // Reset
@@ -80,8 +81,9 @@ const TimerBlock = ({value, setValue, onTimeout}) => {
             setTime(value);            
             KeepAwake.allowSleep()
             .catch(err => {
-                console.log("Error de KeepAwake");
-                console.log(err);                    
+                //console.log("Error de KeepAwake");
+                //console.log(err);                    
+                Function.prototype();
             });
             setRunning(false);            
         }
@@ -269,7 +271,7 @@ const Control = props => {
             <TimerBlock 
                 value={elapsed}
                 setValue={setElapsed}
-                onTimeout={()=>console.log("Timeout")}/>
+                onTimeout={()=>{Function.prototype(); /*console.log("timeout");*/}}/>
             
             <ArcConfigDisplay 
                 disabled={arcNumber === 1}

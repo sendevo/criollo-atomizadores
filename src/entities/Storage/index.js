@@ -21,8 +21,9 @@ const storageWrite = (key, value) => { // Guardar datos en localStorage
                 };                    
                 window.avt.storage.user.put(data);
             }catch(e){
-                console.log("Error al guardar datos");
-                console.log(e);
+                //console.log("Error al guardar datos");
+                //console.log(e);
+                Function.prototype();
             }
         }else{
             //console.log("set: Fallback a localStorage");
