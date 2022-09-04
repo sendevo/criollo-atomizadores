@@ -49,7 +49,15 @@ $ npx cap add android
 $ npm run build && npx cap sync
 ```
 
-3.- Agregar permisos en android/app/src/main/AndroidManifest.xml:  
+3.- Indicar el SDK level en app/variables.gradle
+```
+minSdkVersion = 21
+compileSdkVersion = 30
+targetSdkVersion = 31
+```
+
+4.- Agregar permisos en android/app/src/main/AndroidManifest.xml.
+Para API level 31 se requiere el activity->android:exported
 
 ```xml
 ...
@@ -57,7 +65,14 @@ $ npm run build && npx cap sync
   ...
   android:requestLegacyExternalStorage="true"
   ...
+  <activity>
+    ...
+    android:exported="false"
+    ...
+  </activity>
+  ...
 </application>
+
 ...
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -66,9 +81,9 @@ $ npm run build && npx cap sync
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
 
-4.- Definir iconos y splashcreens en android/app/src/main/res.  
+5.- Definir iconos y splashcreens en android/app/src/main/res.  
 
-5.- Abrir proyecto de AndroidStudio:
+6.- Abrir proyecto de AndroidStudio:
 ```bash
 $ npx cap open android
 ```
