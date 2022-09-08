@@ -18,7 +18,7 @@ const About = props => (
                     <AccordionContent>
                         <Block>
                             <center>
-                                    <h3>Calibrador CRIOLLO Atomizadores 3.0</h3>
+                                    <h3>Calibrador CRIOLLO Atomizadores 3.2</h3>
                             </center>
                             <h3>Staff</h3>
                             <p><b>Autor:</b> Juan Pablo D'Amico</p>
