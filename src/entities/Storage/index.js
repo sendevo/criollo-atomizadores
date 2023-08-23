@@ -1,8 +1,8 @@
-import { Storage } from '@capacitor/storage';
 import { Capacitor } from "@capacitor/core";
+import { Preferences } from '@capacitor/preferences';
 
 const appname = "criollo_atm";
-const version = "4"; // Usar versionCode (para version avt, no usar "." u otros caracteres similares)
+const version = "3.3"; // Usar versionCode (para version avt, no usar "." u otros caracteres similares)
 const versionKey = "criollo_atm_version";
 
 const storageWrite = (key, value) => { // Guardar datos en localStorage    
@@ -46,7 +46,7 @@ const checkVersion = () => {// Check data version
     const dataVersion = storageRead(versionKey);
     if(version !== dataVersion){
         if(Capacitor.isNativePlatform()){
-            Storage.clear();
+            Preferences.clear();
         }else{
             localStorage.clear();
         }

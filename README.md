@@ -17,6 +17,7 @@ Una vez instalada, la utilización de Campero no requiere disponibilidad de señ
   - Los formularios tienen almacenamiento persistente de datos, no se pierden al cambiar de vistas o si la app queda en segundo plano, pero se borran al salir (previo confirmacion del usuario).  
   - El almacenamiento de los datos se realiza en Storage de Capacitor en el caso nativo, en avt.storage en el caso de la extensión Auravant o en localStorage en el caso web.  
 
+### Versión 3.3 [7] (Migración capacitor 3 a 5. Compatibilidad con android 13)
 
 ## Instalación y despliegue
 
@@ -51,9 +52,9 @@ $ npm run build && npx cap sync
 
 3.- Indicar el SDK level en app/variables.gradle
 ```
-minSdkVersion = 21
-compileSdkVersion = 30
-targetSdkVersion = 31
+minSdkVersion = 22
+compileSdkVersion = 33
+targetSdkVersion = 33
 ```
 
 4.- Agregar permisos en android/app/src/main/AndroidManifest.xml.
